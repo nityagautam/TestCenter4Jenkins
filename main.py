@@ -1,32 +1,53 @@
 #===============================================================
-# @author:  nityanarayan44@live.com
-# @written: 08 December 2021
-# @desc:    Backend server for the Dashboard of reports.
+# @author       : Ashutosh Mishra [nityanarayan44@live.com]
+# @written      : 08 December 2021
+# @re-written   : 14 February 2023
+# @desc         : Backend server for the Dashboard of reports.
 #===============================================================
 
 # Import section
-from flask import Flask
-from app.utilites.console_animator import ConsoleAnimator
+#from flask import Flask
+#from app.server.utilites.console_animator import ConsoleAnimator
+# import multiprocessing
+import argparse
+import subprocess
+from app.settings import STATIC_FOLDER
+
+
+# Runner Class
+# ======================
+class Runner:
+    DEBUG = True
+    LAST_STDOUT = None
+
+    def __init__(self):
+        pass
+
+    # Do some extra work
+    def do_extra_work(self):
+        subprocess.call('cd {} && npm run watch'.format(STATIC_FOLDER.replace(' ', '\ ')), shell=True)
+        # process = multiprocessing.Process(target=do_extra_work)
+        # process.start()
+        # process.join()
+        self.LAST_STDOUT = None
+
+    # Processing the CLI args (if any)
+    def main(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-d', '--debug', default=True, help='Run the web server in debug mode.')
+        args = parser.parse_args()
+        #
+        self.DEBUG = args['debug']
+
+    def run(self):
+        from app.server import app
+        from app.settings import APP_SERVER_HOST, APP_SERVER_PORT
+        app.run(host=APP_SERVER_HOST, port=APP_SERVER_PORT, threaded=True, debug=self.DEBUG)
 
 
 # ==============================================================
-# Flask configuration
+# App Execution
 # ==============================================================
-#ReportDashboard/
-public_folder_path = "/public/"
-public_folder_name = "public"
-application = Flask(__name__, static_url_path=public_folder_path, static_folder=public_folder_name)
-# Now import the route which usage the 'application' instance
-import app.routes.router
+if __name__ == '__main__':
+    Runner().run()
 
-
-# ==============================================================
-# Executor
-# ==============================================================
-if __name__ == "__main__":
-    ConsoleAnimator().print_msg_with_title(title='SERVER RE/START', msg='REPORT DASHBOARD BACKEND SERVER', dash_length=30)
-    ConsoleAnimator().print_with_delay(main_string='| Initializing', loading_string='.... ', delay_time=0.2)
-
-    if application:
-        # Running the app in debug mode (modifying the source code will restart the server untill error occured)
-        application.run(debug=True, host='0.0.0.0', port=10000, threaded=True) 

@@ -4,6 +4,26 @@ Custom style for my new pages starts from here
 ====================================================
 */
 
+/* For every element text should be quite sharp and thin */
+* {
+     font-weight: 100 !important;
+}
+
+/* THIS IS FOR THE THEME TOGGLE */
+body {
+  background-color: white;
+  color: black;
+}
+.dark-theme {
+  background-color: black;
+  color: white;
+}
+
+
+.white-font {
+    color: white !important;
+}
+
 .custom-card {
     border-radius: 3px;
     border-style: double;

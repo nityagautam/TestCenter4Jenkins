@@ -13,8 +13,8 @@ import sample_data
 # ==============================================================
 # Flask configuration
 # ==============================================================
-public_folder_path = "/ReportDashboard/public/"
-public_folder_name = "public"
+public_folder_path = "/ReportDashboard/static/"
+public_folder_name = "static"
 app = Flask(__name__, static_url_path=public_folder_path, static_folder=public_folder_name)
 
 
@@ -97,7 +97,7 @@ def get_logo():
     """
     # set template directory of the Flask App to the  path set by the user as command line arg.
     return f'<html><head><title>Root</title><head><body><hr/> Welcome to the main page <hr/> ' \
-           f'Building image from static public location: <br/> ' \
+           f'Building image from static static location: <br/> ' \
            f'<img src=\'{url_for("static", filename="images/logo.svg")}\' /> </body></html>'
 
 

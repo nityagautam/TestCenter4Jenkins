@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="{{url_for('static', filename='images/logo.svg')}}">
+
+        <title>Report Dashboard</title>
+
+        <!-- stylesheets -->
+        <!-- Custom stylesheet-->
+        <link href="{{url_for('static', filename='css/custom-style.css')}}" rel="stylesheet">
+        <!-- Bootstrap scripts -->
+        <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+        <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
+    </head>
+
+    <body>
+
+
+            <!-- Navbar "CLS: bg-body-tertiary" -->
+            <nav class="navbar fixed-top navbar-expand-lg" style="background: #34495e;">
+              <div class="container-fluid">
+
+                <a class="navbar-brand white-font" href="#" style=""> {{ app_data['app_title'] }} </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="#"> Overview </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#"> Dashboard </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#"> Trends </a>
+                    </li>
+                  </ul>
+
+                  <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  </form> &nbsp;&nbsp;&nbsp;&nbsp;
+
+                  <form>
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Hi {{ username }}
+                            </button>
+
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"> Logout &nbsp; </a></li>
+                                <li><a class="dropdown-item" href="#"> Settings  &nbsp; </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item disabled">(En) English  &nbsp; </a></li>
+                            </ul>
+                        </div>
+                  </form>
+
+                </div>
+              </div>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+
+
+                <!-- Give some initial brief/info "table-hover table-group-divider" -->
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">This is an overview of automation report dashboard.</h5>
+                            <p class="card-text">
+                                This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
+                                It is the overview of the all the test projects for the automation, which has been extracted/crawled
+                                either from the jenkins or from the (HTML/Junit xml) reports file.
+                            </p>
+                            <p class="card-text">
+                                All the projects/job can be configured to be crawled either from the jenkins or from a local locations, and you can always modify your settings.
+                            </p>
+                            <a href="#" class="btn btn-outline-primary"> Settings </a>
+                          </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
+
+
+                <!-- Other card -->
+                <div class="row m-b-1 align-items-center">
+
+                    <div class="col-md-4">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Total Projects </h5>
+                            <p class="card-text"> 5 </p>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Total Testcases </h5>
+                            <p class="card-text"> 199 </p>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Average Pass Rate </h5>
+                            <p class="card-text"> 98% </p>
+                          </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
+
+                <!-- Show the table for all the available projects -->
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Project List </h5>
+
+                            <table class="table table-sm table-hover">
+                              <thead class="table-group-divider">
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">First</th>
+                                  <th scope="col">Last</th>
+                                  <th scope="col">Handle</th>
+                                </tr>
+                              </thead>
+                              <tbody class="table-group-divider">
+                                <tr>
+                                  <th scope="row">1</th>
+                                  <td>Mark</td>
+                                  <td>Otto</td>
+                                  <td>@mdo</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">2</th>
+                                  <td>Jacob</td>
+                                  <td>Thornton</td>
+                                  <td>@fat</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">3</th>
+                                  <td colspan="2">Larry the Bird</td>
+                                  <td>@twitter</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div></div></div></div>
+
+
+            </div>
+
+            <!-- Last -->
+            <hr/>
+            <div>
+                <span class="badge rounded-pill text-bg-dark"> Built with Python3+Flask+Bootstrap5.3 </span>
+				<span class="badge rounded-pill text-bg-dark"> by {{app_data['app_author']}} </span>
+				<span class="badge rounded-pill text-bg-dark"> {{app_data['app_version']}} Build: [{{app_data['app_experimental_tag']}}]</span>
+            </div>
+            <hr/>
+
+    </body>
+
+    <script>
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
+
+</html>

@@ -1,7 +1,7 @@
 #===================================================================
 # @author:  nityanarayan44@live.com
 # @written: 09 December 2021
-# @desc:    Squish XML report parser (gives out the dict/json data)
+# @desc:    Squish XML report crawlers (gives out the dict/json data)
 #===================================================================
 # use:> python3 <script_name.py> squish_xml_file.xml
 # < returns the dict/json data
@@ -119,7 +119,7 @@ class HTMLGenerator:
 # For CLI Execution
 # --------------------------
 if __name__ == "__main__":
-    #initiate the squish xml file parser
+    #initiate the squish xml file crawlers
     dict_output = SquishXMLParser('C:\\Users\\mishra.ashutosh\\Downloads\\TC1\\2020-04-07T16-40-13+0530\\results.xml').initialize()
     #print(">>> For XML file, dict/json has been generated: \n\n", json.dumps(dict_output) )
     html_output = HTMLGenerator(dict_data=dict_output).generate(output_file_name='index.html')

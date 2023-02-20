@@ -19,7 +19,12 @@
 	<!-- Bootstrap scripts -->
 	<script src="{{url_for('static', filename='assets/jquery/jquery-3.1.0.min.js')}}"></script>
 	<script src="{{url_for('static', filename='assets/tether/tether.min.js')}}"></script>
-	<script src="{{url_for('static', filename='assets/bootstrap/bootstrap4-alpha3.min.js')}}"></script>
+	<!--<script src="{{url_for('static', filename='assets/bootstrap/bootstrap4-alpha3.min.js')}}"></script>-->
+<!--	<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>-->
+<!--	<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js.map')}}"></script>-->
+	<link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
+
 	<!-- scripts: Chart libs -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 
@@ -36,11 +41,72 @@
 				<div class="brand">
 					<a href="/">
 						<span class="hidden-m-down m-r-12"> &nbsp; </span>
-						<span class="lead"> {{ app_data['app_name'] }} </span>
-						<!-- <span class="tag" id="revenue-tag"> {{app_data["app_poc_tag_1"]}} </span> -->
+						<span class="lead"> {{ app_data['app_title'] }} </span>
 					</a>
 				</div>
+				<!--
+				<span class="" style="display: inline-flex; width: 350px;">
+					<form class="d-flex" role="search">
+						<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+						<button class="btn btn-outline-success" type="submit">Search</button>
+					</form>
+				</span>
+				-->
+				<span class="" style="top: 2%; right: 2%; position: absolute; padding: 12px 16px 12px 0;" tooltip="Logout">
+<!--					<a href="/logout">-->
+<!--						<span class="hidden-m-down m-r-12"> &nbsp; </span>-->
+<!--						<img src="{{url_for('static', filename='images/person-circle.svg')}}" height="40" width="40" class="rounded me-1" style="padding: 12px 16px 12px 0;" alt="user">-->
 
+<!--					</a>-->
+
+<!--					<div class="dropdown">-->
+<!--&lt;!&ndash;					  	<button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">&ndash;&gt;-->
+<!--&lt;!&ndash;							Hi User&ndash;&gt;-->
+<!--&lt;!&ndash;					  	</button>&ndash;&gt;-->
+<!--						<button type="button" class="btn btn-danger">Hi User</button>-->
+<!--						<button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--							<span class="visually-hidden">Toggle Dropdown</span>-->
+<!--						</button>-->
+<!--						<ul class="dropdown-menu">-->
+<!--							<li><a class="dropdown-item" href="#">Logout</a></li>-->
+<!--							<li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--							<li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--					  	</ul>-->
+<!--					</div>-->
+
+<!--						<div class="btn-group dropdown-center">-->
+<!--						  <button type="button" class="btn btn-danger disabled">Hi User</button>-->
+<!--						  <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--							<span class="visually-hidden">Toggle Dropdown</span>-->
+<!--						  </button>-->
+<!--						  <ul class="dropdown-menu">-->
+<!--							<li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--							<li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--							<li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--							<li><hr class="dropdown-divider"></li>-->
+<!--							<li><a class="dropdown-item" href="#">Separated link</a></li>-->
+<!--						  </ul>-->
+<!--						</div>-->
+
+						<!-- Split dropstart button -->
+						<div class="btn-group dropstart">
+						  <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+							<span class="visually-hidden">Toggle Dropstart</span>
+						  </button>
+						  <ul class="dropdown-menu">
+							<!-- Dropdown menu links -->
+							<li><a class="dropdown-item" href="/settings">Settings</a></li>
+							<li><a class="dropdown-item" href="/notes">Notes</a></li>
+							<li><a class="dropdown-item" href="/index">INDEX</a></li>
+							<li><hr class="dropdown-divider"></li>
+							<li><a class="dropdown-item" href="/logout">Logout</a></li>
+						  </ul>
+						  <button type="button" class="btn btn-dark disabled">
+							Hi {{ username }}
+						  </button>
+						</div>
+
+				</span>
 			</div>
 		</div>
 	</nav>
@@ -70,26 +136,44 @@
 				<li role="separator" class="divider"></li>
 				{%endif%}
 			{% endfor %}
+
 			<!-- And at the very end of the side menu attach the experimental tag -->
+			<!-- Lets make it sticked to the side navbar class="sidebar-bottom" -->
 			<li class="sidebar-bottom">
-				<span class="tag custom-tag" id="experimental-tag1"> {{app_data["app_experimental_tag"]}} </span>
+<!--				<div class="card" style="width: 100%; bottom: -55%; ">-->
+<!--				  <img src="{{url_for('static', filename='images/person-circle.svg')}}" class="card-img-top" alt="author">-->
+<!--				  <div class="card-body">-->
+<!--					<h5 class="card-title">{{app_data['app_author']}}</h5>-->
+<!--					<p class="card-text"> And I do this </p>-->
+<!--					<a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--				  </div>-->
+<!--				</div>-->
+Ashutosh@amazon1
+				<!--<span class="tag custom-tag" id="experimental-tag1"> {{app_data["app_experimental_tag"]}} </span>-->
+				<span class="badge rounded-pill text-bg-dark"> Made with &love; </span> <br/>
+				<span class="badge rounded-pill text-bg-dark"> by {{app_data['app_author']}} </span> <br/>
+				<span class="badge rounded-pill text-bg-dark"> {{app_data['app_version']}} Build: [{{app_data['app_experimental_tag']}}]</span>
+<!--				<button type="button" class="btn btn-lg btn-primary" data-bs-toggle="popover" data-bs-title="Info about app" data-bs-content="Well, {{app_data['app_experimental_tag']}}">Author NNG</button>-->
 			</li>
 		</ul>
 	</div>
+
 	<!-- /sidebar -->
+
+
 
 	<!-- page-content-wrapper -->
 	<div class="page-content-toggle" id="page-content-wrapper">
 		<div class="container-fluid">
 
-			<!-- 1st row is about the whole page -->
-			<div class="row m-b-1">
-				<div class="col-md-12">
-					<div class="card card-block">
-						<h4 class="card-title m-b-2"> {{app_data["dashboard_page"]["title"]}} </h4>
-					</div>
-				</div>
-			</div>
+			<!-- 1st row is about the individual page title -->
+<!--			<div class="row m-b-1">-->
+<!--				<div class="col-md-12">-->
+<!--					<div class="card card-block">-->
+<!--						<h4 class="card-title m-b-2"> {{app_data["dashboard_page"]["title"]}} </h4>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
 			<!-- /1st row -->
 
 			<!-- This row is for the dashboard charts -->

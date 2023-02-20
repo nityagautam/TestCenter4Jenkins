@@ -1,0 +1,35 @@
+    <!-- sidebar -->
+	<div class="sidebar-toggle" id="sidebar">
+		<ul class="nav nav-sidebar">
+			{% for menu in app_data["side_menu"] %}
+				{%if menu['name'] == "DASHBOARD" %}
+				<li>
+					<a href="{{menu['route']}}" class="active">
+						<i class="{{menu['icon']}}"></i>
+						<span> {{menu['name']}} </span>
+					</a>
+				</li>
+				<li role="separator" class="divider"></li>
+				{%elif menu['name'] != "-" %}
+				<li>
+					<a href="{{menu['route']}}">
+						<i class="{{menu['icon']}}"></i>
+						<span> {{menu['name']}} </span>
+					</a>
+				</li>
+				<li role="separator" class="divider"></li>
+				{%else%}
+				<li role="separator" class="divider"></li>
+				{%endif%}
+			{% endfor %}
+
+			<!-- And at the very end of the side menu attach the experimental tag -->
+			<!-- Let's make it sticked to the side navbar -->
+			<li class="sidebar-bottom">
+				<!--<span class="tag custom-tag" id="experimental-tag1"> {{app_data["app_experimental_tag"]}} </span>-->
+				<span class="badge rounded-pill text-bg-dark">Dark {{app_data['app_experimental_tag']}} </span>
+<!--				<button type="button" class="btn btn-lg btn-primary" data-bs-toggle="popover" data-bs-title="Info about app" data-bs-content="Well, {{app_data['app_experimental_tag']}}">Author NNG</button>-->
+			</li>
+		</ul>
+	</div>
+	<!-- /sidebar -->

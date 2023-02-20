@@ -4,6 +4,16 @@
 latest_data = [
     {
         "key": "Well, I came from flask server",
+        "project_name": "SMPL Helix QAC VS Code Plugin",
+        "build_no": "build15",
+        "build_url": "https://jenkins.url/prj/build15",
+        "report_date": "15 Aug 2021",
+        "crawled_date": "10 Aug 2021",
+        "report_location": "https://some.path/prj/build15/index.html",
+        "test_result": {"pass": 20, "fail": 1, "error": 3, "skipped": 0, "others": 2}
+    },
+    {
+        "key": "Well, I came from flask server",
         "project_name": "SMPL Helix QAC Dashboard",
         "build_no": "build15",
         "build_url": "https://jenkins.url/prj/build15",

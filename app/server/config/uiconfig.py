@@ -1,17 +1,24 @@
+from app.settings import APP_NAME, AUTHOR_NAME, APP_VERSION
+
 # ===[Config Starts]=================================================================
 
 # Core configurations
-core_config = {
+report_data_config = {
     "preserve_reports_history_for_days": 20
 }
 
 # ===[UI Config Starts]=================================================================
 app_ui_config = {
-    "app_name": "AUTOMATION REPORT DASHBOARD & ANALYTICS",
+    "app_name": APP_NAME,
+    "app_version": f"v[{APP_VERSION}]",
+    "app_author": f"{AUTHOR_NAME}",
+    "app_title": f"AUTOMATION DASHBOARD",
     "app_poc_tag_1": "POC PROTOTYPE-1",
-    "app_experimental_tag": "An @amishra's experimental",
+    "app_experimental_tag": f"BETA-experimental",
 
+    # -----------------------------------
     # Page-wise configuration data
+    # -----------------------------------
     "about_page": {
         "title": "ABOUT",
         "desc": """This is the main page of the Automation Dashboard server. This application is to present the reports 
@@ -49,11 +56,13 @@ app_ui_config = {
         "title": "NOTES"
     },
 
-    # Side Menus
+    # -----------------------------------
+    # Side Menus of the application
+    # -----------------------------------
     "side_menu": [
         {
             "name": "DASHBOARD",
-            "route": "/dashboard",
+            "route": "/dashboard",                  # The route name should be in the routes.py file
             "icon": "fa fa-dashboard fa-lg fa-fw"
         },
         {
@@ -79,6 +88,7 @@ app_ui_config = {
     ]
     # End of side menu
 }
+
 """
 Side Bar menu junk
 ,
