@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+                <p> PAGE_NAME = {{ pagename }} </p>
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Trends.</h5>
+                            <p class="card-text">
+                                This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
+                                In case you want to modify something, go to the settings page.
+                            </p>
+                            <p class="card-text">
+                                <a href="#" class="btn btn-outline-primary"> Settings </a>
+                            </p>
+
+                          </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
+
+
+                <!-- Other card -->
+                <div class="row m-b-1 align-items-center">
+
+                    <div class="col-md-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Project 1 </h5>
+                            <p class="card-text">
+                                <span class="badge bg-success"> 05/ Pass </span>
+                                <span class="badge bg-danger"> 02 Fail </span>
+                                <span class="badge bg-secondary"> 10 Skipped </span>
+                                <span class="badge bg-warning text-dark"> 02 Error </span>
+                            </p>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Total Testcases </h5>
+                            <p class="card-text"> 199 </p>
+                          </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
+
+
+            </div> <!-- End of the container -->
+
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
+
+    </body>
+
+    <script>
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
+
+</html>

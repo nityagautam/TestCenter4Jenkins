@@ -1,11 +1,13 @@
 # ===[Sample data Starts]============================================================
 
 # Sample recent crawled data
+latest_datas = []
 latest_data = [
     {
         "key": "server",
         "project_name": "New",
         "build_no": "build16",
+        "data_source": "Jenkins",
         "build_url": "https://jenkins.url/prj/build15",
         "report_date": "15 Aug 2021",
         "crawled_date": "10 Aug 2021",
@@ -15,6 +17,7 @@ latest_data = [
     {
         "key": "Well, I came from flask server",
         "project_name": "SMPL Helix QAC VS Code Plugin",
+        "data_source": "Jenkins",
         "build_no": "build15",
         "build_url": "https://jenkins.url/prj/build15",
         "report_date": "15 Aug 2021",
@@ -25,6 +28,7 @@ latest_data = [
     {
         "key": "Well, I came from flask server",
         "project_name": "SMPL Helix QAC Dashboard",
+        "data_source": "Jenkins",
         "build_no": "build15",
         "build_url": "https://jenkins.url/prj/build15",
         "report_date": "15 Aug 2021",
@@ -35,6 +39,7 @@ latest_data = [
     {
         "key": "Well, I came from flask server",
         "project_name": "SMPL Helix QAC Eclipse Plugin",
+        "data_source": "Jenkins",
         "build_no": "build16",
         "build_url": "https://jenkins.url/prj/build16",
         "report_date": "15 Aug 2021",
@@ -45,6 +50,7 @@ latest_data = [
     {
         "key": "Well, I came from flask server",
         "project_name": "SMPL Multi-Engine Parser",
+        "data_source": "Jenkins",
         "build_no": "build17",
         "build_url": "https://jenkins.url/prj/build17",
         "report_date": "15 Aug 2021",
@@ -55,6 +61,7 @@ latest_data = [
     {
         "key": "Well, I came from flask server",
         "project_name": "SMPL klocwork Server",
+        "data_source": "Jenkins",
         "build_no": "build17",
         "build_url": "https://jenkins.url/prj/build17",
         "report_date": "15 Aug 2021",
@@ -65,6 +72,7 @@ latest_data = [
     {
         "key": "Well, I came from flask server",
         "project_name": "Project Theta-5",
+        "data_source": "Jenkins",
         "build_no": "build17",
         "build_url": "https://jenkins.url/prj/build17",
         "report_date": "13 Aug 2021",

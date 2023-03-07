@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="{{url_for('static', filename='images/logo.svg')}}">
+
+	<title>Report Dashboard</title>
+
+	<!-- stylesheets -->
+	<link href="{{url_for('static', filename='assets/fonts/font-roboto.css')}}" rel="stylesheet">
+	<link href="{{url_for('static', filename='assets/bootstrap/bootstrap4-alpha3.min.css')}}" rel="stylesheet">
+	<link href="{{url_for('static', filename='assets/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+	<link href="{{url_for('static', filename='assets/web-analytics/style.css')}}" rel="stylesheet">
+	<!-- Custom stylesheet-->
+	<link href="{{url_for('static', filename='css/custom-style.css')}}" rel="stylesheet">
+	<!-- Bootstrap scripts -->
+	<script src="{{url_for('static', filename='assets/jquery/jquery-3.1.0.min.js')}}"></script>
+	<script src="{{url_for('static', filename='assets/tether/tether.min.js')}}"></script>
+	<script src="{{url_for('static', filename='assets/bootstrap/bootstrap4-alpha3.min.js')}}"></script>
+
+</head>
+
+<body>
+	<!-- header -->
+	<nav class="navbar navbar-fixed-top" id="header">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<div id="sidebar-toggle-button">
+					<i class="fa fa-bars" aria-hidden="true"></i>
+				</div>
+				<div class="brand">
+					<a href="/">
+						<span class="hidden-m-down m-r-12"> &nbsp; </span>
+						<span class="lead"> {{ app_data['app_name'] }} </span>
+						<!-- <span class="tag" id="revenue-tag"> {{app_data["app_poc_tag_1"]}} </span> -->
+					</a>
+				</div>
+
+			</div>
+		</div>
+	</nav>
+	<!-- /header -->
+
+	<!-- sidebar -->
+	<div class="sidebar-toggle" id="sidebar">
+		<ul class="nav nav-sidebar">
+			{% for menu in app_data["side_menu"] %}
+				{%if menu['name'] == "NOTES" %}
+				<li>
+					<a href="{{menu['route']}}" class="active">
+						<i class="{{menu['icon']}}"></i>
+						<span> {{menu['name']}} </span>
+					</a>
+				</li>
+				<li role="separator" class="divider"></li>
+				{%elif menu['name'] != "-" %}
+				<li>
+					<a href="{{menu['route']}}">
+						<i class="{{menu['icon']}}"></i>
+						<span> {{menu['name']}} </span>
+					</a>
+				</li>
+				<li role="separator" class="divider"></li>
+				{%else%}
+				<li role="separator" class="divider"></li>
+				{%endif%}
+			{% endfor %}
+			<!-- And at the very end of the side menu attach the experimental tag -->
+			<li class="sidebar-bottom">
+				<span class="tag custom-tag" id="experimental-tag1"> {{app_data["app_experimental_tag"]}} </span>
+			</li>
+		</ul>
+	</div>
+	<!-- /sidebar -->
+
+	<!-- page-content-wrapper -->
+	<div class="page-content-toggle" id="page-content-wrapper">
+		<div class="container-fluid">
+
+			<!-- 1st row -->
+			<div class="row m-b-1">
+				<div class="col-md-12">
+					<div class="card card-block">
+						<h4 class="card-title m-b-2"> {{app_data["notes_page"]["title"]}} </h4>
+						<div class="desc">
+							<!-- <form method="POST" action="/get-todo"> -->
+								<textarea id="toDoText" name="todotxt" style='height: 200px; width: 100%' placeholder='Type something here ...'></textarea>
+								<input type="submit" value="ADD" onclick="javascript:addToTempList();"/>
+							<!-- </form> -->
+							<hr/>
+							<p> Navigate to the <a href='/'> home </a> </p>
+							<div class="added_notes" id="addedNotes">
+								<!-- Note will be added here -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /1st row -->
+
+		</div>
+		<!-- /.container-fluid -->
+
+	</div>
+	<!-- /page-content-wrapper -->
+
+</body>
+
+<!-- script for sidebar menu handling -->
+<script>
+	$('#sidebar-toggle-button').on('click', function () {
+		$('#sidebar').toggleClass('sidebar-toggle');
+		$('#page-content-wrapper').toggleClass('page-content-toggle');
+	});
+
+	// Function to add the note into temporary list.
+	function addToTempList(){
+		var myDiv = document.getElementById("addedNotes");
+        
+		// If Some text has been witten in the text area;
+		if(document.getElementById("toDoText").value !== '' || document.getElementById("toDoText").value.length > 0 ){
+			console.info('Note Added: ', document.getElementById("toDoText").value);
+			// creating checkbox element
+			var checkbox = document.createElement('input');
+			// Assigning the attributes
+			checkbox.type = "checkbox";
+			checkbox.name = "name";
+			checkbox.value = "value";
+			checkbox.id = "id"+Date();
+				
+			// creating label for checkbox
+			var label = document.createElement('label');
+			// assigning attributes for
+			label.className = "label label-default";
+			label.style = "padding: 3px; white-space: break-spaces;";
+			// the created label tag
+			label.htmlFor = checkbox.id;
+			label.innerText = document.getElementById("toDoText").value;
+			
+			// Create new line with seperator
+			var seperator = document.createElement('hr');
+
+			// appending the checkbox
+			// and label to div
+			myDiv.appendChild(checkbox);
+			myDiv.appendChild(label);
+			myDiv.appendChild(seperator);
+			document.getElementById("toDoText").value = '';
+		}
+	}
+</script>
+
+</html>

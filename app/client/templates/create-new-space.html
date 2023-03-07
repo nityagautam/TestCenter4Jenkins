@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+
+
+                <!-- Give some initial brief/info "table-hover table-group-divider" -->
+                <div class="accordion" id="accordionExample">
+
+                      <!-- Second item -->
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Create new spce
+                          </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                            <strong>Create a new space for a dashboard with some file or Jenkins link.</strong>
+                              <p>
+                                  Now, You can provide, <code>Project/Space name</code>, <code>Source file</code>, <code> Jenkins URL along with credentials </code>
+                                  to extract all the data and create a view here.
+                              </p>
+
+                          </div>
+                        </div>
+                      </div>
+                </div> <br/> <br/>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title"> <strong> Create new space for a project. </strong></h4> <hr/>
+                                <!-- Form -->
+                                            <!-- Adding a form here to create a new space (get the inputs from the user) -->
+                                            <form class="row g-3 needs-validation" novalidate>
+                                                  <!-- Project/Space name <div class="col-md-4"> input-group input-group-text -->
+                                                  <div class="mb-3">
+                                                    <label class="form-label" for="validationCustom01"> Space name </label>
+                                                    <input type="text" class="form-control" id="validationCustom01" value="SampleSpace01" required>
+                                                    <div class="valid-feedback"> Looks good! </div>
+                                                  </div>
+
+                                                  <!-- Select data source (File/Jenkins) -->
+                                                  <div class="mb-3">
+                                                      <label for="validationCustom04" class="form-label"> Data source </label>
+                                                      <select class="form-select" id="validationCustom04" required>
+                                                          <option selected disabled value="">Choose...</option>
+                                                          <option>JUnit Test Result XML File</option>
+                                                          <option>Jenkins Server</option>
+                                                      </select>
+                                                    <div class="invalid-feedback">
+                                                      Please select a valid state.
+                                                    </div>
+                                                  </div>
+
+                                                  <!-- File to upload -->
+                                                  <div class="mb-3">
+                                                      <label class="form-label" for="inputGroupFile01"> JUnit Test Result File</label>
+                                                      <input type="file" class="form-control" id="inputGroupFile01">
+                                                  </div>
+
+                                                  <!-- Jenkins URL -->
+                                                  <div class="mb-3">
+                                                    <label class="form-label" for="validationCustom06"> Jenkins URL </label>
+                                                    <input type="text" class="form-control" id="validationCustom06" value="http://localhost:8080/" required>
+                                                    <div class="valid-feedback"> Looks good! </div>
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                    <label for="validationCustomUsername1" class="form-label">Username</label>
+                                                    <div class="input-group has-validation">
+                                                      <span class="input-group-text" id="inputGroupPrepend1">@</span>
+                                                      <input type="text" class="form-control" id="validationCustomUsername1" aria-describedby="inputGroupPrepend" required>
+                                                      <div class="invalid-feedback">
+                                                        Please choose a username.
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                    <label for="validationCustomUsername2" class="form-label">Username</label>
+                                                    <div class="input-group has-validation">
+                                                      <span class="input-group-text" id="inputGroupPrepend2">@</span>
+                                                      <input type="text" class="form-control" id="validationCustomUsername2" aria-describedby="inputGroupPrepend" required>
+                                                      <div class="invalid-feedback">
+                                                        Please choose a username.
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+
+
+                                                  <div class="col-md-4">
+                                                    <label for="validationCustom02" class="form-label">Last name</label>
+                                                    <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
+                                                    <div class="valid-feedback">
+                                                      Looks good!
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="col-md-6">
+                                                    <label for="validationCustom03" class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="validationCustom03" required>
+                                                    <div class="invalid-feedback">
+                                                      Please provide a valid city.
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="col-md-3">
+                                                    <label for="validationCustom05" class="form-label">Zip</label>
+                                                    <input type="text" class="form-control" id="validationCustom05" required>
+                                                    <div class="invalid-feedback">
+                                                      Please provide a valid zip.
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-12">
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                                                      <label class="form-check-label" for="invalidCheck">
+                                                        Agree to terms and conditions
+                                                      </label>
+                                                      <div class="invalid-feedback">
+                                                        You must agree before submitting.
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-12">
+                                                    <button class="btn btn-primary" type="submit"> Create new space </button>
+                                                  </div>
+                                            </form>
+
+
+                                <!-- End form -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/><br/>
+
+            </div>
+
+            <!-- Footer Last -->
+            <hr/>
+            <div>
+                <span class="badge rounded-pill text-bg-dark"> Built with Python3+Flask+Bootstrap5.3 </span>
+				<span class="badge rounded-pill text-bg-dark"> by {{app_data['app_author']}} </span>
+				<span class="badge rounded-pill text-bg-dark"> {{app_data['app_version']}} Build: [{{app_data['app_experimental_tag']}}]</span>
+            </div>
+            <hr/>
+
+    </body>
+
+    <script>
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
+
+</html>

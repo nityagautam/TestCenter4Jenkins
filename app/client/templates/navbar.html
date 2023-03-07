@@ -1,0 +1,80 @@
+<!-- Navbar "CLS: bg-body-tertiary" -->
+<nav class="navbar fixed-top navbar-expand-lg" style="background: #34495e;">
+  <div class="container-fluid">
+
+    <a class="navbar-brand white-font" href="#" style=""> {{ app_data['app_title'] }} </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Right Side of menu options -->
+        <!-- We can track the page to set the nav link as active (get app_page == 'any_page_name' then use 'active-link' class for nav-link )
+                        Or, we can get all the info from the server only like
+                            - Menu names
+                            - Menu link route
+                            - Menu link status (eg active-link)
+
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                    <a class="nav-link active-link" aria-current="page" href="/index"> Overview </a>
+              </li>
+              <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/"> Dashboard </a>
+              </li>
+              <li class="nav-item">
+                    <a class="nav-link" href="/create-new-space"> Create </a>
+              </li>
+              <li class="nav-item">
+                    <a class="nav-link" href="/trends"> Trends </a>
+              </li>
+              <li class="nav-item">
+                    <a class="nav-link" href="/about"> About </a>
+              </li>
+          </ul>
+        -->
+        <!--
+            Auto Generated Navbar Manus
+            Based on pagename, set the menu as active-link
+        -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {%if ui_config["routes"]|length >= 1 %}
+                    {% for route_name, route_data in ui_config["routes"].items() %}
+                        {%if route_data["is_menu"]%}
+                            <li class="nav-item">
+                                <a class="nav-link {%if pagename == route_data['page_name']%} active-link {%endif%}" href="{{route_name}}"> {{route_data["page_name"]}} </a>
+                            </li>
+                        {%endif%}
+                    {% endfor %}
+                {%else%}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"> No Menus found, Read how to setup menus </a>
+                    </li>
+                {%endif%}
+            </ul>
+
+
+          <!-- Right Side of menu options -->
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form> &nbsp;&nbsp;&nbsp;&nbsp;
+
+          <form>
+                <div class="dropdown white-font">
+                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Hi {{ username }}
+                    </button>
+
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"> Logout &nbsp; </a></li>
+                        <li><a class="dropdown-item" href="#"> Settings  &nbsp; </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item disabled">(En) English  &nbsp; </a></li>
+                    </ul>
+                </div>
+          </form>
+
+    </div>
+  </div>
+</nav>

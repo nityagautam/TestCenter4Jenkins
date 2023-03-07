@@ -42,5 +42,27 @@ Just clone the repo/code and install the requirements;
 ###### Other things
 Simply goes here
 
+
+###### Template Rendering args
+1st arg: template file <br/>
+2nd arg: username in session  <br/>
+3rd arg: ui_config  <br/>
+4th arg: data (related to projects and all)  <br/> <br/>
+<pre> 
+Syntax:
+render_template("index.html",
+                  page_name="",
+                  username=session['user'], 
+                  ui_configuration=app_ui_config, 
+                  data=sample_data.latest_data)
+Example:
+render_template(ui_config["/index"]["template_name"],
+                page_name = ui_config["/index"]["page_name"],
+                username = ,
+                ui_configuration = ,
+                data
+                )
+</pre>
+
 <hr/>
 Developer: nityanarayan44@live.com

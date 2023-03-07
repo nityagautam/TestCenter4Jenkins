@@ -1,77 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="{{url_for('static', filename='images/logo.svg')}}">
-
-        <title>Report Dashboard</title>
-
-        <!-- stylesheets -->
-        <!-- Custom stylesheet-->
-        <link href="{{url_for('static', filename='css/custom-style.css')}}" rel="stylesheet">
-        <!-- Bootstrap scripts -->
-        <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
-        <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
-    </head>
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
 
     <body>
 
 
-            <!-- Navbar "CLS: bg-body-tertiary" -->
-            <nav class="navbar fixed-top navbar-expand-lg" style="background: #34495e;">
-              <div class="container-fluid">
-
-                <a class="navbar-brand white-font" href="#" style=""> {{ app_data['app_title'] }} </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#"> Overview </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#"> Dashboard </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#"> Trends </a>
-                    </li>
-                  </ul>
-
-                  <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form> &nbsp;&nbsp;&nbsp;&nbsp;
-
-                  <form>
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Hi {{ username }}
-                            </button>
-
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"> Logout &nbsp; </a></li>
-                                <li><a class="dropdown-item" href="#"> Settings  &nbsp; </a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item disabled">(En) English  &nbsp; </a></li>
-                            </ul>
-                        </div>
-                  </form>
-
-                </div>
-              </div>
-            </nav>
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
 
             <!-- Content Area -->
             <div class="container">
                 <br/><br/><br/><br/>
-
+                {{pagename}}
 
                 <!-- Give some initial brief/info "table-hover table-group-divider" -->
+                <div class="accordion" id="accordionExample">
+                      <!-- First item -->
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Overview
+                          </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                                <strong>This</strong> page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
+                                It is the overview of the all the test projects for the automation, which has been extracted/crawled
+                                either from the jenkins or from the <code>(HTML/Junit xml)</code> reports file.
+                                <p>
+                                All the projects/job can be configured to be crawled either from the jenkins or from a local locations, and you can always modify your settings.
+                                </p>
+                                <a href="#" class="btn btn-outline-primary"> Settings </a>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Second item -->
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Create new spce
+                          </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                            <strong>Create a new space for a dashboard with some file or Jenkins link.</strong>
+                              <p>
+                                  Now, You can provide, <code>Project/Space name</code>, <code>Source file</code>, <code> Jenkins URL along with credentials </code>
+                                  to extract all the data and create a view here.
+                              </p>
+
+                          </div>
+                        </div>
+                      </div>
+                </div> <br/> <br/>
+
                 <div class="row">
                     <div class="col">
                         <div class="card">
@@ -83,7 +69,7 @@
                                 either from the jenkins or from the (HTML/Junit xml) reports file.
                             </p>
                             <p class="card-text">
-                                All the projects/job can be configured to be crawled either from the jenkins or from a local locations, and you can always modify your settings.
+
                             </p>
                             <a href="#" class="btn btn-outline-primary"> Settings </a>
                           </div>
@@ -132,44 +118,42 @@
                               <thead class="table-group-divider">
                                 <tr>
                                   <th scope="col">#</th>
-                                  <th scope="col">First</th>
-                                  <th scope="col">Last</th>
-                                  <th scope="col">Handle</th>
+                                  <th scope="col">Projects</th>
+                                  <th scope="col">Created</th>
+                                  <th scope="col">Status</th>
+                                  <th scope="col">Manage</th>
                                 </tr>
                               </thead>
                               <tbody class="table-group-divider">
-                                <tr>
-                                  <th scope="row">1</th>
-                                  <td>Mark</td>
-                                  <td>Otto</td>
-                                  <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                  <th scope="row">2</th>
-                                  <td>Jacob</td>
-                                  <td>Thornton</td>
-                                  <td>@fat</td>
-                                </tr>
-                                <tr>
-                                  <th scope="row">3</th>
-                                  <td colspan="2">Larry the Bird</td>
-                                  <td>@twitter</td>
-                                </tr>
+                                    <!-- Loading all the projects available -->
+                                    {%if data|length >= 1 %}
+                                        {% for project in data %}
+                                                <tr>
+                                                  <th scope="row"> 1 </th>
+                                                  <td>Validate Portal</td>
+                                                  <td>01 January 2023</td>
+                                                  <td>Active / Archived</td>
+                                                  <td>
+                                                      <a href="#" class="btn btn-outline-primary"> Edit </a>
+                                                      <a href="#" class="btn btn-outline-primary"> Archive </a>
+                                                  </td>
+                                                </tr>
+                                        {%endfor%}
+                                    {%else%}
+                                        <!-- Show no data, because data is empty -->
+                                        <tr>
+                                            <th scope="row" colspan="4"> No projects available yet, consider creating one </th>
+                                            <td> <a href="/create-new-space" class="btn btn-outline-primary"> Create new space </a> </td>
+                                        </tr>
+                                    {%endif%}
                               </tbody>
                             </table>
                           </div></div></div></div>
 
-
             </div>
 
-            <!-- Last -->
-            <hr/>
-            <div>
-                <span class="badge rounded-pill text-bg-dark"> Built with Python3+Flask+Bootstrap5.3 </span>
-				<span class="badge rounded-pill text-bg-dark"> by {{app_data['app_author']}} </span>
-				<span class="badge rounded-pill text-bg-dark"> {{app_data['app_version']}} Build: [{{app_data['app_experimental_tag']}}]</span>
-            </div>
-            <hr/>
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
 
     </body>
 
