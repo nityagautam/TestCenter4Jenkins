@@ -1,280 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-	<meta charset="utf-8">
-	<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="{{url_for('static', filename='images/logo.svg')}}">
-
-	<title>Report Dashboard</title>
-
-	<!-- stylesheets -->
-	<link href="{{url_for('static', filename='assets/fonts/font-roboto.css')}}" rel="stylesheet">
-	<link href="{{url_for('static', filename='assets/bootstrap/bootstrap4-alpha3.min.css')}}" rel="stylesheet">
-	<link href="{{url_for('static', filename='assets/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-	<link href="{{url_for('static', filename='assets/web-analytics/style.css')}}" rel="stylesheet">
-	<!-- Custom stylesheet-->
-	<link href="{{url_for('static', filename='css/custom-style.css')}}" rel="stylesheet">
-	<!-- Bootstrap scripts -->
-	<script src="{{url_for('static', filename='assets/jquery/jquery-3.1.0.min.js')}}"></script>
-	<script src="{{url_for('static', filename='assets/tether/tether.min.js')}}"></script>
-	<!--<script src="{{url_for('static', filename='assets/bootstrap/bootstrap4-alpha3.min.js')}}"></script>-->
-<!--	<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>-->
-<!--	<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js.map')}}"></script>-->
-	<link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
-    <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
-
-	<!-- scripts: Chart libs -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-
-</head>
-
-<body>
-	<!-- header -->
-	<nav class="navbar navbar-fixed-top" id="header">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<div id="sidebar-toggle-button">
-					<i class="fa fa-bars" aria-hidden="true"></i>
-				</div>
-				<div class="brand">
-					<a href="/">
-						<span class="hidden-m-down m-r-12"> &nbsp; </span>
-						<span class="lead"> {{ app_data['app_title'] }} </span>
-					</a>
-				</div>
-				<!--
-				<span class="" style="display: inline-flex; width: 350px;">
-					<form class="d-flex" role="search">
-						<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-						<button class="btn btn-outline-success" type="submit">Search</button>
-					</form>
-				</span>
-				-->
-				<span class="" style="top: 2%; right: 2%; position: absolute; padding: 12px 16px 12px 0;" tooltip="Logout">
-<!--					<a href="/logout">-->
-<!--						<span class="hidden-m-down m-r-12"> &nbsp; </span>-->
-<!--						<img src="{{url_for('static', filename='images/person-circle.svg')}}" height="40" width="40" class="rounded me-1" style="padding: 12px 16px 12px 0;" alt="user">-->
-
-<!--					</a>-->
-
-<!--					<div class="dropdown">-->
-<!--&lt;!&ndash;					  	<button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">&ndash;&gt;-->
-<!--&lt;!&ndash;							Hi User&ndash;&gt;-->
-<!--&lt;!&ndash;					  	</button>&ndash;&gt;-->
-<!--						<button type="button" class="btn btn-danger">Hi User</button>-->
-<!--						<button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--							<span class="visually-hidden">Toggle Dropdown</span>-->
-<!--						</button>-->
-<!--						<ul class="dropdown-menu">-->
-<!--							<li><a class="dropdown-item" href="#">Logout</a></li>-->
-<!--							<li><a class="dropdown-item" href="#">Another action</a></li>-->
-<!--							<li><a class="dropdown-item" href="#">Something else here</a></li>-->
-<!--					  	</ul>-->
-<!--					</div>-->
-
-<!--						<div class="btn-group dropdown-center">-->
-<!--						  <button type="button" class="btn btn-danger disabled">Hi User</button>-->
-<!--						  <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--							<span class="visually-hidden">Toggle Dropdown</span>-->
-<!--						  </button>-->
-<!--						  <ul class="dropdown-menu">-->
-<!--							<li><a class="dropdown-item" href="#">Action</a></li>-->
-<!--							<li><a class="dropdown-item" href="#">Another action</a></li>-->
-<!--							<li><a class="dropdown-item" href="#">Something else here</a></li>-->
-<!--							<li><hr class="dropdown-divider"></li>-->
-<!--							<li><a class="dropdown-item" href="#">Separated link</a></li>-->
-<!--						  </ul>-->
-<!--						</div>-->
-
-						<!-- Split dropstart button -->
-						<div class="btn-group dropstart">
-						  <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-							<span class="visually-hidden">Toggle Dropstart</span>
-						  </button>
-						  <ul class="dropdown-menu">
-							<!-- Dropdown menu links -->
-							<li><a class="dropdown-item" href="/settings">Settings</a></li>
-							<li><a class="dropdown-item" href="/notes">Notes</a></li>
-							<li><a class="dropdown-item" href="/index">INDEX</a></li>
-							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="/logout">Logout</a></li>
-						  </ul>
-						  <button type="button" class="btn btn-dark disabled">
-							Hi {{ username }}
-						  </button>
-						</div>
-
-				</span>
-			</div>
-		</div>
-	</nav>
-	<!-- /header -->
-
-	<!-- sidebar -->
-	<div class="sidebar-toggle" id="sidebar">
-		<ul class="nav nav-sidebar">
-			{% for menu in app_data["side_menu"] %}
-				{%if menu['name'] == "DASHBOARD" %}
-				<li>
-					<a href="{{menu['route']}}" class="active">
-						<i class="{{menu['icon']}}"></i>
-						<span> {{menu['name']}} </span>
-					</a>
-				</li>
-				<li role="separator" class="divider"></li>
-				{%elif menu['name'] != "-" %}
-				<li>
-					<a href="{{menu['route']}}">
-						<i class="{{menu['icon']}}"></i>
-						<span> {{menu['name']}} </span>
-					</a>
-				</li>
-				<li role="separator" class="divider"></li>
-				{%else%}
-				<li role="separator" class="divider"></li>
-				{%endif%}
-			{% endfor %}
-
-			<!-- And at the very end of the side menu attach the experimental tag -->
-			<!-- Lets make it sticked to the side navbar class="sidebar-bottom" -->
-			<li class="sidebar-bottom">
-<!--				<div class="card" style="width: 100%; bottom: -55%; ">-->
-<!--				  <img src="{{url_for('static', filename='images/person-circle.svg')}}" class="card-img-top" alt="author">-->
-<!--				  <div class="card-body">-->
-<!--					<h5 class="card-title">{{app_data['app_author']}}</h5>-->
-<!--					<p class="card-text"> And I do this </p>-->
-<!--					<a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--				  </div>-->
-<!--				</div>-->
-				<!--<span class="tag custom-tag" id="experimental-tag1"> {{app_data["app_experimental_tag"]}} </span>-->
-				<span class="badge rounded-pill text-bg-dark"> Made with &love; </span> <br/>
-				<span class="badge rounded-pill text-bg-dark"> by {{app_data['app_author']}} </span> <br/>
-				<span class="badge rounded-pill text-bg-dark"> {{app_data['app_version']}} Build: [{{app_data['app_experimental_tag']}}]</span>
-<!--				<button type="button" class="btn btn-lg btn-primary" data-bs-toggle="popover" data-bs-title="Info about app" data-bs-content="Well, {{app_data['app_experimental_tag']}}">Author NNG</button>-->
-			</li>
-		</ul>
-	</div>
-
-	<!-- /sidebar -->
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+    <head>
+        <!-- scripts: Chart libs -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    </head>
+    <body>
 
 
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
 
-	<!-- page-content-wrapper -->
-	<div class="page-content-toggle" id="page-content-wrapper">
-		<div class="container-fluid">
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+                <!--<p> For DEBUG purpose, PAGE_NAME = {{ pagename }} </p>-->
 
-			<!-- 1st row is about the individual page title -->
-<!--			<div class="row m-b-1">-->
-<!--				<div class="col-md-12">-->
-<!--					<div class="card card-block">-->
-<!--						<h4 class="card-title m-b-2"> {{app_data["dashboard_page"]["title"]}} </h4>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-			<!-- /1st row -->
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Dashboard View</h5>
+                            <p class="card-text">
+                                This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
+                                In case you want to modify something, go to the settings page.
+                            </p>
+                            <p class="card-text">
+                                <a href="#" class="btn btn-outline-primary"> Settings </a>
+                            </p>
 
-			<!-- This row is for the dashboard charts -->
-			<div class="row m-b-1">
+                          </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
 
-				{% for project in data %}
-				<div class="col-md-4">
-					<div class="card custom-card card-block">
-						<h4 class="card-title"> {{ project.project_name }} </h4>
-						<span> Report Date: {{ project.report_date }} </span>
-						<!-- Here goes our chart -->
-						<canvas height="250px" class="{{ project.project_name|replace(' ' , '')|replace('-' , '') }}" id="myChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
-						<!-- Here goes our META info (if any)
-						<div>
-							META CONTROLS :: {{ project.project_name|replace(' ' , '')|replace('-' , '') }}
-						</div>
-						-->
 
-						<!-- Here goes our card action buttons -->
-						<div class="action_btns_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}" style="text-align: center;">
-							<button type="button" class="btn btn-dark btn-sm"> VIEW REPORT </button>
-							<button type="button" class="btn btn-dark btn-sm"> VIEW HISTORY </button>
-							<button type="button" class="btn btn-dark btn-sm"> VIEW JENKINS </button>
-						</div>
-						<!-- Javascript action for chart -->
-						<script type="text/javascript">
-							  var ctx = document.getElementById("myChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                <!-- Summary view card -->
+                <div class="row m-b-1 align-items-center">
 
-							  // For doughnut chart | pie | polarArea
-							  var myChart = new Chart(ctx, {
-								  	type: 'doughnut',
-								  	data: {
-								  		labels: [
-								  			{% for keys, val in project.test_result.items() %}
-								  			"{{ keys|safe }}",
-								  			{% endfor %}
-								  		],
-								  		datasets: [{
-													data: [
-														{% for keys, val in project.test_result.items() %}
-														{{ val }},
-														{% endfor %}
-													],
-													borderColor:[
-													  "rgb(60,186,159,1.0)",
-													  "#c45850",
-													  "#ffa500",
-													],
-													backgroundColor: [
-													  "rgb(60,186,159,0.7)",
-													  "rgb(196,88,80,0.7)",
-													  "rgb(255,165,0,0.7)",
-													],
-													borderWidth: 0.5,
-										}]
-								  	},
-								  	options: {
-								  			responsive: true,
-											cutoutPercentage: 55,
-								  			title: {
-												display: true,
-												text: 'LATEST TEST RESULT'
-											},
-											legend: {
-											  	display:true,
-											  	position:'bottom',
-											  	/* align:'start' */
-											},
-											scales: {
-												  	xAxes: [{
-													   	display: false,
-												  	}],
-												  	yAxes: [{
-													   	display: false,
-												  	}],
-											}
-								  	}
+                    <!-- Loading all the projects available -->
+                    {%if data|length >= 1 %}
+                        {% for project in data %}
+                            <div class="col-md-6">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <h5 class="card-title"> {{ project['project_name'] }} </h5>
+                                    <p class="card-text"> </p>
+                                    <span class="badge bg-light text-dark"> Report Date: {{ project.report_date }} </span>
+                                    <span class="badge bg-light text-dark"> Summary: &nbsp;
+                                        <span class="badge bg-success">           {{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|int }}% Pass </span>
+                                        <span class="badge bg-danger">            {{ project['test_result']['fail'] }} Fail </span>
+                                        <span class="badge bg-warning text-dark"> {{ project['test_result']['error'] }}  Error </span>
+                                        <span class="badge bg-secondary">         {{ project['test_result']['skipped'] }} Skipped </span>
+                                    </span> <br/>
+                                    <span class="badge bg-light text-dark"> Options: &nbsp;
+                                        <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;"> Toggle Charts </span>
+                                        <button class="btn"> BTN </button>
+                                    </span>
+                                  </div>
+                                  <div class="card-body">
+                                        <p class="card-text">
+                                            <!-- Here goes our chart -->
+                                            <canvas style="display: none;" height="150px" class="barChartCanvas" id="barChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                            <canvas style="display: block;" height="150px" class="doughnutChartCanvas" id="doughnutChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                        </p>
+                                  </div>
+                                </div> <br/>
+                            </div>
+                        {%endfor%}
+                    {%else%}
+                            <!-- Show no data, because data is empty -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>
+                                            No projects available yet, consider creating one
+                                        </p>
+                                        <p>
+                                            <a href="/create-new-space" class="btn btn-outline-primary"> Create new space </a>
+                                        </p>
+                                    </div>
 
-								});
+                                </div>
+                            </div>
+                    {%endif%}
+                </div> <br/><br/>
 
-						</script>
-					</div>
-				</div>
-				{% endfor %}
+            </div> <!-- End of the container -->
 
-			</div>
-			<!-- /2nd row -->
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
 
-		</div>
-		<!-- /.container-fluid -->
+    </body>
 
-	</div>
-	<!-- /page-content-wrapper -->
+    <script type="text/javascript">
+        function toggleCharts(projectId){
+            var barChartCanvas = document.getElementById("barChart_"+projectId)
+            var doughnutChartCanvas = document.getElementById("doughnutChart_"+projectId)
+            if(barChartCanvas.style.display == 'none'){
+                barChartCanvas.style.display = 'block';
+                doughnutChartCanvas.style.display = 'none';
+            } else {
+                barChartCanvas.style.display = 'none';
+                doughnutChartCanvas.style.display = 'block';
+            }
+        }
+    </script>
+    <!-- Javascript actions for charts -->
+    {%if data|length >= 1 %}
+        {% for project in data %}
+            <script type="text/javascript">
+                  var ctx = document.getElementById("barChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
 
-</body>
+                  // For doughnut chart | pie | polarArea
+                  var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [
+                                {% for keys, val in project.test_result.items() %}
+                                "{{ keys|safe }}",
+                                {% endfor %}
+                            ],
+                            datasets: [{
+                                        data: [
+                                            {% for keys, val in project.test_result.items() %}
+                                            {{ val }},
+                                            {% endfor %}
+                                        ],
+                                        borderColor:[
+                                          "rgb(60,186,159,1.0)",
+                                          "#c45850",
+                                          "#ffa500",
+                                        ],
+                                        backgroundColor: [
+                                          "rgb(60,186,159,0.7)",
+                                          "rgb(196,88,80,0.7)",
+                                          "rgb(255,165,0,0.7)",
+                                        ],
+                                        borderWidth: 2,
+                                        borderRadius: 5,
+                                        borderSkipped: false,
+                            }]
+                        },
+                        options: {
+                                responsive: true,
+                                cutoutPercentage: 55,
+                                title: {
+                                    display: true,
+                                    text: 'LATEST TEST RESULT'
+                                },
+                                legend: {
+                                    display:false,
+                                    position:'bottom',
+                                    /* align:'start' */
+                                },
+                                scales: {
+                                        xAxes: [{
+                                            display: true,
+                                        }],
+                                        yAxes: [{
+                                            display: true,
+                                        }],
+                                }
+                        }
 
-<!-- script for sidebar menu handling -->
-<script>
-	$('#sidebar-toggle-button').on('click', function () {
-		$('#sidebar').toggleClass('sidebar-toggle');
-		$('#page-content-wrapper').toggleClass('page-content-toggle');
-	});
-</script>
+                    });
+            </script>
+        {%endfor%}
+    {%endif%}
+
+    {%if data|length >= 1 %}
+        {% for project in data %}
+            <script type="text/javascript">
+                  var ctx = document.getElementById("doughnutChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+
+                  // For doughnut chart | pie | polarArea
+                  var myChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: [
+                                {% for keys, val in project.test_result.items() %}
+                                "{{ keys|safe }}",
+                                {% endfor %}
+                            ],
+                            datasets: [{
+                                        data: [
+                                            {% for keys, val in project.test_result.items() %}
+                                            {{ val }},
+                                            {% endfor %}
+                                        ],
+                                        borderColor:[
+                                          "rgb(60,186,159,1.0)",
+                                          "#c45850",
+                                          "#ffa500",
+                                        ],
+                                        backgroundColor: [
+                                          "rgb(60,186,159,0.7)",
+                                          "rgb(196,88,80,0.7)",
+                                          "rgb(255,165,0,0.7)",
+                                        ],
+                                        borderWidth: 2,
+                                        borderRadius: 5,
+                                        borderSkipped: false,
+                            }]
+                        },
+                        options: {
+                                responsive: true,
+                                cutoutPercentage: 55,
+                                title: {
+                                    display: true,
+                                    text: 'LATEST TEST RESULT'
+                                },
+                                legend: {
+                                    display:true,
+                                    position:'bottom',
+                                    /* align:'start' */
+                                },
+                                scales: {
+                                        xAxes: [{
+                                            display: false,
+                                        }],
+                                        yAxes: [{
+                                            display: false,
+                                        }],
+                                }
+                        }
+
+                    });
+            </script>
+        {%endfor%}
+    {%endif%}
+
+    <script>
+            // Once dom is loaded
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
 
 </html>

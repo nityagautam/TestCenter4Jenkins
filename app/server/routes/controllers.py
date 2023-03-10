@@ -28,21 +28,13 @@ def home():
 @application.route('/dashboard', methods=['GET'])
 def dashboard():
     if 'user' in session and session['user'] == users['username']:
-        return render_template("dashboard.html", app_data=app_ui_config, data=sample_data.latest_data, username=session['user'])
-    return not_authorised()
-
-
-@application.route('/about', methods=['GET'])
-def about():
-    if 'user' in session and session['user'] == users['username']:
-        return render_template("about.html", app_data=app_ui_config, data=sample_data.latest_data)
-    return not_authorised()
-
-
-@application.route('/notes')
-def info():
-    if 'user' in session and session['user'] == users['username']:
-        return render_template("notes.html", app_data=app_ui_config)
+        return render_template(app_ui_config["routes"]["/dashboard"]["template_name"],
+                               pagename=app_ui_config["routes"]["/dashboard"]["page_name"],
+                               username=session['user'],
+                               ui_config=app_ui_config,
+                               app_data=app_ui_config,  # TODO: need to remove app_data from all routes
+                               data=sample_data.latest_data
+                               )
     return not_authorised()
 
 
@@ -81,6 +73,23 @@ def create_new_project_space():
     return not_authorised()
 
 
-# When User is not authorised, then where to redirect
+@application.route('/about', methods=['GET'])
+def about():
+    if 'user' in session and session['user'] == users['username']:
+        return render_template("about.html", app_data=app_ui_config, data=sample_data.latest_data)
+    return not_authorised()
+
+
+@application.route('/notes')
+def info():
+    if 'user' in session and session['user'] == users['username']:
+        return render_template("notes.html", app_data=app_ui_config)
+    return not_authorised()
+
+
+# ===============================
+# When User is not authorised,
+# then where to redirect
+# ===============================
 def not_authorised():
     return redirect('/login')
