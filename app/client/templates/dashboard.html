@@ -17,7 +17,6 @@
             <!-- Content Area -->
             <div class="container">
                 <br/><br/><br/><br/>
-                <!--<p> For DEBUG purpose, PAGE_NAME = {{ pagename }} </p>-->
 
                 <div class="row">
                     <div class="col">
@@ -56,10 +55,6 @@
                                         <span class="badge bg-warning text-dark"> {{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Error </span>
                                         <span class="badge bg-secondary">         {{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Skipped </span>
                                         <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
-
-<!--                                    <span class="badge bg-light text-dark"> Options: &nbsp;-->
-<!--                                        <button class="btn btn-sm btn-outline-primary" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');"> Toggle Charts </button>-->
-<!--                                    </span>-->
                                   </div>
                                   <hr style="margin: none; padding: 0;"/>
                                   <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">
@@ -108,13 +103,18 @@
             }
         }
     </script>
+
     <!-- Javascript actions for charts -->
     {%if data|length >= 1 %}
         {% for project in data %}
             <script type="text/javascript">
-                  var ctx = document.getElementById("barChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
 
-                  // For doughnut chart | pie | polarArea
+                  /*
+                    ======================================
+                    For the Bar chart
+                    ======================================
+                  */
+                  var ctx = document.getElementById("barChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
                   var myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
@@ -162,33 +162,25 @@
                                     colors: {
                                       enabled: true
                                     },
-
                                 },
-
                                 scales: {
                                     y: {
+                                        display: true,
                                         beginAtZero: true
                                     },
-                                    xAxes: [{
+                                    x: {
                                         display: true,
-                                    }],
-                                    yAxes: [{
-                                        display: true,
-                                    }],
+                                    }
                                 }
                         }
+                  });
 
-                    });
-            </script>
-        {%endfor%}
-    {%endif%}
-
-    {%if data|length >= 1 %}
-        {% for project in data %}
-            <script type="text/javascript">
+                  /*
+                    ======================================
+                    For the Doughnut chart
+                    ======================================
+                  */
                   var ctx = document.getElementById("doughnutChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
-
-                  // For doughnut chart | pie | polarArea
                   var myChart = new Chart(ctx, {
                         type: 'doughnut',
                         data: {
@@ -242,16 +234,16 @@
 
                                 },
                                 scales: {
-                                        xAxes: [{
+                                        x: {
                                             display: false,
-                                        }],
-                                        yAxes: [{
+                                        },
+                                        y: {
                                             display: false,
-                                        }],
+                                        },
                                 }
                         }
 
-                    });
+                  });
             </script>
         {%endfor%}
     {%endif%}
