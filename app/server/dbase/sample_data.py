@@ -1,11 +1,21 @@
 # ===[Sample data Starts]============================================================
 
 # Sample recent crawled data
+project_list_data = [
+    {"project_id": "001", "project_name": "Helix-QAC Eclipse Plugin", "date_created": "15 Aug 2021", "status": "active", "data_source": "jenkins", "jenkins_url": "http://localhost:8080", "jenkins_uname": "dev", "jenkins_pwd": "pwd_digest"},
+    {"project_id": "002", "project_name": "Helix QAC VS Code Plugin", "date_created": "15 Aug 2021", "status": "active", "data_source": "xml/json", "jenkins_url": "", "jenkins_uname": "", "jenkins_pwd": ""},
+    {"project_id": "003", "project_name": "Helix QAC Dashboard", "date_created": "15 Aug 2021", "status": "active", "data_source": "xml/json", "jenkins_url": "", "jenkins_uname": "", "jenkins_pwd": ""},
+    {"project_id": "004", "project_name": "Validate Portal UI", "date_created": "15 Aug 2021", "status": "active", "data_source": "xml/json", "jenkins_url": "", "jenkins_uname": "", "jenkins_pwd": ""},
+    {"project_id": "005", "project_name": "Multi-Engine Parser", "date_created": "15 Aug 2021", "status": "active", "data_source": "xml/json", "jenkins_url": "", "jenkins_uname": "", "jenkins_pwd": ""},
+    {"project_id": "006", "project_name": "klocwork Server", "date_created": "15 Aug 2021", "status": "active", "data_source": "xml/json", "jenkins_url": "", "jenkins_uname": "", "jenkins_pwd": ""},
+    {"project_id": "007", "project_name": "Project Theta-5", "date_created": "15 Aug 2021", "status": "active", "data_source": "xml/json", "jenkins_url": "", "jenkins_uname": "", "jenkins_pwd": ""},
+
+]
 latest_datas = []
 latest_data = [
     {
         "key": "server",
-        "project_name": "New",
+        "project_name": "Helix-QAC Eclipse Plugin",
         "build_no": "build16",
         "data_source": "Jenkins",
         "build_url": "https://jenkins.url/prj/build15",
@@ -16,7 +26,7 @@ latest_data = [
     },
     {
         "key": "Well, I came from flask server",
-        "project_name": "SMPL Helix QAC VS Code Plugin",
+        "project_name": "Helix QAC VS Code Plugin",
         "data_source": "Jenkins",
         "build_no": "build15",
         "build_url": "https://jenkins.url/prj/build15",
@@ -27,7 +37,7 @@ latest_data = [
     },
     {
         "key": "Well, I came from flask server",
-        "project_name": "SMPL Helix QAC Dashboard",
+        "project_name": "Helix QAC Dashboard",
         "data_source": "Jenkins",
         "build_no": "build15",
         "build_url": "https://jenkins.url/prj/build15",
@@ -38,7 +48,7 @@ latest_data = [
     },
     {
         "key": "Well, I came from flask server",
-        "project_name": "SMPL Helix QAC Eclipse Plugin",
+        "project_name": "Validate Portal UI",
         "data_source": "Jenkins",
         "build_no": "build16",
         "build_url": "https://jenkins.url/prj/build16",
@@ -49,7 +59,7 @@ latest_data = [
     },
     {
         "key": "Well, I came from flask server",
-        "project_name": "SMPL Multi-Engine Parser",
+        "project_name": "Multi-Engine Parser",
         "data_source": "Jenkins",
         "build_no": "build17",
         "build_url": "https://jenkins.url/prj/build17",
@@ -60,7 +70,7 @@ latest_data = [
     },
     {
         "key": "Well, I came from flask server",
-        "project_name": "SMPL klocwork Server",
+        "project_name": "klocwork Server",
         "data_source": "Jenkins",
         "build_no": "build17",
         "build_url": "https://jenkins.url/prj/build17",

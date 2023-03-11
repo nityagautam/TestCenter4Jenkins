@@ -5,7 +5,8 @@
     {% include 'head.html' %}
     <head>
         <!-- scripts: Chart libs -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+            <!-- Older Chart <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>-->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
 
@@ -49,23 +50,22 @@
                                     <h5 class="card-title"> {{ project['project_name'] }} </h5>
                                     <p class="card-text"> </p>
                                     <span class="badge bg-light text-dark"> Report Date: {{ project.report_date }} </span>
-                                    <span class="badge bg-light text-dark"> Summary: &nbsp;
-                                        <span class="badge bg-success">           {{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|int }}% Pass </span>
-                                        <span class="badge bg-danger">            {{ project['test_result']['fail'] }} Fail </span>
-                                        <span class="badge bg-warning text-dark"> {{ project['test_result']['error'] }}  Error </span>
-                                        <span class="badge bg-secondary">         {{ project['test_result']['skipped'] }} Skipped </span>
-                                    </span> <br/>
-                                    <span class="badge bg-light text-dark"> Options: &nbsp;
-                                        <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;"> Toggle Charts </span>
-                                        <button class="btn"> BTN </button>
-                                    </span>
+                                    <span class="badge bg-light text-dark"> Summary: </span>
+                                        <span class="badge bg-success">           {{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% Pass </span>
+                                        <span class="badge bg-danger">            {{ ((project['test_result']['fail']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Fail </span>
+                                        <span class="badge bg-warning text-dark"> {{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Error </span>
+                                        <span class="badge bg-secondary">         {{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Skipped </span>
+                                        <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
+
+<!--                                    <span class="badge bg-light text-dark"> Options: &nbsp;-->
+<!--                                        <button class="btn btn-sm btn-outline-primary" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');"> Toggle Charts </button>-->
+<!--                                    </span>-->
                                   </div>
-                                  <div class="card-body">
-                                        <p class="card-text">
-                                            <!-- Here goes our chart -->
-                                            <canvas style="display: none;" height="150px" class="barChartCanvas" id="barChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
-                                            <canvas style="display: block;" height="150px" class="doughnutChartCanvas" id="doughnutChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
-                                        </p>
+                                  <hr style="margin: none; padding: 0;"/>
+                                  <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">
+                                        <!-- Here goes our charts -->
+                                        <canvas style="display: block;" class="doughnutChartCanvas" id="doughnutChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                        <canvas style="display: none;" class="barChartCanvas" id="barChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
                                   </div>
                                 </div> <br/>
                             </div>
@@ -131,13 +131,17 @@
                                         ],
                                         borderColor:[
                                           "rgb(60,186,159,1.0)",
-                                          "#c45850",
-                                          "#ffa500",
+                                          "rgb(196,88,80,1.0)",
+                                          "rgb(255,165,0,1.0)",
+                                          "rgb(108,117,125,1.0)",
+                                          "rgb(100,107,105,1.0)",
                                         ],
                                         backgroundColor: [
                                           "rgb(60,186,159,0.7)",
                                           "rgb(196,88,80,0.7)",
                                           "rgb(255,165,0,0.7)",
+                                          "rgb(108,117,125,0.7)",
+                                          "rgb(100,107,105,0.7)",
                                         ],
                                         borderWidth: 2,
                                         borderRadius: 5,
@@ -146,23 +150,31 @@
                         },
                         options: {
                                 responsive: true,
-                                cutoutPercentage: 55,
-                                title: {
-                                    display: true,
-                                    text: 'LATEST TEST RESULT'
+                                plugins: {
+                                    legend: {
+                                        display:false,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'LATEST TEST RESULT'
+                                    },
+                                    colors: {
+                                      enabled: true
+                                    },
+
                                 },
-                                legend: {
-                                    display:false,
-                                    position:'bottom',
-                                    /* align:'start' */
-                                },
+
                                 scales: {
-                                        xAxes: [{
-                                            display: true,
-                                        }],
-                                        yAxes: [{
-                                            display: true,
-                                        }],
+                                    y: {
+                                        beginAtZero: true
+                                    },
+                                    xAxes: [{
+                                        display: true,
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                    }],
                                 }
                         }
 
@@ -193,13 +205,17 @@
                                         ],
                                         borderColor:[
                                           "rgb(60,186,159,1.0)",
-                                          "#c45850",
-                                          "#ffa500",
+                                          "rgb(196,88,80,1.0)",
+                                          "rgb(255,165,0,1.0)",
+                                          "rgb(108,117,125,1.0)",
+                                          "rgb(100,107,105,1.0)",
                                         ],
                                         backgroundColor: [
                                           "rgb(60,186,159,0.7)",
                                           "rgb(196,88,80,0.7)",
                                           "rgb(255,165,0,0.7)",
+                                          "rgb(108,117,125,0.7)",
+                                          "rgb(100,107,105,0.7)",
                                         ],
                                         borderWidth: 2,
                                         borderRadius: 5,
@@ -208,15 +224,22 @@
                         },
                         options: {
                                 responsive: true,
-                                cutoutPercentage: 55,
-                                title: {
-                                    display: true,
-                                    text: 'LATEST TEST RESULT'
-                                },
-                                legend: {
-                                    display:true,
-                                    position:'bottom',
-                                    /* align:'start' */
+                                maintainAspectRatio: true,
+                                aspectRatio: 2,
+                                cutoutPercentage: 75,
+                                cutout: "75%", /* Maybe in new version of chart instead of cutoutPercentage */
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'LATEST TEST RESULT'
+                                    },
+                                    colors: {
+                                      enabled: true
+                                    },
+
                                 },
                                 scales: {
                                         xAxes: [{

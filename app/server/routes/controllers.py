@@ -32,7 +32,6 @@ def dashboard():
                                pagename=app_ui_config["routes"]["/dashboard"]["page_name"],
                                username=session['user'],
                                ui_config=app_ui_config,
-                               app_data=app_ui_config,  # TODO: need to remove app_data from all routes
                                data=sample_data.latest_data
                                )
     return not_authorised()
@@ -45,8 +44,7 @@ def index():
                                pagename=app_ui_config["routes"]["/index"]["page_name"],
                                username=session['user'],
                                ui_config=app_ui_config,
-                               app_data=app_ui_config,  # TODO: need to remove app_data from all routes
-                               data=sample_data.latest_data)
+                               data=sample_data.project_list_data)
     return not_authorised()
 
 
@@ -57,7 +55,17 @@ def trends():
                                pagename=app_ui_config["routes"]["/trends"]["page_name"],
                                username=session['user'],
                                ui_config=app_ui_config,
-                               app_data=app_ui_config,
+                               data=sample_data.latest_data)
+    return not_authorised()
+
+
+@application.route('/settings', methods=['GET'])
+def settings():
+    if 'user' in session and session['user'] == users['username']:
+        return render_template(app_ui_config["routes"]["/settings"]["template_name"],
+                               pagename=app_ui_config["routes"]["/settings"]["page_name"],
+                               username=session['user'],
+                               ui_config=app_ui_config,
                                data=sample_data.latest_data)
     return not_authorised()
 
@@ -68,8 +76,7 @@ def create_new_project_space():
         return render_template(app_ui_config["routes"]["/create-new-space"]["template_name"],
                                pagename=app_ui_config["routes"]["/create-new-space"]["page_name"],
                                username=session['user'],
-                               ui_config=app_ui_config,
-                               app_data=app_ui_config)
+                               ui_config=app_ui_config)
     return not_authorised()
 
 
@@ -83,7 +90,10 @@ def about():
 @application.route('/notes')
 def info():
     if 'user' in session and session['user'] == users['username']:
-        return render_template("notes.html", app_data=app_ui_config)
+        return render_template(app_ui_config["routes"]["/notes"]["template_name"],
+                               pagename=app_ui_config["routes"]["/notes"]["page_name"],
+                               username=session['user'],
+                               ui_config=app_ui_config)
     return not_authorised()
 
 

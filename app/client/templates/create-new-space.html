@@ -42,8 +42,11 @@
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title"> <strong> Create new space for a project. </strong></h4> <hr/>
-                                <!-- Form -->
+                                <h4 class="card-title"> <strong> Create new space for a project. </strong></h4>
+                            </div>
+                            <hr/>
+                            <div class="card-body">
+                                            <!-- Form -->
                                             <!-- Adding a form here to create a new space (get the inputs from the user) -->
                                             <form class="row g-3 needs-validation" novalidate>
                                                   <!-- Project/Space name <div class="col-md-4"> input-group input-group-text -->
@@ -72,58 +75,39 @@
                                                       <input type="file" class="form-control" id="inputGroupFile01">
                                                   </div>
 
-                                                  <!-- Jenkins URL -->
-                                                  <div class="mb-3">
-                                                    <label class="form-label" for="validationCustom06"> Jenkins URL </label>
-                                                    <input type="text" class="form-control" id="validationCustom06" value="http://localhost:8080/" required>
-                                                    <div class="valid-feedback"> Looks good! </div>
-                                                  </div>
-                                                  <div class="col-md-4">
-                                                    <label for="validationCustomUsername1" class="form-label">Username</label>
+                                                  <!-- Jenkins URL, and its credentials -->
+
+                                                <div class="col-md-4">
+                                                    <label for="validationCustomURL" class="form-label"> Jenkins Server </label>
                                                     <div class="input-group has-validation">
-                                                      <span class="input-group-text" id="inputGroupPrepend1">@</span>
-                                                      <input type="text" class="form-control" id="validationCustomUsername1" aria-describedby="inputGroupPrepend" required>
+                                                        <span class="input-group-text" id="inputGroupForURL">URL</span>
+                                                        <input type="text" class="form-control" id="validationCustomURL" aria-describedby="inputGroupPrepend" value="http://localhost:8080/" required>
+                                                        <div class="invalid-feedback">
+                                                            Please choose a username.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                  <div class="col-md-4">
+                                                    <label for="validationCustomUsername" class="form-label">Jenkins</label>
+                                                    <div class="input-group has-validation">
+                                                      <span class="input-group-text" id="inputGroupForUsername">USERNAME</span>
+                                                      <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
                                                       <div class="invalid-feedback">
                                                         Please choose a username.
                                                       </div>
                                                     </div>
                                                   </div>
                                                   <div class="col-md-4">
-                                                    <label for="validationCustomUsername2" class="form-label">Username</label>
+                                                    <label for="validationCustomPassword" class="form-label">Jenkins</label>
                                                     <div class="input-group has-validation">
-                                                      <span class="input-group-text" id="inputGroupPrepend2">@</span>
-                                                      <input type="text" class="form-control" id="validationCustomUsername2" aria-describedby="inputGroupPrepend" required>
+                                                      <span class="input-group-text" id="inputGroupForPassword">PASSWORD</span>
+                                                      <input type="password" class="form-control" id="validationCustomPassword" aria-describedby="inputGroupPrepend" required>
                                                       <div class="invalid-feedback">
                                                         Please choose a username.
                                                       </div>
                                                     </div>
                                                   </div>
 
-
-
-                                                  <div class="col-md-4">
-                                                    <label for="validationCustom02" class="form-label">Last name</label>
-                                                    <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
-                                                    <div class="valid-feedback">
-                                                      Looks good!
-                                                    </div>
-                                                  </div>
-
-                                                  <div class="col-md-6">
-                                                    <label for="validationCustom03" class="form-label">City</label>
-                                                    <input type="text" class="form-control" id="validationCustom03" required>
-                                                    <div class="invalid-feedback">
-                                                      Please provide a valid city.
-                                                    </div>
-                                                  </div>
-
-                                                  <div class="col-md-3">
-                                                    <label for="validationCustom05" class="form-label">Zip</label>
-                                                    <input type="text" class="form-control" id="validationCustom05" required>
-                                                    <div class="invalid-feedback">
-                                                      Please provide a valid zip.
-                                                    </div>
-                                                  </div>
                                                   <div class="col-12">
                                                     <div class="form-check">
                                                       <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
@@ -150,14 +134,8 @@
 
             </div>
 
-            <!-- Footer Last -->
-            <hr/>
-            <div>
-                <span class="badge rounded-pill text-bg-dark"> Built with Python3+Flask+Bootstrap5.3 </span>
-				<span class="badge rounded-pill text-bg-dark"> by {{app_data['app_author']}} </span>
-				<span class="badge rounded-pill text-bg-dark"> {{app_data['app_version']}} Build: [{{app_data['app_experimental_tag']}}]</span>
-            </div>
-            <hr/>
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
 
     </body>
 

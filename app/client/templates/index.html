@@ -13,50 +13,6 @@
             <!-- Content Area -->
             <div class="container">
                 <br/><br/><br/><br/>
-                {{pagename}}
-
-                <!-- Give some initial brief/info "table-hover table-group-divider" -->
-                <div class="accordion" id="accordionExample">
-                      <!-- First item -->
-                      <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Overview
-                          </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                                <strong>This</strong> page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
-                                It is the overview of the all the test projects for the automation, which has been extracted/crawled
-                                either from the jenkins or from the <code>(HTML/Junit xml)</code> reports file.
-                                <p>
-                                All the projects/job can be configured to be crawled either from the jenkins or from a local locations, and you can always modify your settings.
-                                </p>
-                                <a href="#" class="btn btn-outline-primary"> Settings </a>
-
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Second item -->
-                      <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Create new spce
-                          </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                            <strong>Create a new space for a dashboard with some file or Jenkins link.</strong>
-                              <p>
-                                  Now, You can provide, <code>Project/Space name</code>, <code>Source file</code>, <code> Jenkins URL along with credentials </code>
-                                  to extract all the data and create a view here.
-                              </p>
-
-                          </div>
-                        </div>
-                      </div>
-                </div> <br/> <br/>
 
                 <div class="row">
                     <div class="col">
@@ -66,30 +22,29 @@
                             <p class="card-text">
                                 This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
                                 It is the overview of the all the test projects for the automation, which has been extracted/crawled
-                                either from the jenkins or from the (HTML/Junit xml) reports file.
+                                either from the jenkins or from the (HTML/Junit xml) report files.
                             </p>
                             <p class="card-text">
-
+                                To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings page </a>
                             </p>
-                            <a href="#" class="btn btn-outline-primary"> Settings </a>
                           </div>
                         </div>
                     </div>
                 </div> <br/><br/>
 
 
-                <!-- Other card -->
+                <!-- Summary Cards -->
                 <div class="row m-b-1 align-items-center">
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> Total Projects </h5>
-                            <p class="card-text"> 5 </p>
+                            <p class="card-text"> {{ data|length }} </p>
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> Total Testcases </h5>
@@ -97,7 +52,15 @@
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> No of Executions </h5>
+                            <p class="card-text"> {{ data|length }} </p>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> Average Pass Rate </h5>
@@ -105,50 +68,92 @@
                           </div>
                         </div>
                     </div>
-                </div> <br/><br/>
-
-                <!-- Show the table for all the available projects -->
-                <div class="row">
-                    <div class="col">
+                    <div class="col-md-2">
                         <div class="card">
                           <div class="card-body">
-                            <h5 class="card-title"> Project List </h5>
+                            <h5 class="card-title"> Average Fail Rate </h5>
+                            <p class="card-text"> 02% </p>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Other Metric </h5>
+                            <p class="card-text"> 00 </p>
+                          </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
 
-                            <table class="table table-sm table-hover">
-                              <thead class="table-group-divider">
-                                <tr>
-                                  <th scope="col">#</th>
-                                  <th scope="col">Projects</th>
-                                  <th scope="col">Created</th>
-                                  <th scope="col">Status</th>
-                                  <th scope="col">Manage</th>
-                                </tr>
-                              </thead>
-                              <tbody class="table-group-divider">
-                                    <!-- Loading all the projects available -->
-                                    {%if data|length >= 1 %}
-                                        {% for project in data %}
-                                                <tr>
-                                                  <th scope="row"> 1 </th>
-                                                  <td>Validate Portal</td>
-                                                  <td>01 January 2023</td>
-                                                  <td>Active / Archived</td>
-                                                  <td>
-                                                      <a href="#" class="btn btn-outline-primary"> Edit </a>
-                                                      <a href="#" class="btn btn-outline-primary"> Archive </a>
-                                                  </td>
-                                                </tr>
-                                        {%endfor%}
-                                    {%else%}
-                                        <!-- Show no data, because data is empty -->
-                                        <tr>
-                                            <th scope="row" colspan="4"> No projects available yet, consider creating one </th>
-                                            <td> <a href="/create-new-space" class="btn btn-outline-primary"> Create new space </a> </td>
-                                        </tr>
-                                    {%endif%}
-                              </tbody>
-                            </table>
-                          </div></div></div></div>
+                <!-- Other data for overview -->
+                <div class="accordion" id="accordionExample">
+                      <!-- First item -->
+                      <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Project List
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                  <!-- Show the table for all the available projects -->
+                                    <table class="table table-sm table-hover"> <!-- table-bordered border-primary -->
+                                          <thead class="table-group-divider">
+                                            <tr>
+                                              <th scope="col">#</th>
+                                              <th scope="col">Projects</th>
+                                              <th scope="col">Created</th>
+                                              <th scope="col">Source</th>
+                                              <th scope="col">Status</th>
+                                              <th scope="col">Manage</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody class="table-group-divider">
+                                                <!-- Loading all the projects available -->
+                                                {%if data|length >= 1 %}
+                                                    {% for project in data %}
+                                                            <tr>
+                                                              <th scope="row"> {{project["project_id"]}} </th>
+                                                              <td> {{project["project_name"]}} </td>
+                                                              <td> {{project["date_created"]}} </td>
+                                                              <td> {{project["data_source"]}} </td>
+                                                              <td> {{project["status"]}} </td>
+                                                              <td>
+                                                                  <a href="#" class="btn btn-outline-primary"> Edit </a>
+                                                                  <a href="#" class="btn btn-outline-primary"> Archive </a>
+                                                              </td>
+                                                            </tr>
+                                                    {%endfor%}
+                                                {%else%}
+                                                    <!-- Show no data, because data is empty -->
+                                                    <tr>
+                                                        <th scope="row" colspan="4"> No projects available yet, consider creating one </th>
+                                                        <td> <a href="/create-new-space" class="btn btn-outline-primary"> Create new space </a> </td>
+                                                    </tr>
+                                                {%endif%}
+                                          </tbody>
+                                        </table>
+                                </div>
+                            </div>
+                      </div>
+
+                      <!-- Second item -->
+                      <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Project crawled History
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>
+                                      Project Crawl history goes here ...
+                                    </p>
+                                </div>
+                            </div>
+                      </div>
+                </div> <br/> <br/>
 
             </div>
 

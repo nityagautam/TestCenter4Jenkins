@@ -86,6 +86,12 @@ app_ui_config = {
                     "template_name": "create-new-space.html",
                     "data": []
                 },
+                "/settings": {
+                    "is_menu": True,
+                    "page_name": "SETTINGS",
+                    "template_name": "settings.html",
+                    "data": []
+                },
                 "/notes": {
                     "is_menu": True,
                     "page_name": "NOTES",
