@@ -52,6 +52,12 @@ class DatabaseObject(object):
     def fetch_many_result_from_cursor(self, size=1):
         return self.cursor.fetchmany(size=size)
 
+    def execute_custom_query(self, query):
+        if query.split(' ')[0] in ['SELECT']:
+            return self.read(query)
+        else:
+            return self.write(query)
+
     def read(self, query):
         # print("QUERY:", query)
         try:

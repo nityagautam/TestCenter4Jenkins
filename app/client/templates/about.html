@@ -34,8 +34,8 @@
 				<div class="brand">
 					<a href="/">
 						<span class="hidden-m-down m-r-12"> &nbsp; </span>
-						<span class="lead"> {{ app_data['app_name'] }} </span>
-						<!-- <span class="tag" id="revenue-tag"> {{app_data["app_poc_tag_1"]}} </span> -->
+						<span class="lead"> {{ ui_config['app_name'] }} </span>
+						<!-- <span class="tag" id="revenue-tag"> {{ui_config["app_poc_tag_1"]}} </span> -->
 					</a>
 				</div>
 
@@ -47,7 +47,7 @@
 	<!-- sidebar -->
 	<div class="sidebar-toggle" id="sidebar">
 		<ul class="nav nav-sidebar">
-			{% for menu in app_data["side_menu"] %}
+			{% for menu in ui_config["side_menu"] %}
 				{%if menu['name'] == "ABOUT" %}
 				<li>
 					<a href="{{menu['route']}}" class="active">
@@ -70,7 +70,7 @@
 			{% endfor %}
 			<!-- And at the very end of the side menu attach the experimental tag -->
 			<li class="sidebar-bottom">
-				<span class="tag custom-tag" id="experimental-tag1"> {{app_data["app_experimental_tag"]}} </span>
+				<span class="tag custom-tag" id="experimental-tag1"> {{ui_config["app_experimental_tag"]}} </span>
 			</li>
 		</ul>
 	</div>
@@ -85,13 +85,13 @@
 				<div class="col-md-12">
 					<div class="card card-block">
 						<h4 class="card-title m-b-2">
-							{{app_data["about_page"]["title"]}}
-							<span class="tag" id="revenue-tag"> {{app_data["app_poc_tag_1"]}} </span>
+							{{ui_config["routes"]["/about"]["page_name"]}}
+							<span class="tag" id="revenue-tag"> {{ui_config["app_poc_tag_1"]}} </span>
 							<h6>THIS APPLICATION IS STILL IN "DEV" STAGE.</h6>
 						</h4>
 						
 						<div class="home-page-desc">
-							<span> {{app_data["about_page"]["desc"]}} </span>
+							<span> {{ui_config["routes"]["/about"]["data"]["desc"]}} </span>
 						</div>
 					</div>
 				</div>
@@ -105,7 +105,7 @@
 						<h6 class="title m-b-2"> Components / About  </h6>
 						<div>
 							<ul>
-								{% for desc in app_data["about_page"]["info"] %}
+								{% for desc in ui_config["routes"]["/about"]["data"]["info"] %}
 								<li> {{ desc }} </li>
 								{% endfor %}
 							</ul>

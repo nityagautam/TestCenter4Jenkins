@@ -51,10 +51,6 @@ AUTHOR_NAME = 'Ashutosh Mishra [amishra]'
 APP_VERSION = '1.0.0'
 APP_MODE_TAG = 'Experimental'
 
-# Our user database.
-users = {'username': 'admin',
-         'password': 'password'}
-
 # Set the dirs location based on the app dir name
 # ===================================================
 PROJECT_DIR = os.getcwd()
@@ -69,3 +65,7 @@ SERVER_FOLDER = os.path.join(PROJECT_SUB_DIR, 'server')
 # ----------------------------------------------------------
 STATIC_FOLDER = os.path.join(CLIENT_FOLDER, 'static')
 TEMPLATE_FOLDER = os.path.join(CLIENT_FOLDER, 'templates')
+
+# Our fallback users.
+# ===================
+fallback_users = {'username': 'admin', 'password': 'admin'}

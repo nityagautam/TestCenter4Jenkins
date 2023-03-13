@@ -8,7 +8,8 @@
 
 from app.server import app as application
 from flask import flash, redirect, render_template, request, session
-from app.settings import users
+from app.server import users
+from app.server.config import uiconfig
 
 
 @application.route('/', methods=['POST', 'GET'])
@@ -26,15 +27,19 @@ def login():
     # Check requests for the form login
     print(">>> In the login section ...")
     if request.method == 'POST':
-        print(">>> In the form section ...")
-        if request.form['password'] == users['password'] and request.form['username'] == users['username']:
-            print(f'Accepted the user: {request.form["username"]}')
+        print(">>> In the login form section ...")
+        print(f">>> Form User: '{request.form['username']}' in DB pwd: '{users.get(request.form['username'])}' ")
+        if users.get(request.form["username"]) and request.form['password'] == users.get(request.form['username']):
+            print(f'>>> Accepted the user: {request.form["username"]}')
             session['logged_in'] = True
             session['user'] = request.form['username']
             return redirect('/home')
         else:
-            print(f'Incorrect creds for user: {request.form["username"]}')
-            flash('Oopse, incorrect credential!')
+            print(f"If in DB User: {request.form['username']} in DB: {users.get(request.form['username'])}")
+            print(f'>>>> Rejected user: {request.form["username"]}, password: {request.form["password"]}')
+            # Send a message to the next redirect page
+            #flash('Oopse, incorrect credentials !')
+            flash(uiconfig.ERROR_MESSAGES['INCORRECT_CREDENTIALS'])
             return redirect('/login')
     else:
         # User's session is valid, let him in to home page

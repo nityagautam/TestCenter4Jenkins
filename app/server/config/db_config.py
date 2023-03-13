@@ -1,19 +1,24 @@
 class DBConfig:
-    # Database name/path
     # ----------------------------------
-    db_file = './app/server/dbase/test.db'
+    # Database file name/path
+    # ----------------------------------
+    db_file = {"PROD": "./app/server/dbase/prod_database.db",
+               "TEST": "./app/server/dbase/test.db",
+               "SAMPLE": "./app/server/dbase/sample.db"}
 
+    # ----------------------------------
     # Tables and its schema
     # ----------------------------------
     USER_TABLE = 'users'
-    USER_TABLE_FILED = ['user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
-                        'username TEXT',
+    USER_TABLE_FILED = ['id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
+                        'username TEXT PRIMARY KEY',
                         'password TEXT',
                         'created TIMESTAMP']
 
     PROJECT_TABLE = 'projects'
-    PROJECT_TABLE_FIELDS = ['project_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
-                            'project_name TEXT',
+    PROJECT_TABLE_FIELDS = ['id INTEGER AUTOINCREMENT',
+                            'project_id INTEGER NOT NULL PRIMARY KEY',
+                            'project_name TEXT NOT NULL PRIMARY KEY',
                             'data_source TEXT',
                             'jenkins_url TEXT',
                             'jenkins_user TEXT',

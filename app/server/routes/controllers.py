@@ -11,7 +11,8 @@ from app.server import app as application
 from flask import redirect, render_template, session
 from app.server.config.uiconfig import app_ui_config
 from app.server.dbase import sample_data
-from app.settings import users
+from app.server.dbase.db_crud import generate_sample_data_to_db
+from app.server import users
 
 
 # ==========================================================================
@@ -20,14 +21,14 @@ from app.settings import users
 # ==========================================================================
 @application.route('/home', methods=['GET'])
 def home():
-    if 'user' in session and session['user'] == users['username']:
+    if 'user' in session and session['user'] in users.keys():
         return redirect('/dashboard')
     return not_authorised()
 
 
 @application.route('/dashboard', methods=['GET'])
 def dashboard():
-    if 'user' in session and session['user'] == users['username']:
+    if 'user' in session and session['user'] in users.keys():
         return render_template(app_ui_config["routes"]["/dashboard"]["template_name"],
                                pagename=app_ui_config["routes"]["/dashboard"]["page_name"],
                                username=session['user'],
@@ -39,7 +40,7 @@ def dashboard():
 
 @application.route('/index')
 def index():
-    if 'user' in session and session['user'] == users['username']:
+    if 'user' in session and session['user'] in users.keys():
         return render_template(app_ui_config["routes"]["/index"]["template_name"],
                                pagename=app_ui_config["routes"]["/index"]["page_name"],
                                username=session['user'],
@@ -50,7 +51,7 @@ def index():
 
 @application.route('/trends', methods=['GET'])
 def trends():
-    if 'user' in session and session['user'] == users['username']:
+    if 'user' in session and session['user'] in users.keys():
         return render_template(app_ui_config["routes"]["/trends"]["template_name"],
                                pagename=app_ui_config["routes"]["/trends"]["page_name"],
                                username=session['user'],
@@ -61,7 +62,7 @@ def trends():
 
 @application.route('/settings', methods=['GET'])
 def settings():
-    if 'user' in session and session['user'] == users['username']:
+    if 'user' in session and session['user'] in users.keys():
         return render_template(app_ui_config["routes"]["/settings"]["template_name"],
                                pagename=app_ui_config["routes"]["/settings"]["page_name"],
                                username=session['user'],
@@ -72,7 +73,7 @@ def settings():
 
 @application.route('/create-new-space')
 def create_new_project_space():
-    if 'user' in session and session['user'] == users['username']:
+    if 'user' in session and session['user'] in users.keys():
         return render_template(app_ui_config["routes"]["/create-new-space"]["template_name"],
                                pagename=app_ui_config["routes"]["/create-new-space"]["page_name"],
                                username=session['user'],
@@ -82,14 +83,14 @@ def create_new_project_space():
 
 @application.route('/about', methods=['GET'])
 def about():
-    if 'user' in session and session['user'] == users['username']:
-        return render_template("about.html", app_data=app_ui_config, data=sample_data.latest_data)
+    if 'user' in session and session['user'] in users.keys():
+        return render_template("about.html", ui_config=app_ui_config, data=sample_data.latest_data)
     return not_authorised()
 
 
 @application.route('/notes')
 def info():
-    if 'user' in session and session['user'] == users['username']:
+    if 'user' in session and session['user'] in users.keys():
         return render_template(app_ui_config["routes"]["/notes"]["template_name"],
                                pagename=app_ui_config["routes"]["/notes"]["page_name"],
                                username=session['user'],
