@@ -1,4 +1,10 @@
 class DBConfig:
+    # Database name/path
+    # ----------------------------------
+    db_file = './app/server/dbase/test.db'
+
+    # Tables and its schema
+    # ----------------------------------
     USER_TABLE = 'users'
     USER_TABLE_FILED = ['user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
                         'username TEXT',
@@ -27,3 +33,4 @@ class DBConfig:
     SETTINGS_TABLE = 'settings'
     SETTINGS_TABLE_FIELDS = ['project_crawl_interval TEXT'
                              'retain_record_count INTEGER']
+

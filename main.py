@@ -10,8 +10,10 @@
 #from app.server.utilites.console_animator import ConsoleAnimator
 # import multiprocessing
 import argparse
+import datetime
 import subprocess
 from app.settings import STATIC_FOLDER
+from app.server.dbase.db_crud import Projects
 
 
 # Runner Class
@@ -48,6 +50,22 @@ class Runner:
 # ==============================================================
 # App Execution
 # ==============================================================
+def normal_db_usage():
+    o = Projects()
+    # o.delete_all()
+    o.add(project_name="project2",
+          data_source='Jenkins',
+          jenkins_url='http://localhost:8080', jenkins_user='NIL', jenkins_password='NIL',
+          status='active',
+          created=datetime.datetime.now(),
+          last_modified=datetime.datetime.now())
+    print("Listed Projects ===> ", o.list_all())
+
+    # Release cursor
+    o.release()
+
+
 if __name__ == '__main__':
-    Runner().run()
+    # Runner().run()
+    normal_db_usage()
 

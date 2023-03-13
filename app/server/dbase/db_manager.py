@@ -94,6 +94,7 @@ class Projects(Table):
 
     def select_where(self, *args, **kwargs):
         cursor = super(Projects, self).select_where(*args, **kwargs)
+        print("==> CUR:", cursor)
         results = cursor.fetchall()
         cursor.close()
         return results
@@ -130,4 +131,4 @@ def normal_usage():
     obj.free()
 
 
-normal_usage()
+# normal_usage()

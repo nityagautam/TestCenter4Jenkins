@@ -6,7 +6,6 @@
 import datetime
 import sqlite3
 
-
 # =============================
 # Define the queries
 # =============================
@@ -37,6 +36,10 @@ class DatabaseObject(object):
     def free(self):
         self.cursor.close()
 
+    def get_cursor(self):
+        self.cursor = self.db.cursor()
+        return self.cursor
+
     def disconnect(self):
         self.db.close()
 
@@ -59,14 +62,15 @@ class DatabaseObject(object):
             return None
 
     def write(self, query, values=None):
-        print("QUERY:", query)
-        print("VALUE:", values)
+        # print("QUERY:", query)
+        # print("VALUE:", values)
         try:
             if values is not None and len(values) >= 1:
                 self.cursor.execute(query, list(values))
             else:
                 self.cursor.execute(query)
             self.db.commit()
+            print(f'QUERY EXECUTED:==> "{query}"')
             return self.cursor
         except sqlite3.IntegrityError as e:
             # Unique / Primary key rule failed
@@ -122,7 +126,7 @@ class DatabaseObject(object):
         field_names = ','.join(['%s' % field for field in kwargs])
         field_value_replacements = ','.join(['?' for field in kwargs])
         values = [v for k, v in kwargs.items()]
-        print('==> VALUES: ', values)
+        # print('==> VALUES: ', values)
         query = queries['INSERT'] % (table_name, field_names, field_value_replacements)
         return self.write(query, values)
 
@@ -166,7 +170,8 @@ class DatabaseObject(object):
 # Sample Usage:
 # ======================
 def sample_usage():
-    obj = DatabaseObject('./app/server/dbase/sample_dashboard_dbase.db')
+    obj = DatabaseObject('./app/server/dbase/test.db')
+    # obj = DatabaseObject(DBConfig.db_file)
 
     # # Create a user base
     # obj.create_table('users', ['user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT', 'user_name TEXT', 'user_password TEXT', 'date_created TIMESTAMP'])
@@ -177,16 +182,19 @@ def sample_usage():
 
     # Insert data to table
     # Check before insertion
-    obj.select_where('users', 'user_name', user_name="'a'")
-    res = obj.fetch_result_from_cursor()
-    if len(res) == 0:
-        # obj.insert('users', 'a', 'pwd', datetime.datetime.now())
-        obj.insert('users', user_name='a', user_password='pwd', date_created=datetime.datetime.now())
-    else:
-        print(f'"a" User already exists')
+    # obj.select_where('users', 'user_name', user_name="'a'")
+    # res = obj.fetch_result_from_cursor()
+    # if len(res) == 0:
+    #     # obj.insert('users', 'a', 'pwd', datetime.datetime.now())
+    #     obj.insert('users', user_name='a', user_password='pwd', date_created=datetime.datetime.now())
+    # else:
+    #     print(f'"a" User already exists')
 
     # Fetch data from table
     obj.select('users', '*')
+    print("USER FROM DB:", obj.fetch_result_from_cursor())
+
+    obj.select('projects', '*')
     print("USER FROM DB:", obj.fetch_result_from_cursor())
 
     # # Update User data
@@ -207,4 +215,4 @@ def sample_usage():
     obj.disconnect()
 
 
-sample_usage()
+# sample_usage()
