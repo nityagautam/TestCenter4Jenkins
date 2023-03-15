@@ -1,7 +1,7 @@
 from flask import session, render_template
 from app.server.config.ui_configurations import UIConfigurations
 from app.server.dbase import sample_data
-from app.server.dbase.db_dashboard import Dashboard
+from app.server.dbase.db_access_data import DBData
 from app.server.dbase.db_users import Users
 
 
@@ -58,12 +58,13 @@ class Gateway(UIConfigurations):
     def get_template(self, route_name):
         template_name, page_name, session_user, ui_config = self.get_arg_data_for_template(route_name)
         print(f"Processing for route: {route_name}; UI_CONFIG: {ui_config}")
+        # data=sample_data.latest_data if '/dashboard' in route_name else sample_data.project_list_data if '/index' in route_name else sample_data.latest_data
         return render_template(template_name,
                                pagename=page_name,
                                username=session_user,
                                ui_config=ui_config,
-                               db_data=Dashboard().get_latest_data_for_dashboard(),
-                               data=sample_data.latest_data if '/dashboard' in route_name else sample_data.project_list_data if '/index' in route_name else sample_data.latest_data
+                               db_data=[],
+                               data=DBData().get_dashboard_data() if '/dashboard' in route_name else sample_data.project_list_data if '/index' in route_name else sample_data.latest_data
                                )
 
     def get_error_template(self, route_name, error_data, error_code):

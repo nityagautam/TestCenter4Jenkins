@@ -1,3 +1,4 @@
+import datetime
 from app.server.config.db_configurations import DBConfig
 from app.server.config.configurations import Configurations
 from app.server.dbase.db_engine import DatabaseObject
@@ -18,6 +19,11 @@ class Users(Configurations):
 
         # Create the table if they don't exist
         self.db_obj.create_table(self.user_table, self.user_table_fields)
+
+        # Add Default users
+        # self.db_obj.insert(self.user_table, username='root', password='root', created=datetime.datetime.now())
+        # self.db_obj.insert(self.user_table, username='admin', password='admin', created=datetime.datetime.now())
+        # self.db_obj.insert(self.user_table, username='test', password='password', created=datetime.datetime.now())
 
         # Load User list
         self.users = {}

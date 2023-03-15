@@ -38,6 +38,17 @@ class DBConfig(Configurations):
                                    'execution_date TIMESTAMP',
                                    'crawled_date TIMESTAMP']
 
+    DATA_PARSING_TYPES = {
+        "FOR_DASHBOARD": "executions",
+        "FOR_TRENDS": "trends",
+        "FOR_HISTORY": "history",
+    }
+
+    CUSTOM_QUERIES = {
+        "OLDEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS": "SELECT project_id, project_name, test_results, execution_date, crawled_date FROM executions GROUP BY project_name ORDER BY MIN(crawled_date)",
+        "LATEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS": "SELECT * FROM executions GROUP BY project_name ORDER BY MAX(crawled_date)"
+    }
+
     TABLE_JOINS = {
         "ORDER": "DESC",
         "ORDER_BY_COLUMN": "crawled_date",
