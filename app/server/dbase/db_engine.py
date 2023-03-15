@@ -29,6 +29,7 @@ queries = {
 class DatabaseObject(object):
 
     def __init__(self, data_file):
+        print(f"[DatabaseObject] DB Given to connect ===> : {data_file}")
         self.db = sqlite3.connect(data_file, check_same_thread=False)
         self.cursor = self.db.cursor()
         self.data_file = data_file
@@ -62,9 +63,10 @@ class DatabaseObject(object):
         # print("QUERY:", query)
         try:
             self.cursor.execute(query)
+            print(f'QUERY EXECUTED:==> "{query}"')
             return self.cursor
         except sqlite3.OperationalError as e:
-            print('[DB OP ERROR]', e)
+            print(f'[DB OP ERROR] Error while executing query: {query}\n', e)
             return None
 
     def write(self, query, values=None):
@@ -80,10 +82,10 @@ class DatabaseObject(object):
             return self.cursor
         except sqlite3.IntegrityError as e:
             # Unique / Primary key rule failed
-            print('[DB OP ERROR]', e)
+            print(f'[DB OP ERROR] Error while executing query {query}\n', e)
             return None
         except sqlite3.OperationalError as e:
-            print('[DB OP ERROR]', e)
+            print(f'[DB OP ERROR] Error while executing query: {query}\n', e)
             return None
 
     def select(self, table, *args):
@@ -163,8 +165,8 @@ class DatabaseObject(object):
         query = queries['DELETE_ALL'] % table_name
         return self.write(query)
 
-    def create_table(self, table_name, values):
-        query = queries['CREATE_TABLE'] % (table_name, ','.join(values))
+    def create_table(self, table_name, table_field_schema):
+        query = queries['CREATE_TABLE'] % (table_name, ','.join(table_field_schema))
         return self.write(query)
 
     def drop_table(self, table_name):

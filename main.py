@@ -9,13 +9,12 @@
 # import multiprocessing
 import argparse
 import subprocess
-# from app.server.dbase.db_crud import generate_sample_data_to_db
-from app.settings import STATIC_FOLDER
+from app.server.config.configurations import Configurations
 
 
 # Runner Class
 # ======================
-class Runner:
+class Runner(Configurations):
     DEBUG = True
     LAST_STDOUT = None
 
@@ -24,7 +23,7 @@ class Runner:
 
     # Do some extra work
     def do_extra_work(self):
-        subprocess.call('cd {} && npm run watch'.format(STATIC_FOLDER.replace(' ', '\ ')), shell=True)
+        subprocess.call('cd {} && npm run watch'.format(Configurations.STATIC_FOLDER.replace(' ', '\ ')), shell=True)
         # process = multiprocessing.Process(target=do_extra_work)
         # process.start()
         # process.join()
@@ -40,8 +39,7 @@ class Runner:
 
     def run(self):
         from app.server import app
-        from app.settings import APP_SERVER_HOST, APP_SERVER_PORT
-        app.run(host=APP_SERVER_HOST, port=APP_SERVER_PORT, threaded=True, debug=self.DEBUG)
+        app.run(host=Configurations.APP_SERVER_HOST, port=Configurations.APP_SERVER_PORT, threaded=True, debug=self.DEBUG)
 
 
 # ==============================================================

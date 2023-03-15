@@ -2,7 +2,7 @@
 <nav class="navbar fixed-top navbar-expand-lg" style="background: #34495e;">
   <div class="container-fluid">
 
-    <a class="navbar-brand white-font" href="#" style=""> {{ ui_config['app_title'] }} </a>
+    <a class="navbar-brand white-font" href="#" style=""> {{ ui_config['APP_META']['app_title'] }} </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -20,8 +20,8 @@
             {% set counter = namespace(index=1) %}
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {%if ui_config["routes"]|length >= 1 %}
-                        {% for route_name, route_data in ui_config["routes"].items() %}
+                {%if ui_config["ROUTES"]|length >= 1 %}
+                        {% for route_name, route_data in ui_config["ROUTES"].items() %}
                             {% set counter.index = counter.index + 1 %}
                             {%if counter.index <= separate_menu.limit %}
                                 {%if route_data["is_menu"]%}
@@ -46,8 +46,8 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         {% set counter.index = 1 %}
-                        {%if ui_config["routes"]|length >= 1 %}
-                            {% for route_name, route_data in ui_config["routes"].items() %}
+                        {%if ui_config["ROUTES"]|length >= 1 %}
+                            {% for route_name, route_data in ui_config["ROUTES"].items() %}
                                 {% set counter.index = counter.index + 1 %}
                                 {%if counter.index > 4%}
                                     {%if route_data["is_menu"]%}
@@ -76,7 +76,7 @@
                     </button>
 
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#"> Logout &nbsp; </a></li>
+                        <li><a class="dropdown-item" href="/logout?username={{username}}"> Logout &nbsp; </a></li>
                         <li><a class="dropdown-item" href="#"> Settings  &nbsp; </a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item disabled">(En) English  &nbsp; </a></li>

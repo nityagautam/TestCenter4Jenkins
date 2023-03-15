@@ -7,13 +7,9 @@
   Created on 14 February, 2023 @ 10:25 AM.
 """
 from app.server import app as application
-from flask import jsonify, render_template, url_for, request, redirect, flash
-from flask import redirect, render_template, session
-
-from app.server.config import uiconfig
-from app.server.config.uiconfig import app_ui_config
-from app.server.routes.controllers import not_authorised
-from app.server import users
+from flask import flash
+from app.server.config.ui_configurations import UIConfigurations
+from app.server.routes.authentication import not_authorised, route_gateway
 
 
 # ==============================================================
@@ -23,15 +19,9 @@ from app.server import users
 # 404 Handler; We can also pass the specific request errors codes to the decorator;
 @application.errorhandler(404)
 def not_found(err):
-    if 'user' in session and session['user'] in users.keys():
-        flash(uiconfig.ERROR_MESSAGES['404'])
-        return render_template(app_ui_config["routes"]["/error"]["template_name"],
-                               pagename=app_ui_config["routes"]["/error"]["page_name"],
-                               username=session['user'],
-                               ui_config=app_ui_config,
-                               app_data=app_ui_config,  # TODO: need to remove app_data from all routes
-                               error_data=err
-                               ), 404
+    if route_gateway.is_session_active():
+        flash(UIConfigurations.ERROR_MESSAGES['404'])
+        return route_gateway.get_error_template("/error", err, 404)
     return not_authorised()
 
 
@@ -39,15 +29,9 @@ def not_found(err):
 @application.errorhandler(TypeError)
 def type_error(err):
     application.logger.exception(err)
-    if 'user' in session and session['user'] in users.keys():
-        flash(uiconfig.ERROR_MESSAGES['500'])
-        return render_template(app_ui_config["routes"]["/error"]["template_name"],
-                               pagename=app_ui_config["routes"]["/error"]["page_name"],
-                               username=session['user'],
-                               ui_config=app_ui_config,
-                               app_data=app_ui_config,  # TODO: need to remove app_data from all routes
-                               error_data=err
-                               ), 500
+    if route_gateway.is_session_active():
+        flash(UIConfigurations.ERROR_MESSAGES['500'])
+        return route_gateway.get_error_template("/error", err, 500)
     return not_authorised()
     # return render_template("error.html", app_data=app_ui_config, error_data=err), 500
 
@@ -56,15 +40,9 @@ def type_error(err):
 @application.errorhandler(Exception)
 def unknown_error(err):
     application.logger.exception(err)
-    if 'user' in session and session['user'] in users.keys():
-        flash(uiconfig.ERROR_MESSAGES['500'])
-        return render_template(app_ui_config["routes"]["/error"]["template_name"],
-                               pagename=app_ui_config["routes"]["/error"]["page_name"],
-                               username=session['user'],
-                               ui_config=app_ui_config,
-                               app_data=app_ui_config,  # TODO: need to remove app_data from all routes
-                               error_data=err
-                               ), 500
+    if route_gateway.is_session_active():
+        flash(UIConfigurations.ERROR_MESSAGES['500'])
+        return route_gateway.get_error_template("/error", err, 500)
     return not_authorised()
     # return render_template("error.html", app_data=app_ui_config, error_data=err), 500
 

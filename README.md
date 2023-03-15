@@ -4,7 +4,38 @@
 
 ###### Description
 It is the combination of few services which gets/crawls the reports and manage the report on the disk as well as in to the database; it keeps cleaning the old records and keeps last 20-30(as configured) records.
+<pre>
+# Application Structure
+# ==========================
+# ReportDashboard
+#               \____ app                           # This is the application source dir
+#                   |____ client
+#                       |____ static                # This contains all the static sources like: js, css
+#                       |____ templates             # This contains all the HTML source files
+#
+#                   |____ server
+#                       |____ entire source code lies here # This has all the python3 back-end server logic
+#                       |____ config
+#                               |________ # This contains all configurations (app, db, etc)
+#                       |____ crawlers
+#                       |____ dbase
+#                       |____ routes
+#                       |____ unittests
+#                       |____ utilities
+#                       |____ views
+#
+#                   |____ __init__.py
+#                   |____ settings.py               
+#
+#               |____ LICENSE
+#               |____ main.py                       # This is the entry point; starts the server
+#               |____ pytest.ini                    # This is pytest configuration for testing server
+#               |____ README.md                     # Refer this file for more details of HowTo
+#               |____ requirements.txt              # Python packages requirement file
+#
 
+
+</pre>
 
 ###### There are three section of this application
 1. Crawler

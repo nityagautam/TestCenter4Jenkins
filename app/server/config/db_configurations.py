@@ -1,4 +1,7 @@
-class DBConfig:
+from app.server.config.configurations import Configurations
+
+
+class DBConfig(Configurations):
     # ----------------------------------
     # Database file name/path
     # ----------------------------------
@@ -11,14 +14,13 @@ class DBConfig:
     # ----------------------------------
     USER_TABLE = 'users'
     USER_TABLE_FILED = ['id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
-                        'username TEXT PRIMARY KEY',
+                        'username TEXT',
                         'password TEXT',
                         'created TIMESTAMP']
 
     PROJECT_TABLE = 'projects'
-    PROJECT_TABLE_FIELDS = ['id INTEGER AUTOINCREMENT',
-                            'project_id INTEGER NOT NULL PRIMARY KEY',
-                            'project_name TEXT NOT NULL PRIMARY KEY',
+    PROJECT_TABLE_FIELDS = ['project_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
+                            'project_name TEXT',
                             'data_source TEXT',
                             'jenkins_url TEXT',
                             'jenkins_user TEXT',
@@ -29,11 +31,20 @@ class DBConfig:
 
     TEST_EXECUTION_TABLE = 'executions'
     TEST_EXECUTION_TABLE_FIELDS = ['project_id INTEGER NOT NULL',
+                                   'project_name TEXT',
                                    'test_results TEXT',
                                    'source TEXT',
                                    'source_value TEXT',
                                    'execution_date TIMESTAMP',
                                    'crawled_date TIMESTAMP']
+
+    TABLE_JOINS = {
+        "ORDER": "DESC",
+        "ORDER_BY_COLUMN": "crawled_date",
+        "JOIN_ON": "project_id",
+        # "SELECT_COLUMNS_FOR_PROJECTS_AND_EXECUTION": "project_name, test_results, source, source_value, crawled_date"
+        "SELECT_COLUMNS_FOR_PROJECTS_AND_EXECUTION": "*"
+    }
 
     SETTINGS_TABLE = 'settings'
     SETTINGS_TABLE_FIELDS = ['project_crawl_interval TEXT'

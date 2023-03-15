@@ -8,61 +8,45 @@
 """
 
 from app.server import app as application
-from flask import jsonify, render_template, url_for, request, redirect
-from app.server.config.uiconfig import app_ui_config
+from flask import jsonify, render_template, url_for, request, redirect, session
+from app.server.config.configurations import Configurations
+from app.server.routes.authentication import route_gateway, not_authorised
+from app.server.dbase.sample_data import latest_data, history_data, project_list_data
 
 
-# Route For Sample data
-@application.route('/data')
-def get_data():
-    data = {
-        "reports": [
-            {
-                "build": "build_no",
-                "created": "Imported 05052021T11:30:00:00IST",
-                "platform": "Imported Win/Unix/Mac",
-                "project_name": "project_name_1",
-                "report_location_path": "path/to/report/location/index.html",
-                "report_summary": {"pass": "50", "fail": "0", "ignored": "0", "skipped": "0"},
-                "total_time": "35 min."
-            },
-            {
-                "build": "build_no",
-                "created": "Imported 05052021T11:30:00:00IST",
-                "platform": "Imported Win/Unix/Mac",
-                "project_name": "project_name_2",
-                "report_location_path": "path/to/report/location/index.html",
-                "report_summary": {"pass": "10", "fail": "2", "ignored": "0", "skipped": "0"},
-                "total_time": "0.2345 secs."
-            },
-            {
-                "build": "build_no",
-                "created": "Imported 05052021T11:30:00:00IST",
-                "platform": "Imported Win/Unix/Mac",
-                "project_name": "project_name_3",
-                "report_location_path": "path/to/report/location/index.html",
-                "report_summary": {"pass": "100", "fail": "5", "ignored": "0", "skipped": "0"},
-                "total_time": "5 days"
-            }
-        ]
-    }
-    return jsonify(data)
+@application.route(f'{Configurations.APP_API_BASE_ROUTE}/get-dashboard-data', methods=['GET'])
+def get_dashboard_data():
+    # TODO: Need to implement API_KEY for auth
+    if route_gateway.is_session_active():
+        return jsonify(latest_data)
+    return not_authorised()
 
 
-# ==============================================================
-# Extra routes starts
-# ==============================================================
-@application.route('/sample1')
-def sample1():
-    return render_template("web-analytics-overview.html")
+@application.route(f'{Configurations.APP_API_BASE_ROUTE}/get-project-list', methods=['GET'])
+def get_project_data():
+    # TODO: Need to implement API_KEY for auth
+    if route_gateway.is_session_active():
+        return jsonify(project_list_data)
+    return not_authorised()
 
 
-@application.route('/sample2')
-def sample2():
-    return render_template("web-analytics-real-time.html")
+@application.route(f'{Configurations.APP_API_BASE_ROUTE}/get-history-data', methods=['GET'])
+def get_history_data():
+    # TODO: Need to implement API_KEY for auth
+    if route_gateway.is_session_active():
+        return jsonify(history_data)
+    return not_authorised()
 
 
-@application.route('/logo')
+@application.route(f'{Configurations.APP_API_BASE_ROUTE}/get-dummy-data', methods=['GET'])
+def get_dummy_data():
+    # TODO: Need to implement API_KEY for auth
+    if route_gateway.is_session_active():
+        return jsonify(history_data)
+    return not_authorised()
+
+
+@application.route(f'{Configurations.APP_API_BASE_ROUTE}/logo')
 def get_logo():
     """
     Queries the snapshot data for both Serenity and JMeter projects from the MongoDB.

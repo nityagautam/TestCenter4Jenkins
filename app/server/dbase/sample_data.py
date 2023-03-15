@@ -22,7 +22,7 @@ latest_data = [
         "report_date": "15 Aug 2021",
         "crawled_date": "10 Aug 2021",
         "report_location": "https://some.path/prj/build15/index.html",
-        "test_result": {"pass": 20, "fail": 1, "error": 3, "skipped": 0, "others": 2}
+        "test_result": {"pass": 120, "fail": 10, "error": 3, "skipped": 2}
     },
     {
         "key": "Well, I came from flask server",
@@ -33,7 +33,7 @@ latest_data = [
         "report_date": "15 Aug 2021",
         "crawled_date": "10 Aug 2021",
         "report_location": "https://some.path/prj/build15/index.html",
-        "test_result": {"pass": 20, "fail": 1, "error": 3, "skipped": 0, "others": 2}
+        "test_result": {"pass": 200, "fail": 1, "error": 3, "skipped": 2}
     },
     {
         "key": "Well, I came from flask server",
@@ -44,7 +44,7 @@ latest_data = [
         "report_date": "15 Aug 2021",
         "crawled_date": "10 Aug 2021",
         "report_location": "https://some.path/prj/build15/index.html",
-        "test_result": {"pass": 100, "fail": 5, "error": 0, "skipped": 0, "others": 2}
+        "test_result": {"pass": 100, "fail": 5, "error": 0, "skipped": 2}
     },
     {
         "key": "Well, I came from flask server",
