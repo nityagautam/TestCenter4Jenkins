@@ -36,23 +36,30 @@
                 <!-- Summary Cards -->
                 <div class="row m-b-1 align-items-center">
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> Total Projects </h5>
-                            <p class="card-text"> {{ data|length }} </p>
+                            <p class="card-text">
+                                <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                    {{ data|length }}
+
+                                <span class="badge bg-sm bg-success" style="font-size: x-small;"> 0 Active </span>
+                                <span class="badge bg-secondary" style="font-size: x-small;"> 0 Archived </span>
+                                </span>
+                            </p>
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title"> Total Testcases </h5>
-                            <p class="card-text"> 199 </p>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
+<!--                    <div class="col-md-2">-->
+<!--                        <div class="card">-->
+<!--                          <div class="card-body">-->
+<!--                            <h5 class="card-title"> Total Testcases </h5>-->
+<!--                            <p class="card-text"> 199 </p>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="col-md-3">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> No of Executions </h5>
@@ -60,7 +67,7 @@
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> Average Pass Rate </h5>
@@ -68,7 +75,7 @@
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> Average Fail Rate </h5>
@@ -76,14 +83,7 @@
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title"> Other Metric </h5>
-                            <p class="card-text"> 00 </p>
-                          </div>
-                        </div>
-                    </div>
+
                 </div> <br/><br/>
 
                 <!-- Other data for overview -->
@@ -101,7 +101,7 @@
                                     <table class="table table-sm table-hover"> <!-- table-bordered border-primary -->
                                           <thead class="table-group-divider">
                                             <tr>
-                                              <th scope="col">#</th>
+<!--                                              <th scope="col">#</th>-->
                                               <th scope="col">Projects</th>
                                               <th scope="col">Created</th>
                                               <th scope="col">Source</th>
@@ -114,14 +114,14 @@
                                                 {%if data|length >= 1 %}
                                                     {% for project in data %}
                                                             <tr>
-                                                              <th scope="row"> {{project["project_id"]}} </th>
-                                                              <td> {{project["project_name"]}} </td>
+<!--                                                              <th scope="row"> {{project["project_id"]}} </th>-->
+                                                              <td scope="row"> {{project["project_name"]}} </td>
                                                               <td> {{project["date_created"]}} </td>
                                                               <td> {{project["data_source"]}} </td>
                                                               <td> {{project["status"]}} </td>
                                                               <td>
-                                                                  <a href="#" class="btn btn-outline-primary"> Edit </a>
-                                                                  <a href="#" class="btn btn-outline-primary"> Archive </a>
+                                                                  <img src="{{url_for('static', filename='images/edit.svg')}}" alt="Edit" width="15px" data-bs-toggle="tooltip" title="Edit the project: {{project['project_name']}}"/>
+                                                                  <img src="{{url_for('static', filename='images/archive.svg')}}" alt="Archive" width="15px" data-bs-toggle="tooltip" title="Archive this project: {{project['project_name']}}"/>
                                                               </td>
                                                             </tr>
                                                     {%endfor%}

@@ -60,6 +60,16 @@ class DBData(Configurations):
         final_filtered_result = [execution_record for execution_record in test_executions_data if execution_record[1] in tmp_lst_for_active_projects]
         return final_filtered_result
 
+    def get_overview_data(self):
+        # We are going to give
+        # --------------------------------------
+        # - projects list (no of projs, active/archived)
+        # - no of execution
+        # - pass rate
+        # - apply filter to have active projects only
+
+        pass
+
     def get_dashboard_data(self):
         # We are going to give
         # --------------------------------------
