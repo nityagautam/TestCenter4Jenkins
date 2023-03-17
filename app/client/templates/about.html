@@ -1,157 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-	<meta charset="utf-8">
-	<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="{{url_for('static', filename='images/logo.svg')}}">
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+    <head>
+        <!-- scripts: Chart libs -->
+            <!-- Older Chart <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>-->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
 
-	<title>Report Dashboard</title>
 
-	<!-- stylesheets -->
-	<link href="{{url_for('static', filename='assets/fonts/font-roboto.css')}}" rel="stylesheet">
-	<link href="{{url_for('static', filename='assets/bootstrap/bootstrap4-alpha3.min.css')}}" rel="stylesheet">
-	<link href="{{url_for('static', filename='assets/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
-	<link href="{{url_for('static', filename='assets/web-analytics/style.css')}}" rel="stylesheet">
-	<!-- Custom stylesheet-->
-	<link href="{{url_for('static', filename='css/custom-style.css')}}" rel="stylesheet">
-	<!-- Bootstrap scripts -->
-	<script src="{{url_for('static', filename='assets/jquery/jquery-3.1.0.min.js')}}"></script>
-	<script src="{{url_for('static', filename='assets/tether/tether.min.js')}}"></script>
-	<script src="{{url_for('static', filename='assets/bootstrap/bootstrap4-alpha3.min.js')}}"></script>
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
 
-</head>
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
 
-<body>
-	<!-- header -->
-	<nav class="navbar navbar-fixed-top" id="header">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<div id="sidebar-toggle-button">
-					<i class="fa fa-bars" aria-hidden="true"></i>
-				</div>
-				<div class="brand">
-					<a href="/">
-						<span class="hidden-m-down m-r-12"> &nbsp; </span>
-						<span class="lead"> {{ ui_config['app_name'] }} </span>
-						<!-- <span class="tag" id="revenue-tag"> {{ui_config["app_poc_tag_1"]}} </span> -->
-					</a>
-				</div>
-
-			</div>
-		</div>
-	</nav>
-	<!-- /header -->
-
-	<!-- sidebar -->
-	<div class="sidebar-toggle" id="sidebar">
-		<ul class="nav nav-sidebar">
-			{% for menu in ui_config["side_menu"] %}
-				{%if menu['name'] == "ABOUT" %}
-				<li>
-					<a href="{{menu['route']}}" class="active">
-						<i class="{{menu['icon']}}"></i>
-						<span> {{menu['name']}} </span>
-					</a>
-				</li>
-				<li role="separator" class="divider"></li>
-				{%elif menu['name'] != "-" %}
-				<li>
-					<a href="{{menu['route']}}">
-						<i class="{{menu['icon']}}"></i>
-						<span> {{menu['name']}} </span>
-					</a>
-				</li>
-				<li role="separator" class="divider"></li>
-				{%else%}
-				<li role="separator" class="divider"></li>
-				{%endif%}
-			{% endfor %}
-			<!-- And at the very end of the side menu attach the experimental tag -->
-			<li class="sidebar-bottom">
-				<span class="tag custom-tag" id="experimental-tag1"> {{ui_config["app_experimental_tag"]}} </span>
-			</li>
-		</ul>
-	</div>
-	<!-- /sidebar -->
-
-	<!-- page-content-wrapper -->
-	<div class="page-content-toggle" id="page-content-wrapper">
-		<div class="container-fluid">
-
-			<!-- 1st row -->
-			<div class="row m-b-1">
-				<div class="col-md-12">
-					<div class="card card-block">
-						<h4 class="card-title m-b-2">
-							{{ui_config["routes"]["/about"]["page_name"]}}
-							<span class="tag" id="revenue-tag"> {{ui_config["app_poc_tag_1"]}} </span>
-							<h6>THIS APPLICATION IS STILL IN "DEV" STAGE.</h6>
-						</h4>
-						
-						<div class="home-page-desc">
-							<span> {{ui_config["routes"]["/about"]["data"]["desc"]}} </span>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">
+									{{pagename}}
+									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
+									<span class="badge bg-secondary" style="font-size: x-small;"> THIS APPLICATION IS STILL IN "DEV" STAGE.</span>
+								</h3>
+								<hr/>
+								<div class="home-page-desc">
+									<span> {{ui_config["ROUTES"]["/about"]["data"]["desc"]}} </span>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-			<!-- /1st row -->
+				</div> <br/>
 
-			<!-- 2nd row -->
-			<div class="row m-b-1">
-				<div class="col-md-12">
-					<div class="card card-block">
-						<h6 class="title m-b-2"> Components / About  </h6>
-						<div>
-							<ul>
-								{% for desc in ui_config["routes"]["/about"]["data"]["info"] %}
-								<li> {{ desc }} </li>
-								{% endfor %}
-							</ul>
-						</div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="border-width: 0px;">
+                            <div class="card-body">
+                                <h4 class="card-title"> Components </h4>
+                                <div>
+									<ul>
+										{% for line in ui_config["ROUTES"]["/about"]["data"]["info"] %}
+										<li> {{ line }} </li>
+										{% endfor %}
+									</ul>
+								</div>
 
-						<br/>
-						<h6 class="title m-b-2"> Figure-1 (Application working flow)  </h6>
-						<img height="600" src="{{url_for('static', filename='images/automation_dashboard.png')}}" alt="Dashboard architecture"> </img>
-					</div>
+								<br/>
+								<h6 class="title m-b-2"> Figure-1 (Application working flow)  </h6>
+								<img height="600" src="{{url_for('static', filename='images/automation_dashboard.png')}}" alt="Dashboard architecture"> </img>
+                            </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
 
-				</div>
-			</div>
-			<!-- /2nd row -->
 
-			<!-- 3rd row -->
-			<div class="row m-b-1">
-				<div class="col-md-12">
-					<div class="card card-block">
-						<p class="title m-b-2"> Available sample automation projects </p>
-						<div>
-							<ul>
-								{% for project in data %}
-								<li> {{ project.project_name }} </li>
-								{% endfor %}
-							</ul>
-						</div>
-					</div>
 
-				</div>
-			</div>
-			<!-- /3rd row -->
 
-		</div>
-		<!-- /.container-fluid -->
+            </div> <!-- End of the container -->
 
-	</div>
-	<!-- /page-content-wrapper -->
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
 
-</body>
+    </body>
 
-<!-- script for sidebar menu handling -->
-<script>
-	$('#sidebar-toggle-button').on('click', function () {
-		$('#sidebar').toggleClass('sidebar-toggle');
-		$('#page-content-wrapper').toggleClass('page-content-toggle');
-	});
-</script>
+    <script>
+            // Once dom is loaded
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
 
 </html>

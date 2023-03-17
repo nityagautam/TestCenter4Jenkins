@@ -25,6 +25,38 @@ class DBData(Configurations):
         # Create some dummy records
         self.__insert_some_dummy_data()
 
+    # ------------------------------------------------------------------------
+    # Methods specific to the pages
+    # ------------------------------------------------------------------------
+
+    def get_overview_data(self):
+        # We are going to give
+        # --------------------------------------
+        # - projects list (no of projs, active/archived)
+        # - no of execution
+        # - pass rate
+        # - apply filter to have active projects only
+        # - the latest project executions history (each active project with the latest crawled date)
+        # -
+        return {}
+
+    def get_dashboard_data(self):
+        # We are going to give
+        # --------------------------------------
+        # - latest test executions data based on the crawled data for distinct project
+        # - apply filter to have active projects only
+
+        # Now in Action
+        # ---------------
+        dashboard_data = self.filter_test_executions_data_for_active_projects(
+            self.get_latest_crawled_test_executions_data_for_distinct_projects())
+        print("\n\nData for Dashboard =====> ", dashboard_data)
+        return self.__parse_data_to_dict(DBConfig.DATA_PARSING_TYPES["FOR_DASHBOARD"], dashboard_data)
+
+    # ------------------------------------------------------------------------
+    # Methods for Internal usage
+    # ------------------------------------------------------------------------
+
     def get_projects_list(self):
         self.db_obj.select(self.project_table, "*")
         return self.db_obj.fetch_result_from_cursor()
@@ -60,42 +92,15 @@ class DBData(Configurations):
         final_filtered_result = [execution_record for execution_record in test_executions_data if execution_record[1] in tmp_lst_for_active_projects]
         return final_filtered_result
 
-    def get_overview_data(self):
-        # We are going to give
-        # --------------------------------------
-        # - projects list (no of projs, active/archived)
-        # - no of execution
-        # - pass rate
-        # - apply filter to have active projects only
-
-        pass
-
-    def get_dashboard_data(self):
-        # We are going to give
-        # --------------------------------------
-        # - latest test executions data based on the crawled data for distinct project
-        # - apply filter to have active projects only
-
-        # Now in Action
-        # ---------------
-        dashboard_data = self.filter_test_executions_data_for_active_projects(self.get_latest_crawled_test_executions_data_for_distinct_projects())
-        print("\n\nData for Dashboard =====> ", dashboard_data)
-        return self.__parse_data_to_dict(DBConfig.DATA_PARSING_TYPES["FOR_DASHBOARD"], dashboard_data)
-
     @staticmethod
     def __parse_data_to_dict(parse_for: str, data: any) -> any:
         # trim the 'executions' data, and convert it to json
         parsed_data_obj = []
         if parse_for == 'executions':
             for item in data:
-                parsed_data_obj.append({"project_id": item[0],
-                                "project_name": item[1],
-                                "test_result": json.loads(item[2]),
-                                "source": item[3],
-                                "execution_date": item[5],
-                                "report_date": item[5],
-                                "crawled_date": item[6]
-                })
+                # Preparing dict data to be appended in the list
+                # This format(keys) are going to be used in the templates directly.
+                parsed_data_obj.append({"project_id": item[0], "project_name": item[1], "test_result": json.loads(item[2]), "source": item[3], "execution_date": item[5], "report_date": item[5], "crawled_date": item[6]})
         else:
             # TODO: Add more parsing for history trends, etc
             pass
@@ -109,7 +114,8 @@ class DBData(Configurations):
     # ---------------------------------------------------------------------------------------------
 
     def __insert_some_dummy_data(self):
-        # ==> Insert some data in to projects table
+
+        # ==> Insert some data in to "projects" table
         # ---------------------------------------------------------------------------------------------
         # self.db_obj.insert(self.project_table, project_id=1, project_name="Helix-QAC Eclipse Plugin", data_source='Jenkins', jenkins_url='http://localhost:8080', jenkins_user='NIL', jenkins_password='NIL', status='active', created=datetime.datetime.now(), last_modified=datetime.datetime.now())
         # self.db_obj.insert(self.project_table, project_id=2, project_name="Helix-QAC VSCode Plugin", data_source='XML', jenkins_url='NIL', jenkins_user='NIL', jenkins_password='NIL', status='active', created=datetime.datetime.now(), last_modified=datetime.datetime.now())
@@ -123,7 +129,7 @@ class DBData(Configurations):
         # # ---------------------------------------------------------------------------------------------
         # self.db_obj.update_where(self.project_table, {"status": "archived"}, project_name="Helix-QAC Dashboard")
 
-        # ==> Insert more data in to execution ( {"pass": 125, "fail": 20, "error": 5, "skipped": 10} )
+        # ==> Insert more data in to "executions" table
         # ---------------------------------------------------------------------------------------------
         self.db_obj.insert(self.test_execution_table, project_id=1, project_name="Helix-QAC Eclipse Plugin", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
         self.db_obj.insert(self.test_execution_table, project_id=2, project_name="Helix-QAC VSCode Plugin", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())

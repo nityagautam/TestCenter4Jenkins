@@ -21,7 +21,7 @@ from app.server.dbase import sample_data
 @application.route('/home', methods=['GET'])
 def home():
     if route_gateway.is_session_active():
-        return redirect('/dashboard')
+        return redirect('/about')
     return not_authorised()
 
 
@@ -64,6 +64,13 @@ def create_new_project_space():
 def about():
     if route_gateway.is_session_active():
         return route_gateway.get_template("/about")
+    return not_authorised()
+
+
+@application.route('/utility', methods=['GET'])
+def utility():
+    if route_gateway.is_session_active():
+        return route_gateway.get_template("/utility")
     return not_authorised()
 
 

@@ -12,8 +12,8 @@ class UIConfigurations(Configurations):
         "app_name": Configurations.APP_NAME,
         "app_version": f"v[{Configurations.APP_VERSION}]",
         "app_author": f"{Configurations.AUTHOR_NAME}",
-        "app_title": f"AUTOMATION DASHBOARD",
-        "app_poc_tag_1": "POC PROTOTYPE-1",
+        "app_title": f"TEST CENTER",
+        "app_poc_tag": "POC PROTOTYPE-1",
         "app_experimental_tag": f"Experimental",
     }
 
@@ -85,19 +85,26 @@ class UIConfigurations(Configurations):
             "template_name": "error.html",
             "data": []
         },
+        "/utility": {
+            "is_menu": True,
+            "page_name": "Utility",
+            "PAGE_DESC": "",
+            "template_name": "utility.html",
+            "data": []
+        },
         "/about": {
             "is_menu": True,
             "page_name": "ABOUT",
             "PAGE_DESC": "",
             "template_name": "about.html",
             "data": {
-                "desc": """This is the main page of the Automation Dashboard server. This application is to present the reports 
-                                               more effectively and in detailed way of the executed automated suites. 
-                                               It is just a POC(Proof of Concept) proto-type, to show-case the idea of a dashboard server 
-                                               for better reporting of the automation reports and doing/extracting some insights from it.
-                                               >>>>>  
-                                               This idea came after looking at a lot of reports and jenkins execution data, 
-                                               with an idea to represent the insights in a better way.""",
+                "desc": f"""This is the about page of the {APP_META["app_title"]} server. This application is to present the reports 
+                           more effectively and in detailed way of the executed automated suites. 
+                           It is just a POC(Proof of Concept) proto-type, to show-case the idea of a dashboard server 
+                           for better reporting of the automation reports and doing/extracting some insights from it.
+                           >>>>>  
+                           This idea came after looking at a lot of reports and jenkins execution data, 
+                           with an idea to represent the insights in a better way.""",
                 "info": [
                     "App has 3 main components:: Backend Server + FrontEnd(Aggregation and reports) + Crawler",
                     "Server is written on 'Python3' with 'Flask'",

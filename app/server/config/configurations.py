@@ -21,7 +21,7 @@ class Configurations(object):
     # -------------------
     # Core properties
     # -------------------
-    APP_NAME = 'REPORT_DASHBOARD'
+    APP_NAME = 'TEST_CENTER'
     AUTHOR_NAME = 'Ashutosh Mishra [amishra]'
     APP_VERSION = '1.0.0'
     APP_ENVIRONMENT = "TEST"
