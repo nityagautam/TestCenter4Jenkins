@@ -74,6 +74,10 @@ svg {
   font-size: 0.5rem;
   font-weight: 100;
 }
+.authorText {
+    font-size: 0.5rem;
+    font-weight: 100;
+}
 
 .timeText {
   font-family: "Open Sans";
@@ -81,9 +85,15 @@ svg {
   font-weight: 600;
   fill: White;
 }
+.timeSecondsText {
+  font-family: "Open Sans";
+  font-size: 2.5rem;
+  font-weight: 100;
+  fill: White;
+}
 
 .otherTimeText {
-      font-size: 2rem;
+      font-size: 1.3rem;
       font-weight: 100;
       fill: White;
 }

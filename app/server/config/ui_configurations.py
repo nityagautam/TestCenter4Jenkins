@@ -21,6 +21,7 @@ class UIConfigurations(Configurations):
     # Error messages
     # -----------------------------------
     ERROR_MESSAGES = {
+        "USER_LOGGED_OUT": "User has been logged out.",
         "NOT_LOGGED_IN": "You are not logged-in.",
         "NOT_AUTHORISED": "You are not authorised.",
         "INCORRECT_CREDENTIALS": "Oopse, incorrect credentials !",
@@ -87,7 +88,7 @@ class UIConfigurations(Configurations):
         },
         "/utility": {
             "is_menu": True,
-            "page_name": "Utility",
+            "page_name": "UTILITY",
             "PAGE_DESC": "",
             "template_name": "utility.html",
             "data": []

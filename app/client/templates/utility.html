@@ -104,20 +104,25 @@
 
 												<!-- Caption objects -->
 												<text id="time" class="caption timeText" x="570" y="240" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)"></text>
+												<text id="timeSeconds" class="caption timeSecondsText" x="570" y="300" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)"></text>
 
+												<rect x="40" y="130" width="350" height="0.5" style="stroke: #ffffff; fill: url(#dotPattern);" />
 												<text id="day" class="caption dayText" x="350" y="160" stroke-width="0" text-anchor="end" alignment-baseline="middle"  filter="url(#shadow)"></text>
 												<text id="year-and-date" class="caption dateText" x="350" y="200" stroke-width="0" text-anchor="end" alignment-baseline="middle" filter="url(#shadow)"></text>
 												<text id="timezone" class="caption" x="350" y="230" stroke-width="0" text-anchor="end" alignment-baseline="middle"  filter="url(#shadow)">TZ</text>
 
 												<!-- 3 other timezones -->
-												<rect x="10" y="240" width="340" height="0.5" style="stroke: #ffffff; fill: url(#dotPattern);" />
-												<text id="msg" class="caption msgText" x="300" y="270" stroke-width="0" text-anchor="end" alignment-baseline="middle" filter="url(#shadow)"></text>
-												<text id="istTime" class="caption otherTimeText" x="180" y="300" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)">IST</text>
-												<text id="jstTime" class="caption otherTimeText" x="200" y="340" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)">EST</text>
-												<text id="edtTime" class="caption otherTimeText" x="220" y="380" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)">IST</text>
-												<text id="gmtTime" class="caption otherTimeText" x="230" y="420" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)">GMT</text>
+												<rect x="40" y="240" width="320" height="0.5" style="stroke: #ffffff; fill: url(#glow);" />
+												<text id="istTime" class="otherTimeText" x="180" y="270" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="India Standard Time">IST</text>
+												<text id="jstTime" class="otherTimeText" x="200" y="310" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="Japan Standard Time">JST</text>
+												<text id="edtTime" class="otherTimeText" x="220" y="350" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="EDT, Newyork, US Time">EDT</text>
+												<text id="gmtTime" class="otherTimeText" x="230" y="390" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="GMT, London, UK Time">GMT</text>
 
+												<!-- other -->
+												<text id="author" class="authorText" x="650" y="470" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="Author">Author</text>
 
+												<!-- Debug stuff -->
+												<text id="msg" class="caption msgText" x="80" y="470" stroke-width="0" text-anchor="end" alignment-baseline="middle" filter="url(#shadow)"></text>
 
 											</svg>
 

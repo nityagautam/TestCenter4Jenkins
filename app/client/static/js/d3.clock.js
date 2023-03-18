@@ -2,6 +2,9 @@
 Inspired by https://dribbble.com/shots/2004657-Alarm-Clock-concept
  */
 
+// Author
+author = "Author: Ashutosh Mishra (amishra), nityagautam@github"
+
  // Set radius of clocks pins
     var hourRadius = 150;
     var minuteRadius = 170;
@@ -65,24 +68,31 @@ setCaptions = function() {
     dot.attr("cx", pos.x);
     dot.attr("cy", pos.y);
 
-    $('#msg').text(secArc);
+    // Set the Year, date, month on the left of the clock
+    $('#timezone').text('Timezone - ' + moment.tz.guess());
+    $('#day').text(moment().format('dddd'));
+    $('#year-and-date').text(moment().format('YYYY MMMM D'));
+
 
     // Setting other times for other timezones
-    $('#istTime').text('IST: ' + moment().tz('Asia/Kolkata').format('H:mm:ss | dddd | D/M'));
-    $('#gmtTime').text('GMT: ' + moment().tz('Europe/London').format('H:mm:ss | dddd | D/M'));
-    $('#edtTime').text('EDT: ' + moment().tz('America/New_York').format('H:mm:ss | dddd | D/M'));
-    $('#jstTime').text('JST: ' + moment().tz('Asia/Tokyo').format('H:mm:ss | dddd | D/M'));
+    $('#istTime').text('IST: ' + moment().tz('Asia/Kolkata').format('H:mm | dddd | D/M'));
+    $('#gmtTime').text('GMT: ' + moment().tz('Europe/London').format('H:mm | dddd | D/M'));
+    $('#edtTime').text('EDT: ' + moment().tz('America/New_York').format('H:mm | dddd | D/M'));
+    $('#jstTime').text('JST: ' + moment().tz('Asia/Tokyo').format('H:mm | dddd | D/M'));
 
-    return $('#time').text(moment().format('H:mm'));
+    // Now setting the main clock time and second value/text
+    $('#timeSeconds').text('' + moment().tz('Asia/Tokyo').format('ss'));
+    $('#time').text(moment().format('H:mm'));
 
+    //[DEBUG]: degree value
+    $('#msg').text(secArc);
+
+    return 0;
 };
 
 // Since, we are not updating the date, year month hence keeping out side of setCaptions method
-// Set the Year, date, month on the left of the clock
-//$('#istTime').text(moment().zone('Asia/Kolkata').format());
-$('#timezone').text('Timezone - ' + moment.tz.guess());
-$('#day').text(moment().format('dddd'));
-$('#year-and-date').text(moment().format('YYYY MMMM D'));
+// set the author
+$('#author').text(author);
 
 setCaptions();
 
@@ -91,11 +101,19 @@ setInterval(function() {
 }, 1000);
 
 $(function() {
-  TweenMax.staggerFrom(".clockArc", .5, {
+  TweenMax.staggerFrom(".clockArc", 0.5, {
     drawSVG: 0,
     ease: Power3.easeOut
-  }, 0.3);
+  }, 0.9);
   TweenMax.from("#time", 0.7, {
+    attr: {
+      y: 350
+    },
+    opacity: 0,
+    ease: Power3.easeOut,
+    delay: 0.5
+  });
+  TweenMax.from("#timeSeconds", 0.5, {
     attr: {
       y: 350
     },
@@ -112,15 +130,25 @@ $(function() {
     ease: Power3.easeOut
   });
 
-// Lets animate Date and Year Text
-//  return TweenMax.from(".dateText", 1.0, {
-//    attr: {
-//      y: 350
-//    },
-//    opacity: 0,
-//    delay: 1.5,
-//    ease: Power3.easeOut
-//  });
+// Lets animate Other timezones date and time
+  return TweenMax.from(".otherTimeText", 1.0, {
+    attr: {
+      y: 350
+    },
+    opacity: 0,
+    delay: 1.5,
+    ease: Power3.easeOut
+  });
+
+  // lets animate Author
+  TweenMax.from("#author", 1.0, {
+    attr: {
+      y: 350
+    },
+    opacity: 0,
+    ease: Power3.easeOut,
+    delay: 2.9
+  });
 });
 
 // ---
