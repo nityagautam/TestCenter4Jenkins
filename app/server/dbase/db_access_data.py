@@ -23,7 +23,7 @@ class DBData(Configurations):
         self.db_obj.create_table(self.test_execution_table, self.test_execution_table_fields)
 
         # Create some dummy records
-        self.__insert_some_dummy_data()
+        # self.__insert_some_dummy_data()
 
     # ------------------------------------------------------------------------
     # Methods specific to the pages
@@ -38,7 +38,40 @@ class DBData(Configurations):
         # - apply filter to have active projects only
         # - the latest project executions history (each active project with the latest crawled date)
         # -
-        return {}
+
+        # Data extraction
+
+        # For Projects
+        projects_list = self.get_projects_list()
+        total_projects_count = len(projects_list)
+        active_projects_count = len(self.get_active_project_list())
+        archived_projects_count = total_projects_count - active_projects_count
+
+        # For Executions
+        executions_data = self.get_test_executions_data()
+        #execution_data_for_active_projects = self.get_test_executions_data_for_active_project()
+        #total_executions_for_active_projects = len(execution_data_for_active_projects)
+        execution_data_for_active_projects_with_latest_crawled_date = self.filter_test_executions_data_for_active_projects(self.get_latest_crawled_test_executions_data_for_distinct_projects())
+
+        # For TC: From Executions
+        total_executions = len(executions_data)
+
+        # Defining schema for overview data
+        # And setting the value as well
+        overview_data = {"PROJECTS_LIST": self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["PROJECTS"], projects_list),
+                         "TOTAL_PROJECTS_COUNT": total_projects_count,
+                         "TOTAL_ACTIVE_PROJECTS": active_projects_count,
+                         "TOTAL_ARCHIVED_PROJECTS": archived_projects_count,
+
+                         "TOTAL_EXECUTIONS_COUNT": total_executions,
+                         "LATEST_EXECUTION_FOR_ACTIVE_PROJECTS": self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], execution_data_for_active_projects_with_latest_crawled_date),
+
+                         "TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS": 0,
+                         "TC_PASSED_FROM_LATEST_EXECUTIONS": 0,
+                         "TC_FAILED_FROM_LATEST_EXECUTIONS": 0,
+                         "TC_ERRORED_FROM_LATEST_EXECUTIONS": 0,
+                         "TC_SKIPPED_FROM_LATEST_EXECUTIONS": 0}
+        return overview_data
 
     def get_dashboard_data(self):
         # We are going to give
@@ -51,7 +84,7 @@ class DBData(Configurations):
         dashboard_data = self.filter_test_executions_data_for_active_projects(
             self.get_latest_crawled_test_executions_data_for_distinct_projects())
         print("\n\nData for Dashboard =====> ", dashboard_data)
-        return self.__parse_data_to_dict(DBConfig.DATA_PARSING_TYPES["FOR_DASHBOARD"], dashboard_data)
+        return self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["FOR_DASHBOARD"], dashboard_data)
 
     # ------------------------------------------------------------------------
     # Methods for Internal usage
@@ -68,6 +101,14 @@ class DBData(Configurations):
     def get_test_executions_data(self):
         self.db_obj.select(self.test_execution_table, "*")
         return self.db_obj.fetch_result_from_cursor()
+
+    def get_test_executions_data_count(self):
+        self.db_obj.select(self.test_execution_table, "COUNT")
+        return self.db_obj.fetch_result_from_cursor()
+
+    def get_test_executions_data_for_active_project(self):
+        self.db_obj.select(self.test_execution_table, "*")
+        return self.filter_test_executions_data_for_active_projects(self.db_obj.fetch_result_from_cursor())
 
     def get_test_executions_data_for_project(self, project_name):
         self.db_obj.select_where(self.test_execution_table, "*", project_name=project_name)
@@ -93,17 +134,24 @@ class DBData(Configurations):
         return final_filtered_result
 
     @staticmethod
-    def __parse_data_to_dict(parse_for: str, data: any) -> any:
+    def __parse_data_to_dict(parse_for_table: str, data: any) -> any:
         # trim the 'executions' data, and convert it to json
         parsed_data_obj = []
-        if parse_for == 'executions':
+        if parse_for_table == 'executions':
             for item in data:
                 # Preparing dict data to be appended in the list
                 # This format(keys) are going to be used in the templates directly.
                 parsed_data_obj.append({"project_id": item[0], "project_name": item[1], "test_result": json.loads(item[2]), "source": item[3], "execution_date": item[5], "report_date": item[5], "crawled_date": item[6]})
+        elif parse_for_table == 'projects':
+            for item in data:
+                # Preparing dict data to be appended in the list
+                # SCHEMA: project_id, project_name, data_source, jenkins_url, jenkins_user, jenkins_password, status, created, last_modified
+                # This format(keys) are going to be used in the templates directly.
+                print("\n\n===> PROJECT RECORD: ", item)
+                parsed_data_obj.append({"PROJECT_ID": item[0], "PROJECT_NAME": item[1], "DATA_SOURCE": item[2], "JENKINS_URL": item[3], "JENKINS_USER": item[4], "JENKINS_PASSWORD": item[5], "STATUS": item[6], "CREATED": item[7], "LAST_MODIFIED": item[8]})
         else:
-            # TODO: Add more parsing for history trends, etc
-            pass
+            # if table not recognised then return the given data
+            return data
 
         # now, return the parsed obj
         # DEBUG: print(f"JOSN DUMPS: {json.dumps(parsed_data_obj)}")

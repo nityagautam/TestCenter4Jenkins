@@ -68,21 +68,20 @@ setCaptions = function() {
     dot.attr("cx", pos.x);
     dot.attr("cy", pos.y);
 
+    // Now setting the main clock time and second value/text
+    $('#timeSeconds').text('' + moment().tz('Asia/Tokyo').format('ss'));
+    $('#time').text(moment().format('H:mm'));
+
     // Set the Year, date, month on the left of the clock
     $('#timezone').text('Timezone - ' + moment.tz.guess());
     $('#day').text(moment().format('dddd'));
     $('#year-and-date').text(moment().format('YYYY MMMM D'));
-
 
     // Setting other times for other timezones
     $('#istTime').text('IST: ' + moment().tz('Asia/Kolkata').format('H:mm | dddd | D/M'));
     $('#gmtTime').text('GMT: ' + moment().tz('Europe/London').format('H:mm | dddd | D/M'));
     $('#edtTime').text('EDT: ' + moment().tz('America/New_York').format('H:mm | dddd | D/M'));
     $('#jstTime').text('JST: ' + moment().tz('Asia/Tokyo').format('H:mm | dddd | D/M'));
-
-    // Now setting the main clock time and second value/text
-    $('#timeSeconds').text('' + moment().tz('Asia/Tokyo').format('ss'));
-    $('#time').text(moment().format('H:mm'));
 
     //[DEBUG]: degree value
     $('#msg').text(secArc);

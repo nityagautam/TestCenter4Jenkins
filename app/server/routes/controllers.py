@@ -21,7 +21,7 @@ from app.server.dbase import sample_data
 @application.route('/home', methods=['GET'])
 def home():
     if route_gateway.is_session_active():
-        return redirect('/about')
+        return redirect('/index')
     return not_authorised()
 
 

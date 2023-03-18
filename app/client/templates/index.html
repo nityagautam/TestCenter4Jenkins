@@ -22,11 +22,14 @@
                             <p class="card-text">
                                 This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
                                 It is the overview of the all the test projects for the automation, which has been extracted/crawled
-                                either from the jenkins or from the (HTML/Junit xml) report files.
-                            </p>
-                            <p class="card-text">
+                                either from the jenkins or from the (HTML/Junit xml) report files. <br/>
                                 To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings page </a>
                             </p>
+                            <p class="card-text">
+                                DATA FROM SERVER: <br/>
+                                {{data}}
+                            </p>
+
                           </div>
                         </div>
                     </div>
@@ -42,10 +45,10 @@
                             <h5 class="card-title"> Total Projects </h5>
                             <p class="card-text">
                                 <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{ data|length }}
+                                    {{ data['TOTAL_PROJECTS_COUNT'] }}
 
-                                <span class="badge bg-sm bg-success" style="font-size: x-small;"> 0 Active </span>
-                                <span class="badge bg-secondary" style="font-size: x-small;"> 0 Archived </span>
+                                <span class="badge bg-sm bg-success" style="font-size: x-small;"> {{data['TOTAL_ACTIVE_PROJECTS']}} Active </span>
+                                <span class="badge bg-secondary" style="font-size: x-small;"> {{data['TOTAL_ARCHIVED_PROJECTS']}} Archived </span>
                                 </span>
                             </p>
                           </div>
@@ -63,7 +66,11 @@
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> No of Executions </h5>
-                            <p class="card-text"> {{ data|length }} </p>
+                            <p class="card-text">
+                                <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                    {{ data["TOTAL_EXECUTIONS_COUNT"] }}
+                                </span>
+                            </p>
                           </div>
                         </div>
                     </div>
@@ -71,7 +78,14 @@
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> Average Pass Rate </h5>
-                            <p class="card-text"> 98% </p>
+                            <p class="card-text">
+                                <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                    {{ data|length }}
+
+                                <span class="badge bg-sm bg-success" style="font-size: x-small;"> 0 Active </span>
+                                <span class="badge bg-secondary" style="font-size: x-small;"> 0 Archived </span>
+                                </span>
+                            </p>
                           </div>
                         </div>
                     </div>
@@ -79,7 +93,14 @@
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title"> Average Fail Rate </h5>
-                            <p class="card-text"> 02% </p>
+                            <p class="card-text">
+                                <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                    {{ data|length }}
+
+                                <span class="badge bg-sm bg-success" style="font-size: x-small;"> 0 Active </span>
+                                <span class="badge bg-secondary" style="font-size: x-small;"> 0 Archived </span>
+                                </span>
+                            </p>
                           </div>
                         </div>
                     </div>
@@ -110,15 +131,15 @@
                                             </tr>
                                           </thead>
                                           <tbody class="table-group-divider">
-                                                <!-- Loading all the projects available -->
-                                                {%if data|length >= 1 %}
-                                                    {% for project in data %}
+                                                <!-- Loading all the projects available LATEST_EXECUTION_FOR_ACTIVE_PROJECTS -->
+                                                {%if data['PROJECTS_LIST']|length >= 1 %}
+                                                    {% for project in data['PROJECTS_LIST'] %}
                                                             <tr>
 <!--                                                              <th scope="row"> {{project["project_id"]}} </th>-->
-                                                              <td scope="row"> {{project["project_name"]}} </td>
-                                                              <td> {{project["date_created"]}} </td>
-                                                              <td> {{project["data_source"]}} </td>
-                                                              <td> {{project["status"]}} </td>
+                                                              <td scope="row"> {{project["PROJECT_NAME"]}} </td>
+                                                              <td> {{project["CREATED"]}} </td>
+                                                              <td> {{project["DATA_SOURCE"]}} </td>
+                                                              <td> {{project["STATUS"]}} </td>
                                                               <td>
                                                                   <img src="{{url_for('static', filename='images/edit.svg')}}" alt="Edit" width="15px" data-bs-toggle="tooltip" title="Edit the project: {{project['project_name']}}"/>
                                                                   <img src="{{url_for('static', filename='images/archive.svg')}}" alt="Archive" width="15px" data-bs-toggle="tooltip" title="Archive this project: {{project['project_name']}}"/>
@@ -142,14 +163,45 @@
                       <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Project crawled History
+                                Project latest crawled History
                                 </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <p>
-                                      Project Crawl history goes here ...
-                                    </p>
+
+                                    <!-- Show the table for all the available projects -->
+                                    <table class="table table-sm table-hover"> <!-- table-bordered border-primary -->
+                                        <thead class="table-group-divider">
+                                            <tr>
+                                                <!-- <th scope="col">#</th>-->
+                                                <th scope="col">Projects</th>
+                                                <th scope="col">Source</th>
+                                                <th scope="col">Crawled Date</th>
+                                                <th scope="col">Results</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+                                                <!-- Loading latest crawled for active projects available -->
+                                                {%if data['LATEST_EXECUTION_FOR_ACTIVE_PROJECTS']|length >= 1 %}
+                                                    {% for project in data['LATEST_EXECUTION_FOR_ACTIVE_PROJECTS'] %}
+                                                        <tr>
+                                                            <!-- <th scope="row"> {{project["project_id"]}} </th>-->
+                                                            <td scope="row"> {{project["project_name"]}} </td>
+                                                            <td> {{project["source"]}} </td>
+                                                            <td> {{project["crawled_date"]}} </td>
+                                                            <td> {{project["test_result"]}} </td>
+                                                        </tr>
+                                                    {%endfor%}
+                                                {%else%}
+                                                    <!-- Show no data, because data is empty -->
+                                                    <tr>
+                                                        <th scope="row" colspan="4"> No projects available yet, consider creating one </th>
+                                                        <td> <a href="/create-new-space" class="btn btn-outline-primary"> Create new space </a> </td>
+                                                    </tr>
+                                                {%endif%}
+                                        </tbody>
+                                    </table>
+
                                 </div>
                             </div>
                       </div>

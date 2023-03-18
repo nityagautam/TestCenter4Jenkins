@@ -38,10 +38,9 @@ class DBConfig(Configurations):
                                    'execution_date TIMESTAMP',
                                    'crawled_date TIMESTAMP']
 
-    DATA_PARSING_TYPES = {
-        "FOR_DASHBOARD": "executions",
-        "FOR_TRENDS": "trends",
-        "FOR_HISTORY": "history",
+    DATA_PARSING_FOR_TABLE = {
+        "EXECUTIONS": "executions",
+        "PROJECTS": "projects"
     }
 
     CUSTOM_QUERIES = {
