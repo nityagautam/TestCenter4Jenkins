@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+
+                <!-- Accordian for Overview -->
+                <div class="accordion" id="accordionForHistory">
+                      <!-- First item -->
+                      <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingHistory">
+                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
+                                History
+                              </button>
+                          </h2>
+                          <div id="collapseHistory" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionForHistory">
+                              <div class="accordion-body">
+                                  <h5 class="card-title">This is project-wise history.</h5>
+                                  <p>
+                                      Bla, bla, bla <br/>
+                                      To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings </a> page
+                                  </p>
+                                  <p>
+                                      DATA: <br/>
+
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                </div> <br/><br/>
+
+                <!-- Card for trends -->
+                <div class="row m-b-1 align-items-center">
+                    {%if data|length >= 1 %}
+                        {% for key in data %}
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"> Project: {{key}} </h5>
+                                        <span class="badge bg-light text-dark"> Report Date: {{data[key][1]['report_date']}} </span>
+                                        <span class="badge bg-light text-dark"> Summary: {{data[key][1]['test_result']}}</span>
+                                        <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
+                                        <br/>
+                                        <p class="card-text">
+                                            DATA: <br/>
+                                            {{data[key][1]}}
+                                        </p>
+                                    </div>
+                                </div> <br/>
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+
+                </div> <br/><br/>
+
+
+            </div> <!-- End of the container -->
+
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
+
+    </body>
+
+    <script>
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
+
+</html>

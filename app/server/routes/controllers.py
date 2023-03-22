@@ -39,10 +39,10 @@ def index():
     return not_authorised()
 
 
-@application.route('/trends', methods=['GET'])
+@application.route('/history', methods=['GET'])
 def trends():
     if route_gateway.is_session_active():
-        return route_gateway.get_template("/trends")
+        return route_gateway.get_template("/history")
     return not_authorised()
 
 

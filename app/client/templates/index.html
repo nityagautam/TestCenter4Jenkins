@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
     <!-- Following inclusion contains the HEAD tag data -->
     {% include 'head.html' %}
@@ -14,39 +14,40 @@
             <div class="container">
                 <br/><br/><br/><br/>
 
-                <div class="row">
-                    <div class="col">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">This is an overview of automation report dashboard.</h5>
-                            <p class="card-text">
-                                This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
-                                It is the overview of the all the test projects for the automation, which has been extracted/crawled
-                                either from the jenkins or from the (HTML/Junit xml) report files. <br/>
-                                To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings page </a>
-                            </p>
-                            <p class="card-text">
-                                DATA FROM SERVER: <br/>
-                                {{data}}
-                            </p>
-
+                <!-- Accordian for Overview -->
+                <div class="accordion" id="accordionForOverview">
+                      <!-- First item -->
+                      <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingOverview">
+                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOverview" aria-expanded="false" aria-controls="collapseOverview">
+                                Overview
+                              </button>
+                          </h2>
+                          <div id="collapseOverview" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionForOverview">
+                              <div class="accordion-body">
+                                  <h5 class="card-title">This is an overview of automation report dashboard.</h5>
+                                  <p>
+                                      This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
+                                      It is the overview of the all the test projects for the automation, which has been extracted/crawled
+                                      either from the jenkins or from the (HTML/Junit xml) report files. <br/>
+                                      To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings </a> page
+                                  </p>
+                              </div>
                           </div>
-                        </div>
-                    </div>
+                      </div>
                 </div> <br/><br/>
 
 
                 <!-- Summary Cards -->
                 <div class="row m-b-1 align-items-center">
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="card">
                           <div class="card-body">
-                            <h5 class="card-title"> Total Projects </h5>
+                            <h5 class="card-title"> Project Space </h5>
                             <p class="card-text">
                                 <span class="badge bg-light text-dark" style="font-size: x-large;">
                                     {{ data['TOTAL_PROJECTS_COUNT'] }}
-
                                 <span class="badge bg-sm bg-success" style="font-size: x-small;"> {{data['TOTAL_ACTIVE_PROJECTS']}} Active </span>
                                 <span class="badge bg-secondary" style="font-size: x-small;"> {{data['TOTAL_ARCHIVED_PROJECTS']}} Archived </span>
                                 </span>
@@ -54,18 +55,10 @@
                           </div>
                         </div>
                     </div>
-<!--                    <div class="col-md-2">-->
-<!--                        <div class="card">-->
-<!--                          <div class="card-body">-->
-<!--                            <h5 class="card-title"> Total Testcases </h5>-->
-<!--                            <p class="card-text"> 199 </p>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                    <div class="col-md-3">
+                    <div class="col">
                         <div class="card">
                           <div class="card-body">
-                            <h5 class="card-title"> No of Executions </h5>
+                            <h5 class="card-title"> Executions </h5>
                             <p class="card-text">
                                 <span class="badge bg-light text-dark" style="font-size: x-large;">
                                     {{ data["TOTAL_EXECUTIONS_COUNT"] }}
@@ -74,31 +67,52 @@
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col">
                         <div class="card">
                           <div class="card-body">
-                            <h5 class="card-title"> Average Pass Rate </h5>
+                            <h5 class="card-title"> TestCases </h5>
                             <p class="card-text">
                                 <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{ data|length }}
-
-                                <span class="badge bg-sm bg-success" style="font-size: x-small;"> 0 Active </span>
-                                <span class="badge bg-secondary" style="font-size: x-small;"> 0 Archived </span>
+                                    {{data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"]}}
                                 </span>
                             </p>
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="card">
                           <div class="card-body">
-                            <h5 class="card-title"> Average Fail Rate </h5>
+                            <h5 class="card-title"> Avg Pass Rate </h5>
                             <p class="card-text">
                                 <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{ data|length }}
-
-                                <span class="badge bg-sm bg-success" style="font-size: x-small;"> 0 Active </span>
-                                <span class="badge bg-secondary" style="font-size: x-small;"> 0 Archived </span>
+                                    {{ data["TC_PASSED_FROM_LATEST_EXECUTIONS"] }}
+                                    <span class="badge bg-dark" style="font-size: x-small;"> {{((data["TC_PASSED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
+                                </span>
+                            </p>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Avg Fail Rate </h5>
+                            <p class="card-text">
+                                <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                    {{ data["TC_FAILED_FROM_LATEST_EXECUTIONS"] }}
+                                    <span class="badge bg-dark" style="font-size: x-small;"> {{((data["TC_FAILED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
+                                </span>
+                            </p>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> Avg Error Rate </h5>
+                            <p class="card-text">
+                                <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                    {{ data["TC_ERROR_FROM_LATEST_EXECUTIONS"] }}
+                                    <span class="badge bg-dark" style="font-size: x-small;"> {{((data["TC_ERROR_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
                                 </span>
                             </p>
                           </div>
@@ -163,7 +177,7 @@
                       <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Project latest crawled History
+                                <b> Project Execution History (Active)(Latest) </b>
                                 </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">

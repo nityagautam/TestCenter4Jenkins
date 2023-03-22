@@ -64,7 +64,10 @@ class Gateway(UIConfigurations):
                                username=session_user,
                                ui_config=ui_config,
                                db_data=[],
-                               data=DBData().get_dashboard_data() if '/dashboard' in route_name else DBData().get_overview_data() if '/index' in route_name else sample_data.latest_data
+                               data=DBData().get_dashboard_data() if '/dashboard' in route_name
+                                        else DBData().get_overview_data() if '/index' in route_name
+                                        else DBData().get_history_data() if '/history' in route_name
+                                        else sample_data.latest_data
                                )
 
     def get_error_template(self, route_name, error_data, error_code):

@@ -51,11 +51,11 @@ class UIConfigurations(Configurations):
             "template_name": "dashboard.html",
             "data": []
         },
-        "/trends": {
+        "/history": {
             "is_menu": True,
-            "page_name": "TRENDS",
+            "page_name": "HISTORY",
             "PAGE_DESC": "",
-            "template_name": "trends.html",
+            "template_name": "history.html",
             "data": []
         },
         "/create-new-space": {
