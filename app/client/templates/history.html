@@ -3,6 +3,11 @@
 
     <!-- Following inclusion contains the HEAD tag data -->
     {% include 'head.html' %}
+    <head>
+        <!-- scripts: Chart libs -->
+        <!-- Older Chart <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
 
     <body>
 
@@ -23,7 +28,7 @@
                                 History
                               </button>
                           </h2>
-                          <div id="collapseHistory" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionForHistory">
+                          <div id="collapseHistory" class="accordion-collapse collapse hide" aria-labelledby="headingOne" data-bs-parent="#accordionForHistory">
                               <div class="accordion-body">
                                   <h5 class="card-title">This is project-wise history.</h5>
                                   <p>
@@ -48,7 +53,7 @@
                                         <h5 class="card-title"> Project: {{key}} </h5>
                                         <span class="badge bg-light text-dark"> Report Date: {{data[key][1]['report_date']}} </span>
                                         <span class="badge bg-light text-dark"> Summary: {{data[key][1]['test_result']}}</span>
-                                        <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
+                                        <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Toggle Chart </span>
                                         <br/>
                                         <p class="card-text">
                                             DATA: <br/>

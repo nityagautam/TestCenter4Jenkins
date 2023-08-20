@@ -19,9 +19,6 @@ body {
   color: white;
 }
 
-.orange-font {
-    color: orange !important;
-}
 .active-link {
     color: white !important;
     border-width: 2px;
@@ -41,9 +38,13 @@ body {
     color: white !important;
 }
 
+.orange-font {
+    color: orange !important;
+}
+
 .custom-card {
-    border-radius: 3px;
-    border-style: double;
+    border-radius: 3px !important;
+    border-style: double !important;
 }
 
 .sidebar-bottom {
