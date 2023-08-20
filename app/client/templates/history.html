@@ -46,6 +46,7 @@
                 <!-- Card for trends -->
                 <div class="row m-b-1 align-items-center">
                     {%if data|length >= 1 %}
+
                         {% for key in data %}
                             <div class="col-md-12">
                                 <div class="card">
@@ -57,12 +58,100 @@
                                         <br/>
                                         <p class="card-text">
                                             DATA: <br/>
-                                            {{data[key][1]}}
+                                            {{data[key][1]}} <br/>
+                                            RESULT SETs: <br/>
+                                            {{ data[key][1]['test_result'] }} <br/>
+                                            {% for result in data[key][1]['test_result'] %}
+                                                "{{ result }}",
+                                            {% endfor %} <br/>
+                                            {% for result in data[key][1]['test_result'] %}
+                                                "{{ result.fail }}",
+                                            {% endfor %} <br/>
+                                            {% for result in data[key][1]['test_result'] %}
+                                                "{{ result.error }}",
+                                            {% endfor %} <br/>
+                                            {% for result in data[key][1]['test_result'] %}
+                                                "{{ result.skipped }}",
+                                            {% endfor %} <br/>
+
                                         </p>
+                                        <div>
+                                            <!-- Here goes our chart -->
+                                            <canvas style="height: 250px; width: 100%;" height="250" class="{{ key|replace(' ' , '')|replace('-' , '') }}" id="myChart_{{ key|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                            <div class="action_btns_{{ key|replace(' ' , '')|replace('-' , '') }}" style="text-align: left;">
+                                                <button type="button" class="btn btn-dark btn-sm" onclick=""> EXPLORE FURTHER </button>
+                                                <button type="button" class="btn btn-dark btn-sm" onclick="fill_pass(myChart_{{ key|replace(' ' , '')|replace('-' , '') }})"> TOGGLE FILL PASS </button>
+                                                <button type="button" class="btn btn-dark btn-sm" onclick="fill_fail(myChart_{{ key|replace(' ' , '')|replace('-' , '') }})"> TOGGLE FILL FAIL </button>
+                                                <button type="button" class="btn btn-dark btn-sm" onclick="fill_error(myChart_{{ key|replace(' ' , '')|replace('-' , '') }})"> TOGGLE FILL ERROR </button>
+                                                <button type="button" class="btn btn-dark btn-sm" onclick="fill_skipped(myChart_{{ key|replace(' ' , '')|replace('-' , '') }})"> TOGGLE FILL SKIPPED </button>
+                                            </div>
+                                            <!-- Javascript action for chart -->
+                                            <script type="text/javascript">
+                                                    var ctx = document.getElementById("myChart_{{ key|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+
+                                                    // For doughnut chart | pie | polarArea
+                                                    var myChart_{{ key|replace(' ' , '')|replace('-' , '') }} = new Chart(ctx, {
+                                                          type: 'line',
+                                                          data: {
+                                                                labels: ["19 Aug 2023", "18 Aug 2023", "17 Aug 2023", "16 Aug 2023", "15 Aug 2023", "14 Aug 2023", "13 Aug 2023"],
+                                                                datasets: [
+                                                                            {
+                                                                                data: [100, 102, 90, 80, 55, 65, 90],
+                                                                                label: "PASS",
+                                                                                borderColor: "rgb(60,186,159,1.0)",
+                                                                                backgroundColor: "rgb(60,186,159,0.7)",
+                                                                                fill: false,
+                                                                                tension: 0.4
+                                                                            },
+                                                                            {
+                                                                                data: [10, 12, 19, 18, 15, 16, 14],
+                                                                                label: "FAIL",
+                                                                                borderColor: "#c45850",
+                                                                                backgroundColor: "rgb(196,88,80,0.7)",
+                                                                                fill: true,
+                                                                                tension: 0.4
+                                                                            },
+                                                                            {
+                                                                                data: [1, 2, 9, 8, 5, 6, 9],
+                                                                                label: "ERROR",
+                                                                                borderColor: "#ffa500",
+                                                                                backgroundColor: "rgb(255,165,0,0.7)",
+                                                                                fill: false,
+                                                                                tension: 0.4
+                                                                            },
+                                                                            {
+                                                                                data: [1, 2, 9, 0, 5, 6, 0],
+                                                                                label: "SKIPPED",
+                                                                                fill: false,
+                                                                                tension: 0.4
+                                                                            }
+                                                                ]
+                                                          },
+                                                          options: {
+                                                                    responsive: true,
+                                                                    cutoutPercentage: 55,
+                                                                    title: {
+                                                                        display: true,
+                                                                        text: 'HISTORY OF TEST RESULTs'
+                                                                    },
+                                                                    legend: {
+                                                                      display:true,
+                                                                      position:'bottom',
+                                                                      /* align:'start' */
+                                                                    },
+                                                                    scales: {
+                                                                    },
+                                                          },
+                                                    });
+
+                                            </script>
+                                        </div>
+
                                     </div>
                                 </div> <br/>
                             </div>
                         {%endfor%}
+
                     {%endif%}
 
                 </div> <br/><br/>
@@ -78,10 +167,43 @@
     <script>
 
             /* To toggle the class for an element. x*/
-              function myFunction() {
+            function fill_pass(chart_name) {
+                if(chart_name.data.datasets[0].fill) {
+                    chart_name.data.datasets[0].fill = false;
+                } else {
+                    chart_name.data.datasets[0].fill = true;
+                }
+                chart_name.update();
+            }
+            function fill_fail(chart_name) {
+                if(chart_name.data.datasets[1].fill) {
+                    chart_name.data.datasets[1].fill = false;
+                } else {
+                    chart_name.data.datasets[1].fill = true;
+                }
+                chart_name.update();
+            }
+            function fill_error(chart_name) {
+                if(chart_name.data.datasets[2].fill) {
+                    chart_name.data.datasets[2].fill = false;
+                } else {
+                    chart_name.data.datasets[2].fill = true;
+                }
+                chart_name.update();
+            }
+            function fill_skipped(chart_name) {
+                if(chart_name.data.datasets[3].fill) {
+                    chart_name.data.datasets[3].fill = false;
+                } else {
+                    chart_name.data.datasets[3].fill = true;
+                }
+                chart_name.update();
+            }
+
+            function myFunction() {
                   var element = document.body;
                   element.classList.toggle("dark-mode");
-              }
+            }
     </script>
 
 </html>
