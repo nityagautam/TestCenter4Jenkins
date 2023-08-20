@@ -57,23 +57,7 @@
                                         <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Toggle Chart </span>
                                         <br/>
                                         <p class="card-text">
-                                            DATA: <br/>
-                                            {{data[key][1]}} <br/>
-                                            RESULT SETs: <br/>
-                                            {{ data[key][1]['test_result'] }} <br/>
-                                            {% for result in data[key][1]['test_result'] %}
-                                                "{{ result }}",
-                                            {% endfor %} <br/>
-                                            {% for result in data[key][1]['test_result'] %}
-                                                "{{ result.fail }}",
-                                            {% endfor %} <br/>
-                                            {% for result in data[key][1]['test_result'] %}
-                                                "{{ result.error }}",
-                                            {% endfor %} <br/>
-                                            {% for result in data[key][1]['test_result'] %}
-                                                "{{ result.skipped }}",
-                                            {% endfor %} <br/>
-
+                                            DATA: {{data[key][1]}} <br/>
                                         </p>
                                         <div>
                                             <!-- Here goes our chart -->
@@ -87,6 +71,32 @@
                                             </div>
                                             <!-- Javascript action for chart -->
                                             <script type="text/javascript">
+                                                    /**
+                                                     * Returns a random integer between min (inclusive) and max (inclusive).
+                                                     * The value is no lower than min (or the next integer greater than min
+                                                     * if min isn't an integer) and no greater than max (or the next integer
+                                                     * lower than max if max isn't an integer).
+                                                     * Using Math.round() will give you a non-uniform distribution!
+                                                     */
+                                                    function getRandomInt(min, max) {
+                                                        min = Math.ceil(min);
+                                                        max = Math.floor(max);
+                                                        return Math.floor(Math.random() * (max - min + 1)) + min;
+                                                    }
+
+                                                    // random number generation
+                                                    var p = []; // [100, 102, 90, 80, 55, 65, 90]
+                                                    var f = []; // [10, 12, 19, 18, 15, 16, 14]
+                                                    var e = []; // [1, 2, 9, 8, 5, 6, 9]
+                                                    var s = []; // [1, 2, 9, 0, 5, 6, 0]
+                                                    for(let i=0; i<7; i++){
+                                                        p.push(getRandomInt(0, 100));
+                                                        f.push(getRandomInt(0, 100));
+                                                        e.push(getRandomInt(0, 100));
+                                                        s.push(getRandomInt(0, 100));
+                                                    }
+
+                                                    // Chart contexts
                                                     var ctx = document.getElementById("myChart_{{ key|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
 
                                                     // For doughnut chart | pie | polarArea
@@ -96,7 +106,7 @@
                                                                 labels: ["19 Aug 2023", "18 Aug 2023", "17 Aug 2023", "16 Aug 2023", "15 Aug 2023", "14 Aug 2023", "13 Aug 2023"],
                                                                 datasets: [
                                                                             {
-                                                                                data: [100, 102, 90, 80, 55, 65, 90],
+                                                                                data: p,
                                                                                 label: "PASS",
                                                                                 borderColor: "rgb(60,186,159,1.0)",
                                                                                 backgroundColor: "rgb(60,186,159,0.7)",
@@ -104,7 +114,7 @@
                                                                                 tension: 0.4
                                                                             },
                                                                             {
-                                                                                data: [10, 12, 19, 18, 15, 16, 14],
+                                                                                data: f,
                                                                                 label: "FAIL",
                                                                                 borderColor: "#c45850",
                                                                                 backgroundColor: "rgb(196,88,80,0.7)",
@@ -112,7 +122,7 @@
                                                                                 tension: 0.4
                                                                             },
                                                                             {
-                                                                                data: [1, 2, 9, 8, 5, 6, 9],
+                                                                                data: e,
                                                                                 label: "ERROR",
                                                                                 borderColor: "#ffa500",
                                                                                 backgroundColor: "rgb(255,165,0,0.7)",
@@ -120,8 +130,10 @@
                                                                                 tension: 0.4
                                                                             },
                                                                             {
-                                                                                data: [1, 2, 9, 0, 5, 6, 0],
+                                                                                data: s,
                                                                                 label: "SKIPPED",
+                                                                                borderColor: "rgb(128,128,128,1)",
+                                                                                backgroundColor: "rgb(128,128,128,0.7)",
                                                                                 fill: false,
                                                                                 tension: 0.4
                                                                             }
@@ -200,10 +212,14 @@
                 chart_name.update();
             }
 
+            /* Utility functions */
+
             function myFunction() {
                   var element = document.body;
                   element.classList.toggle("dark-mode");
             }
+
+
     </script>
 
 </html>
