@@ -18,17 +18,23 @@ body {
   background-color: black;
   color: white;
 }
+
+.orange-font {
+    color: orange !important;
+}
 .active-link {
     color: white !important;
-    text-decoration-style: solid !important;
-    text-decoration-line: overline !important;
-    text-decoration-thickness: inherit !important;
+    border-width: 2px;
+    border-color: white;
+    border-bottom-style: double;
+    border-bottom-color: white;
 }
 .nav-link:hover {
     color: white !important;
-    text-decoration-style: solid !important;
-    text-decoration-line: overline !important;
-    text-decoration-thickness: inherit !important;
+    border-width: 2px;
+    border-color: white;
+    border-bottom-style: double;
+    border-bottom-color: orange;
 }
 
 .white-font {

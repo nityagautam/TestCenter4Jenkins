@@ -16,7 +16,7 @@
 
             <!-- Content Area -->
             <div class="container">
-                <br/><br/><br/><br/>
+                <br/><br/><br/><br/> <!-- Important to not start from very top, hence breaking for 4 lines. -->
 
                 <div class="row">
                     <div class="col">
@@ -55,10 +55,10 @@
                                     <p class="card-text"> </p>
                                     <span class="badge bg-light text-dark"> Report Date: {{ project.report_date }} </span>
                                     <span class="badge bg-light text-dark"> Summary: </span>
-                                        <span class="badge bg-success">           {{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% Pass </span>
-                                        <span class="badge bg-danger">            {{ ((project['test_result']['fail']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Fail </span>
-                                        <span class="badge bg-warning text-dark"> {{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Error </span>
-                                        <span class="badge bg-secondary">         {{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Skipped </span>
+                                        <span class="badge bg-success" data-bs-toggle="tooltip" title="{{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% tests are passing.">           {{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% Pass </span>
+                                        <span class="badge bg-danger" data-bs-toggle="tooltip" title="{{ ((project['test_result']['fail']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% tests are failing.">            {{ ((project['test_result']['fail']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Fail </span>
+                                        <span class="badge bg-warning text-dark" data-bs-toggle="tooltip" title="{{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% tests are having some kind of error."> {{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Error </span>
+                                        <span class="badge bg-secondary" data-bs-toggle="tooltip" title="{{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% tests are Skipped">         {{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Skipped </span>
                                         <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
                                   </div>
                                   <hr style="margin: none; padding: 0;"/>
