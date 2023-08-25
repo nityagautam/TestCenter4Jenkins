@@ -3,11 +3,15 @@
 
     <!-- Following inclusion contains the HEAD tag data -->
     {% include 'head.html' %}
+<<<<<<< HEAD
     <head>
         <!-- scripts: Chart libs -->
         <!-- Older Chart <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
+=======
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+>>>>>>> 4ef9041 (template changes)
 
     <body>
 
@@ -28,6 +32,7 @@
                                 History
                               </button>
                           </h2>
+<<<<<<< HEAD
                           <div id="collapseHistory" class="accordion-collapse collapse hide" aria-labelledby="headingOne" data-bs-parent="#accordionForHistory">
                               <div class="accordion-body">
                                   <h5 class="card-title">This is project-wise history.</h5>
@@ -36,6 +41,14 @@
                                       To do any change to the system, goto <a href="/settings" class="btn btn-outline-primary"> Settings </a> page
                                   </p>
                                   <p>
+=======
+                          <div id="collapseHistory" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionForHistory">
+                              <div class="accordion-body">
+                                  <h5 class="card-title">This is project-wise history.</h5>
+                                  <p>
+                                      History and analytics for the execution data. <br/>
+                                      To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings </a> page. <br/>
+>>>>>>> 4ef9041 (template changes)
                                       DATA: <br/>
                                   </p>
                               </div>
@@ -43,8 +56,38 @@
                       </div>
                 </div> <br/><br/>
 
-                <!-- Card for trends -->
+                <!--
+                    ---------------------------------------
+                    Card for trends
+                    ---------------------------------------
+                -->
                 <div class="row m-b-1 align-items-center">
+                    <!-- DUMMY DATA -->
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"> Project: DUMMY </h5>
+                                <span class="badge bg-light text-dark"> Report Date: dummy </span>
+                                <span class="badge bg-light text-dark"> Summary: dummy </span>
+                                <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
+                                <br/>
+                                <p class="card-text">
+                                    <!-- Time series Line Chart Goes here --->
+                                    <canvas style="display: block;" class="barChartCanvas" id="dummy_lineChart"></canvas>
+
+                                </p>
+
+                                <!-- Controls for Chart -->
+                                <span class="badge bg-dark" onclick="toggleFill('PASS');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the PASS series"> Toggle Fill for PASS </span>
+                                <span class="badge bg-dark" onclick="toggleFill('FAIL');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the FAIL series"> Toggle Fill for FAIL </span>
+                                <span class="badge bg-dark" onclick="toggleFill('ERROR');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the ERROR series"> Toggle Fill for ERROR </span>
+                                <span class="badge bg-dark" onclick="toggleFill('SKIPPED');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the SKIPPED series"> Toggle Fill for SKIPPED </span>
+
+                            </div>
+                        </div> <br/>
+                    </div>
+
+                    <!-- REAL DATA -->
                     {%if data|length >= 1 %}
 
                         {% for key in data %}
@@ -57,7 +100,17 @@
                                         <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Toggle Chart </span>
                                         <br/>
                                         <p class="card-text">
+<<<<<<< HEAD
                                             DATA: {{data[key][1]}} <br/>
+=======
+                                            DATA: Total Record found: {{data[key]|length}} <br/>
+                                            <!--
+                                            {{data[key]}} <br/>
+                                            -->
+                                            <!-- Time series Line Chart Goes here --->
+                                            <canvas style="display: block;" class="barChartCanvas" id="barChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}"></canvas>
+
+>>>>>>> 4ef9041 (template changes)
                                         </p>
                                         <div>
                                             <!-- Here goes our chart -->
@@ -177,7 +230,154 @@
     </body>
 
     <script>
+        /* DUMMY LINE CHART */
 
+            var ctx = document.getElementById("dummy_lineChart").getContext('2d');
+            var myLineChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                                datasets: [
+                                    { label: 'PASS', data: [25, 59, 80, 81, 56], tension: 0.3, fill: true, borderColor: [ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ], backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],},
+                                    { label: 'FAIL', data: [60, 19, 38, 10, 60], tension: 0.3, fill: true, borderColor: [ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ], backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],},
+                                    { label: 'ERROR', data: [10, 39, 18, 15, 46], tension: 0.3, fill: true, borderColor: [ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ], backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],},
+                                    { label: 'SKIPPED', data: [20, 79, 38, 11, 64], tension: 0.3, fill: true, borderColor: [ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ], backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],},
+                                ],
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'TIME SERIES DATA FOR TEST RESULTS'
+                                    },
+                                    colors: {
+                                        enabled: true
+                                    },
+                                },
+                                scales: {
+                                    y: {
+                                        display: true,
+                                        beginAtZero: true
+                                    },
+                                    x: {
+                                        display: true,
+                                        time: {
+                                            unit: 'month'
+                                        }
+                                    }
+                                }
+                            }
+            });
+
+    /* Controls to toggle the fill in the Dummy chart */
+    function toggleFill(field) {
+        if(field === 'PASS'){
+            if(myLineChart.data.datasets[0].fill){
+                myLineChart.data.datasets[0].fill = false;
+                myLineChart.update();
+            } else {
+                myLineChart.data.datasets[0].fill = true;
+                myLineChart.update();
+            }
+        }
+        else if(field === 'FAIL'){
+            if(myLineChart.data.datasets[1].fill){
+                myLineChart.data.datasets[1].fill = false;
+                myLineChart.update();
+            } else {
+                myLineChart.data.datasets[1].fill = true;
+                myLineChart.update();
+            }
+        }
+        else if(field === 'ERROR'){
+            if(myLineChart.data.datasets[2].fill){
+                myLineChart.data.datasets[2].fill = false;
+                myLineChart.update();
+            } else {
+                myLineChart.data.datasets[2].fill = true;
+                myLineChart.update();
+            }
+        }
+        else if(field === 'SKIPPED'){
+            if(myLineChart.data.datasets[3].fill){
+                myLineChart.data.datasets[3].fill = false;
+                myLineChart.update();
+            } else {
+                myLineChart.data.datasets[3].fill = true;
+                myLineChart.update();
+            }
+        }
+    }
+
+
+
+
+    /* Generating Time series line charts */
+
+    {%if data|length >= 1 %}
+        {% for key in data %}
+
+                var ctx = document.getElementById("barChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [
+                            {% for obj in data[key] %}
+                                "{{ obj['report_date']|safe }}",
+                            {% endfor %}
+                        ],
+                        datasets: [{
+                            data: [
+                                {% for obj in data[key] %}
+                                    {% for keys, val in obj['test_result'].items() %}
+                                        {{ val|safe }},
+                                    {% endfor %}
+                                {% endfor %}
+                            ],
+                            borderColor:[ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ],
+                            backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],
+                            tension: 0.3,
+                            label: '{{ data[key][1]["project_name"] }}',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display:false,
+                                position: 'bottom',
+                            },
+                            title: {
+                                display: true,
+                                text: 'TIME SERIES TEST RESULT'
+                            },
+                            colors: {
+                                enabled: true
+                            },
+                        },
+                        scales: {
+                            y: {
+                                display: true,
+                                beginAtZero: true
+                            },
+                            x: {
+                                display: true,
+                            }
+                        }
+                    }
+                });
+
+        {%endfor%}
+    {%endif%}
+
+
+
+<<<<<<< HEAD
             /* To toggle the class for an element. x*/
             function fill_pass(chart_name) {
                 if(chart_name.data.datasets[0].fill) {
@@ -220,6 +420,8 @@
             }
 
 
+=======
+>>>>>>> 4ef9041 (template changes)
     </script>
 
 </html>

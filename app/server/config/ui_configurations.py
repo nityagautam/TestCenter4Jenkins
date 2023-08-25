@@ -58,11 +58,11 @@ class UIConfigurations(Configurations):
             "template_name": "history.html",
             "data": []
         },
-        "/create-new-space": {
+        "/create-project-space": {
             "is_menu": True,
-            "page_name": "CREATE NEW SPACE",
+            "page_name": "CREATE PROJECT SPACE",
             "PAGE_DESC": "",
-            "template_name": "create-new-space.html",
+            "template_name": "create-project-space.html",
             "data": []
         },
         "/settings": {
