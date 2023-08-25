@@ -86,7 +86,7 @@
                             <p class="card-text">
                                 <span class="badge bg-light text-dark" style="font-size: x-large;">
                                     {{ data["TC_PASSED_FROM_LATEST_EXECUTIONS"] }}
-                                    <span class="badge bg-dark" style="font-size: x-small;"> {{((data["TC_PASSED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
+                                    <span class="badge bg-success bg-sm" style="font-size: x-small;"> {{((data["TC_PASSED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
                                 </span>
                             </p>
                           </div>
@@ -99,7 +99,7 @@
                             <p class="card-text">
                                 <span class="badge bg-light text-dark" style="font-size: x-large;">
                                     {{ data["TC_FAILED_FROM_LATEST_EXECUTIONS"] }}
-                                    <span class="badge bg-dark" style="font-size: x-small;"> {{((data["TC_FAILED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
+                                    <span class="badge bg-danger bg-sm" style="font-size: x-small;"> {{((data["TC_FAILED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
                                 </span>
                             </p>
                           </div>
@@ -112,7 +112,7 @@
                             <p class="card-text">
                                 <span class="badge bg-light text-dark" style="font-size: x-large;">
                                     {{ data["TC_ERROR_FROM_LATEST_EXECUTIONS"] }}
-                                    <span class="badge bg-dark" style="font-size: x-small;"> {{((data["TC_ERROR_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
+                                    <span class="badge bg-warning bg-sm" style="font-size: x-small;"> {{((data["TC_ERROR_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
                                 </span>
                             </p>
                           </div>

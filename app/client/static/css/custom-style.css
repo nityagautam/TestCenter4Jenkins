@@ -18,26 +18,33 @@ body {
   background-color: black;
   color: white;
 }
+
 .active-link {
     color: white !important;
-    text-decoration-style: solid !important;
-    text-decoration-line: overline !important;
-    text-decoration-thickness: inherit !important;
+    border-width: 2px;
+    border-color: white;
+    border-bottom-style: double;
+    border-bottom-color: white;
 }
 .nav-link:hover {
     color: white !important;
-    text-decoration-style: solid !important;
-    text-decoration-line: overline !important;
-    text-decoration-thickness: inherit !important;
+    border-width: 2px;
+    border-color: white;
+    border-bottom-style: double;
+    border-bottom-color: orange;
 }
 
 .white-font {
     color: white !important;
 }
 
+.orange-font {
+    color: orange !important;
+}
+
 .custom-card {
-    border-radius: 3px;
-    border-style: double;
+    border-radius: 3px !important;
+    border-style: double !important;
 }
 
 .sidebar-bottom {

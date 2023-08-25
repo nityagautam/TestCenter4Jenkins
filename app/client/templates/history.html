@@ -13,7 +13,7 @@
 
             <!-- Content Area -->
             <div class="container">
-                <br/><br/><br/><br/>
+                <br/><br/><br/><br/>  <!-- Important to not start from very top, hence breaking for 4 lines. -->
 
                 <!-- Accordian for Overview -->
                 <div class="accordion" id="accordionForHistory">
@@ -77,7 +77,7 @@
                                         <h5 class="card-title"> Project: {{key}} </h5>
                                         <span class="badge bg-light text-dark"> Report Date: {{data[key][1]['report_date']}} </span>
                                         <span class="badge bg-light text-dark"> Summary: {{data[key][1]['test_result']}}</span>
-                                        <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
+                                        <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Toggle Chart </span>
                                         <br/>
                                         <p class="card-text">
                                             DATA: Total Record found: {{data[key]|length}} <br/>

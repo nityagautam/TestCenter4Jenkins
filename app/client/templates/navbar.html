@@ -2,9 +2,10 @@
 <nav class="navbar fixed-top navbar-expand-lg" style="background: #34495e;">
   <div class="container-fluid">
 
-    <a class="navbar-brand white-font" href="#" style=""> {{ ui_config['APP_META']['app_title'] }} </a>
+    <a class="navbar-brand orange-font" href="#" style=""> {{ ui_config['APP_META']['app_title'] }} </a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -33,7 +34,7 @@
                         {% endfor %}
                 {%else%}
                     <li class="nav-item">
-                        <a class="nav-link" href="/"> No Menus found, Read how to setup menus </a>
+                        <a class="nav-link" href="/"> No Menus found, Read how to set up menus </a>
                     </li>
                 {%endif%}
 
@@ -60,18 +61,17 @@
                         {%endif%}
                     </ul>
                 </div>
-
             </ul>
 
           <!-- Right Side of menu options -->
           <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-outline-success white-font" type="submit">Search</button>
           </form> &nbsp;&nbsp;&nbsp;&nbsp;
 
           <form>
                 <div class="dropdown white-font">
-                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn dropdown-toggle white-font" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Hi {{ username }}
                     </button>
 
