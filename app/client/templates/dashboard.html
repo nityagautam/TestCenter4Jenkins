@@ -18,28 +18,29 @@
             <div class="container">
                 <br/><br/><br/><br/>
 
-                <div class="row">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Dashboard View</h5>
-                                <p class="card-text">
-                                    This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
-                                    In case you want to modify something, go to the settings page.
-                                </p>
-                                <p class="card-text">
-                                    <a href="#" class="btn btn-outline-primary"> Settings </a>
-                                </p>
-                                <p class="card-text">
-                                    Records Fetched from the DB: <br/>
-                                    {% for record in db_data %}
-                                        <span class="badge bg-dark"> {{record}} </span> <br/>
-                                    {%endfor%}
-                                </p>
-                            </div>
+                <!-- Give some initial brief/info "table-hover table-group-divider" -->
+                <div class="accordion" id="accordionExample">
+
+                      <!-- Second item -->
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Dashboard View
+                          </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                            <strong>Create a new space for a dashboard with some file or Jenkins link.</strong>
+                              <p>
+                                  This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
+                                  In case you want to modify something, go to the settings page.
+                                  <a href="#" class="btn btn-outline-primary"> Settings </a>
+                              </p>
+
+                          </div>
                         </div>
-                    </div>
-                </div> <br/><br/>
+                      </div>
+                </div> <br/> <br/>
 
 
                 <!-- Summary view card -->
@@ -50,16 +51,18 @@
                         {% for project in data %}
                             <div class="col-md-6">
                                 <div class="card">
-                                  <div class="card-body">
-                                    <h5 class="card-title"> {{ project['project_name'] }} </h5>
-                                    <p class="card-text"> </p>
-                                    <span class="badge bg-light text-dark"> Report Date: {{ project.report_date }} </span>
-                                    <span class="badge bg-light text-dark"> Summary: </span>
-                                        <span class="badge bg-success">           {{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% Pass </span>
-                                        <span class="badge bg-danger">            {{ ((project['test_result']['fail']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Fail </span>
-                                        <span class="badge bg-warning text-dark"> {{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Error </span>
-                                        <span class="badge bg-secondary">         {{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Skipped </span>
-                                        <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
+                                    <div class="card-body">
+                                        <h5 class="card-title"> {{ project['project_name'] }} </h5>
+                                        <p class="card-text"> </p>
+                                        <span class="badge bg-light text-dark"> Summary: </span>
+                                            <span class="badge bg-success">           {{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% Pass </span>
+                                            <span class="badge bg-danger">            {{ ((project['test_result']['fail']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Fail </span>
+                                            <span class="badge bg-warning text-dark"> {{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Error </span>
+                                            <span class="badge bg-secondary">         {{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Skipped </span>
+                                            <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
+                                        <br/>
+                                        <span class="badge bg-light text-dark"> Report Date: {{ project.report_date }} </span>
+
                                   </div>
                                   <hr style="margin: none; padding: 0;"/>
                                   <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">

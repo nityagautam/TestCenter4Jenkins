@@ -61,8 +61,9 @@
                                                       <label for="validationCustom04" class="form-label"> Data source </label>
                                                       <select class="form-select" id="validationCustom04" required>
                                                           <option selected disabled value="">Choose...</option>
-                                                          <option>JUnit Test Result XML File</option>
                                                           <option>Jenkins Server</option>
+                                                          <!-- <option>JUnit Test Result XML File</option> -->
+
                                                       </select>
                                                     <div class="invalid-feedback">
                                                       Please select a valid state.
@@ -70,14 +71,16 @@
                                                   </div>
 
                                                   <!-- File to upload -->
+                                                  <!--
                                                   <div class="mb-3">
                                                       <label class="form-label" for="inputGroupFile01"> JUnit Test Result File</label>
                                                       <input type="file" class="form-control" id="inputGroupFile01">
                                                   </div>
+                                                  -->
 
                                                   <!-- Jenkins URL, and its credentials -->
 
-                                                <div class="col-md-4">
+                                                <div class="col-md-12">
                                                     <label for="validationCustomURL" class="form-label"> Jenkins Server </label>
                                                     <div class="input-group has-validation">
                                                         <span class="input-group-text" id="inputGroupForURL">URL</span>
@@ -87,20 +90,31 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                  <div class="col-md-4">
-                                                    <label for="validationCustomUsername" class="form-label">Jenkins</label>
+                                                <div class="col-md-4">
+                                                    <label for="validationCustomJobName" class="form-label">Jenkins Job Name</label>
                                                     <div class="input-group has-validation">
-                                                      <span class="input-group-text" id="inputGroupForUsername">USERNAME</span>
-                                                      <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
-                                                      <div class="invalid-feedback">
-                                                        Please choose a username.
-                                                      </div>
+                                                        <span class="input-group-text" id="inputGroupForJobName">#</span>
+                                                        <input type="text" class="form-control" id="validationCustomJobName" aria-describedby="inputGroupPrepend" required>
+                                                        <div class="invalid-feedback">
+                                                            Please choose a username.
+                                                        </div>
                                                     </div>
-                                                  </div>
-                                                  <div class="col-md-4">
-                                                    <label for="validationCustomPassword" class="form-label">Jenkins</label>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label for="validationCustomUsername" class="form-label">Jenkins Username</label>
                                                     <div class="input-group has-validation">
-                                                      <span class="input-group-text" id="inputGroupForPassword">PASSWORD</span>
+                                                        <span class="input-group-text" id="inputGroupForUsername">@</span>
+                                                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                                                        <div class="invalid-feedback">
+                                                            Please choose a username.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                  <div class="col-md-4">
+                                                    <label for="validationCustomPassword" class="form-label">Jenkins user password</label>
+                                                    <div class="input-group has-validation">
+                                                      <span class="input-group-text" id="inputGroupForPassword">*</span>
                                                       <input type="password" class="form-control" id="validationCustomPassword" aria-describedby="inputGroupPrepend" required>
                                                       <div class="invalid-feedback">
                                                         Please choose a username.

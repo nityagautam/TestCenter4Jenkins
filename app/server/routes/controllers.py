@@ -53,10 +53,10 @@ def settings():
     return not_authorised()
 
 
-@application.route('/create-new-space')
+@application.route('/create-project-space')
 def create_new_project_space():
     if route_gateway.is_session_active():
-        return route_gateway.get_template("/create-new-space")
+        return route_gateway.get_template("/create-project-space")
     return not_authorised()
 
 
