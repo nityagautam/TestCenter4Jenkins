@@ -15,27 +15,27 @@
             <div class="container">
                 <br/><br/><br/><br/>  <!-- Important to not start from very top, hence breaking for 4 lines. -->
 
-                <!-- Accordian for Overview -->
-                <div class="accordion" id="accordionForHistory">
-                      <!-- First item -->
+                <div class="accordion" id="accordionExample">
+
+                      <!-- Second item -->
                       <div class="accordion-item">
-                          <h2 class="accordion-header" id="headingHistory">
-                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
-                                History
-                              </button>
-                          </h2>
-                          <div id="collapseHistory" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionForHistory">
-                              <div class="accordion-body">
-                                  <h5 class="card-title">This is project-wise history.</h5>
-                                  <p>
-                                      History and analytics for the execution data. <br/>
-                                      To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings </a> page. <br/>
-                                      DATA: <br/>
-                                  </p>
-                              </div>
+                        <h2 class="accordion-header" id="headingTwo">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            History View
+                          </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                              <strong> This is project-wise history. </strong>
+                              <p>
+                                  History and analytics for the execution data. <br/>
+                                  To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings </a> page. <br/>
+                              </p>
+
                           </div>
+                        </div>
                       </div>
-                </div> <br/><br/>
+                </div> <br/> <br/>
 
                 <!--
                     ---------------------------------------
@@ -55,7 +55,6 @@
                                 <p class="card-text">
                                     <!-- Time series Line Chart Goes here --->
                                     <canvas style="display: block;" class="barChartCanvas" id="dummy_lineChart"></canvas>
-
                                 </p>
 
                                 <!-- Controls for Chart -->
