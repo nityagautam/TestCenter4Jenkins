@@ -4,6 +4,8 @@
     <!-- Following inclusion contains the HEAD tag data -->
     {% include 'head.html' %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js" integrity="sha512-wUYbRPLV5zs6IqvWd88HIqZU/b8TBx+I8LEioQ/UC0t5EMCLApqhIAnUg7EsAzdbhhdgW07TqYDdH3QEXRcPOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <body>
 
@@ -31,7 +33,12 @@
                                   History and analytics for the execution data. <br/>
                                   To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings </a> page. <br/>
                               </p>
-
+                              <p>
+                                    <h5 class="card-title"> Data Dump </h5>
+                              </p>
+                              <p>
+                                {{data}}
+                              </p>
                           </div>
                         </div>
                       </div>
@@ -144,7 +151,15 @@
                                             unit: 'month'
                                         }
                                     }
-                                }
+                                },
+                                pan: {
+                                  enabled: true,
+                                  mode: 'xy',
+                                },
+                                zoom: {
+                                  enabled: true,
+                                  mode: 'xy', // or 'x' for "drag" version
+                                },
                             }
             });
 
@@ -202,48 +217,102 @@
                     data: {
                         labels: [
                             {% for obj in data[key] %}
-                                "{{ obj['report_date']|safe }}",
+                                new Date("{{obj['report_date']|safe}}").toDateString(),
                             {% endfor %}
                         ],
-                        datasets: [{
-                            data: [
-                                {% for obj in data[key] %}
-                                    {% for keys, val in obj['test_result'].items() %}
-                                        {{ val|safe }},
-                                    {% endfor %}
-                                {% endfor %}
-                            ],
-                            borderColor:[ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ],
-                            backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],
-                            tension: 0.3,
-                            label: '{{ data[key][1]["project_name"] }}',
-                        }]
+                        datasets: [
+                                    {
+                                        label: 'PASS',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['pass']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        tension: 0.4,
+                                        fill: false,
+                                        borderColor: [ "rgb(60,186,159,1.0)" ],
+                                        backgroundColor: [ "rgb(60,186,159,0.7)" ],
+                                    },
+                                    {
+                                        label: 'FAIL',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['fail']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        tension: 0.4,
+                                        fill: false,
+                                        borderColor: [ "rgb(196,88,80,1.0)" ],
+                                        backgroundColor: [ "rgb(196,88,80,0.7)" ],
+                                    },
+                                    {
+                                        label: 'ERROR',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['error']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 0.7,
+                                        tension: 0.5,
+                                        fill: false,
+                                        borderColor: [ "rgb(255,165,0,1.0)" ],
+                                        backgroundColor: [ "rgb(255,165,0,0.7)" ],
+                                    },
+                                    {
+                                        label: 'SKIPPED',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['skipped']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 0.7,
+                                        tension: 0.5,
+                                        fill: false,
+                                        borderColor: [ "rgb(108,117,125,1.0)" ],
+                                        backgroundColor: [ "rgb(108,117,125,0.7)" ],
+                                    },
+                        ],
                     },
                     options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                display:false,
-                                position: 'bottom',
-                            },
-                            title: {
-                                display: true,
-                                text: 'TIME SERIES TEST RESULT'
-                            },
-                            colors: {
-                                enabled: true
-                            },
-                        },
-                        scales: {
-                            y: {
-                                display: true,
-                                beginAtZero: true
-                            },
-                            x: {
-                                display: true,
-                            }
-                        }
-                    }
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'TIME SERIES DATA FOR TEST RESULTS'
+                                    },
+                                    colors: {
+                                        enabled: true
+                                    },
+                                },
+                                scales: {
+                                    y: {
+                                        display: true,
+                                        beginAtZero: true,
+                                        border: { color: 'black' },
+                                    },
+                                    x: {
+                                        display: true,
+                                        time: {
+                                            unit: 'month'
+                                        },
+                                        border: { color: 'black' },
+                                    }
+                                },
+                                pan: {
+                                  enabled: true,
+                                  mode: 'xy',
+                                },
+                                zoom: {
+                                  enabled: true,
+                                  mode: 'xy', // or 'x' for "drag" version
+                                },
+                    },
                 });
 
         {%endfor%}

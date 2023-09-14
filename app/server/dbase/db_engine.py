@@ -14,6 +14,8 @@ import time
 queries = {
     'SELECT': 'SELECT %s FROM %s',
     'SELECT_WHERE': 'SELECT %s FROM %s WHERE %s',
+    'SELECT_WHERE_WITH_LIMIT': 'SELECT %s FROM %s WHERE %s LIMIT %s',
+    'SELECT_WHERE_WITH_LIMIT_AND_DESC_ORDER_BY': 'SELECT %s FROM %s WHERE %s ORDER BY %s DESC LIMIT %s',
     'SELECT_ALL': 'SELECT %s FROM %s',
     'INSERT': 'INSERT INTO %s (%s) VALUES(%s)',
     'UPDATE_WHERE': 'UPDATE %s SET %s WHERE %s',
@@ -105,9 +107,9 @@ class DatabaseObject(object):
         Usage:  obj.select_where(<table_name>, <field_name1>, ..., <filed_name>=<filed_value>)
                 obj.select_where('sqlite_master', 'name', name="dev")
         :param table:
-        :param args:
-        :param kwargs:
-        :return:
+        :param args: denotes the fields to be selected
+        :param kwargs: denotes the where conditions
+        :return: entire selected record
         """
         if len(kwargs) >= 1:
             vals = ','.join([field_name for field_name in args])
@@ -116,6 +118,49 @@ class DatabaseObject(object):
             return self.read(query)
         else:
             print('[ERROR]: No data condition provided for where cond')
+            return None
+
+    def select_where_with_limit(self, table, limit, *args, **kwargs):
+        """
+                Usage:  obj.select_where(<table_name>, <limit>, <field_name1>, ..., <filed_name>=<filed_value>)
+                        obj.select_where('sqlite_master', '30', 'name', name="dev")
+                :param table:
+                :param limit: integer type for the limiting the selected record
+                :param args: denotes the fields to be selected
+                :param kwargs: denotes the where conditions
+                :return: entire selected record
+                """
+        if len(kwargs) >= 1:
+            vals = ','.join([field_name for field_name in args])
+            conds = ' and '.join(['%s=%s' % (k, v) for k, v in kwargs.items()])
+            if not limit:
+                limit = '30'
+            query = queries['SELECT_WHERE_WITH_LIMIT'] % (vals, table, conds, limit)
+            return self.read(query)
+        else:
+            print('[ERROR]: No data condition provided for where cond')
+            return None
+
+    def select_where_with_limit_and_desc_order_by(self, table, limit, order_by_column: str, *args, **kwargs):
+        """
+        Usage:  obj.select_where(<table_name>, <limit>, <order_by_column>, <field_name1>, ..., <filed_name>=<filed_value>)
+                obj.select_where('sqlite_master', '30', 'report_date', 'name', name="dev")
+        :param table:
+        :param limit:
+        :param order_by_column:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if len(kwargs) >= 1:
+            vals = ','.join([field_name for field_name in args])
+            conds = ' and '.join(['%s=%s' % (k, v) for k, v in kwargs.items()])
+            if not limit:
+                limit = '30'
+            query = queries['SELECT_WHERE_WITH_LIMIT_AND_DESC_ORDER_BY'] % (vals, table, conds, order_by_column, limit)
+            return self.read(query)
+        else:
+            print('[ERROR]: Some data were not provided to fetch from DB; Check for where cond, limit, order by column')
             return None
 
     def select_all(self, table, *args):
@@ -221,6 +266,5 @@ def sample_usage():
     # Release the DB
     obj.free()
     obj.disconnect()
-
 
 # sample_usage()

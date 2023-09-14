@@ -86,20 +86,20 @@ class DBData(Configurations):
 
         # Now in Action
         # ---------------
-        dashboard_data = self.filter_test_executions_data_for_active_projects(
-            self.get_latest_crawled_test_executions_data_for_distinct_projects())
-        print("\n\nData for Dashboard =====> ", dashboard_data)
+        dashboard_data = self.filter_test_executions_data_for_active_projects(self.get_latest_crawled_test_executions_data_for_distinct_projects())
+        # print("\n\nData for Dashboard =====> ", dashboard_data)
         return self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], dashboard_data)
 
     def get_history_data(self):
         # We are going to give
         # --------------------------------------
         # - from executions, history for each project
+        # TODO: We should apply some limits
         history_data = {}
         for project_record in self.get_projects_list():
             project_name = project_record[1]
             history_data[project_name] = self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], self.get_test_executions_data_for_project("'" + project_name + "'"))
-            print("\n\n====>\n", history_data[project_name])
+            # print("\n\n====>\n", history_data[project_name])
 
         # Return the history data
         return history_data
@@ -129,7 +129,8 @@ class DBData(Configurations):
         return self.filter_test_executions_data_for_active_projects(self.db_obj.fetch_result_from_cursor())
 
     def get_test_executions_data_for_project(self, project_name):
-        self.db_obj.select_where(self.test_execution_table, "*", project_name=project_name)
+        # self.db_obj.select_where_with_limit(self.test_execution_table, '30', "*", project_name=project_name)
+        self.db_obj.select_where_with_limit_and_desc_order_by(self.test_execution_table, '30', 'execution_date', "*", project_name=project_name)
         return self.db_obj.fetch_result_from_cursor()
 
     def get_latest_crawled_test_executions_data_for_distinct_projects(self):
