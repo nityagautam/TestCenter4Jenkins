@@ -14,7 +14,7 @@
             {% include 'navbar.html' %}
 
             <!-- Content Area -->
-            <div class="container">
+            <div class="container container-lg container-xl">
                 <br/><br/><br/><br/>  <!-- Important to not start from very top, hence breaking for 4 lines. -->
 
                 <div class="accordion" id="accordionExample">
@@ -35,14 +35,16 @@
                               </p>
                               <p>
                                     <h5 class="card-title"> Data Dump </h5>
-                              </p>
-                              <p>
-                                {{data}}
+                                    <!--
+                                        {{data}}
+                                    -->
                               </p>
                           </div>
                         </div>
                       </div>
-                </div> <br/> <br/>
+                </div>
+                <br/>
+                <br/>
 
                 <!--
                     ---------------------------------------
@@ -50,8 +52,46 @@
                     ---------------------------------------
                 -->
                 <div class="row m-b-1 align-items-center">
+                    <!-- REAL DATA -->
+                    {%if data|length >= 1 %}
+                        {% for key in data %}
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">
+                                        <h5 class="card-title"> Project: {{key}} </h5>
+                                        <span class="badge bg-light text-dark"> Data: last {{data[key]|length}} executions </span>
+                                        <span class="badge bg-light text-dark"> Summary: {{data[key][1]['test_result']}}</span>
+                                    </div>
+                                    <hr style="margin: none; padding: 0;"/>
+                                    <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">
+                                        <p class="card-text">
+                                            <!--
+                                            {{data[key]}} <br/>
+                                            -->
+                                            <!-- Time series Line Chart Goes here --->
+                                            <canvas style="display: block;" class="barChartCanvas" id="myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                        </p>
+
+                                        <span>
+                                        <!-- Chart controls -->
+                                            <hr/>
+                                            <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Explore this project in different view"> Explore project </span>
+                                            <span class="badge bg-light text-dark"> || </span>
+                                            <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Line/Stacked-Line Charts"> Toggle Chart </span>
+                                            <span class="badge bg-light text-dark"> || </span>
+                                            <span class="badge bg-dark" onclick="toggleChartFill(myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}, 'PASS');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the PASS series"> Toggle Fill for PASS </span>
+                                            <span class="badge bg-dark" onclick="toggleChartFill(myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}, 'FAIL');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the FAIL series"> Toggle Fill for FAIL </span>
+                                            <span class="badge bg-dark" onclick="toggleChartFill(myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}, 'ERROR');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the ERROR series"> Toggle Fill for ERROR </span>
+                                            <span class="badge bg-dark" onclick="toggleChartFill(myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}, 'SKIPPED');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the SKIPPED series"> Toggle Fill for SKIPPED </span>
+                                        </span>
+                                    </div>
+                                </div> <br/>
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+
                     <!-- DUMMY DATA -->
-                    <div class="col-md-12">
+                    <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title"> Project: DUMMY </h5>
@@ -69,36 +109,9 @@
                                 <span class="badge bg-dark" onclick="toggleFill('FAIL');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the FAIL series"> Toggle Fill for FAIL </span>
                                 <span class="badge bg-dark" onclick="toggleFill('ERROR');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the ERROR series"> Toggle Fill for ERROR </span>
                                 <span class="badge bg-dark" onclick="toggleFill('SKIPPED');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the SKIPPED series"> Toggle Fill for SKIPPED </span>
-
                             </div>
                         </div> <br/>
                     </div>
-
-                    <!-- REAL DATA -->
-                    {%if data|length >= 1 %}
-                        {% for key in data %}
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title"> Project: {{key}} </h5>
-                                        <span class="badge bg-light text-dark"> Report Date: {{data[key][1]['report_date']}} </span>
-                                        <span class="badge bg-light text-dark"> Summary: {{data[key][1]['test_result']}}</span>
-                                        <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Toggle Chart </span>
-                                        <br/>
-                                        <p class="card-text">
-                                            DATA: Total Record found: {{data[key]|length}} <br/>
-                                            <!--
-                                            {{data[key]}} <br/>
-                                            -->
-                                            <!-- Time series Line Chart Goes here --->
-                                            <canvas style="display: block;" class="barChartCanvas" id="barChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}"></canvas>
-
-                                        </p>
-                                    </div>
-                                </div> <br/>
-                            </div>
-                        {%endfor%}
-                    {%endif%}
 
                 </div> <br/><br/>
 
@@ -206,16 +219,17 @@
 
 
 
+
     /* Generating Time series line charts */
 
     {%if data|length >= 1 %}
         {% for key in data %}
 
-                var ctx = document.getElementById("barChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
-                var myChart = new Chart(ctx, {
+                var ctx = document.getElementById("myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                var myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }} = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: [
+                        labels: [ /* Adding date series as X label; with 'Date String' */
                             {% for obj in data[key] %}
                                 new Date("{{obj['report_date']|safe}}").toDateString(),
                             {% endfor %}
@@ -318,7 +332,45 @@
         {%endfor%}
     {%endif%}
 
-
+    /* Toggle function for the chart fill */
+    function toggleChartFill(chartName, field) {
+        if(field === 'PASS'){
+            if(chartName.data.datasets[0].fill){
+                chartName.data.datasets[0].fill = false;
+                chartName.update();
+            } else {
+                chartName.data.datasets[0].fill = true;
+                chartName.update();
+            }
+        }
+        else if(field === 'FAIL'){
+            if(chartName.data.datasets[1].fill){
+                chartName.data.datasets[1].fill = false;
+                chartName.update();
+            } else {
+                chartName.data.datasets[1].fill = true;
+                chartName.update();
+            }
+        }
+        else if(field === 'ERROR'){
+            if(chartName.data.datasets[2].fill){
+                chartName.data.datasets[2].fill = false;
+                chartName.update();
+            } else {
+                chartName.data.datasets[2].fill = true;
+                chartName.update();
+            }
+        }
+        else if(field === 'SKIPPED'){
+            if(chartName.data.datasets[3].fill){
+                chartName.data.datasets[3].fill = false;
+                chartName.update();
+            } else {
+                chartName.data.datasets[3].fill = true;
+                chartName.update();
+            }
+        }
+    }
 
     </script>
 
