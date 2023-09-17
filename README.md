@@ -1,6 +1,13 @@
 ### Reporting Dashboard v2.0
 <hr/>
 
+###### Screenshots
+1- Overview page
+![Overview page screenshot](./Screenshot-overview-page.png)
+2- Dashboard page
+![Dashboard page screenshot](./Screenshot-dashboard-page.png)
+3- Hostory page
+![History page screenshot](./Screenshot-History-Page.png)
 
 ###### Description
 It is the combination of few services which gets/crawls the reports and manage the report on the disk as well as in to the database; it keeps cleaning the old records and keeps last 20-30(as configured) records.
