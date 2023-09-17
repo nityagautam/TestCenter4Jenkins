@@ -4,13 +4,13 @@ import random
 
 from app.server.config.db_configurations import DBConfig
 from app.server.config.configurations import Configurations
-from app.server.dbase.db_engine import DatabaseObject
+from app.server.dbase.DBEngine import DBEngine
 
 
-class DBData(Configurations):
+class DBAccess(Configurations):
     def __init__(self):
         # Initialize the DB file for data source
-        self.db_obj = DatabaseObject(DBConfig.db_file[Configurations.APP_ENVIRONMENT])
+        self.db_obj = DBEngine(DBConfig.db_file[Configurations.APP_ENVIRONMENT])
 
         # basic tables and its schema
         self.project_table = DBConfig.PROJECT_TABLE
@@ -25,9 +25,92 @@ class DBData(Configurations):
         # Create some dummy records
         self.__insert_some_dummy_data()
 
-    # ------------------------------------------------------------------------
-    # Methods specific to the pages
-    # ------------------------------------------------------------------------
+    # -----------------------------------
+    # API for the 'users' table
+    # -----------------------------------
+    def get_user(self, username: str):
+        pass
+
+    def get_users(self):
+        pass
+
+    def create_user(self, email: str, username: str, password: str, role: str):
+        pass
+
+    def delete_user(self, username: str):
+        pass
+
+    # -----------------------------------
+    # API for the 'settings' table
+    # -----------------------------------
+    def get_setting(self, column_name: str):
+        pass
+
+    def get_settings(self):
+        pass
+
+    def update_setting(self, column_name: str, value: str):
+        pass
+
+    # -----------------------------------
+    # API for the 'projects' table
+    # -----------------------------------
+    def get_projects_list(self):
+        self.db_obj.select(self.project_table, "*")
+        return self.db_obj.fetch_result_from_cursor()
+
+    def get_projects_count(self):
+        self.db_obj.select(self.project_table, "COUNT")
+        return self.db_obj.fetch_result_from_cursor()
+
+    def get_active_project_list(self):
+        self.db_obj.select_where(self.project_table, "*", status="'active'")
+        return self.db_obj.fetch_result_from_cursor()
+
+    # -----------------------------------
+    # API for the 'executions' table
+    # -----------------------------------
+    def get_test_executions_data(self):
+        self.db_obj.select(self.test_execution_table, "*")
+        return self.db_obj.fetch_result_from_cursor()
+
+    def get_test_executions_data_count(self):
+        self.db_obj.select(self.test_execution_table, "COUNT")
+        return self.db_obj.fetch_result_from_cursor()
+
+    def get_test_executions_data_for_active_project(self):
+        self.db_obj.select(self.test_execution_table, "*")
+        return self.filter_test_executions_data_for_active_projects(self.db_obj.fetch_result_from_cursor())
+
+    def get_test_executions_data_for_project(self, project_name):
+        # self.db_obj.select_where_with_limit(self.test_execution_table, '30', "*", project_name=project_name)
+        self.db_obj.select_where_with_limit_and_desc_order_by(self.test_execution_table, '30', 'execution_date', "*",
+                                                              project_name=project_name)
+        return self.db_obj.fetch_result_from_cursor()
+
+    def get_latest_crawled_test_executions_data_for_distinct_projects(self):
+        self.db_obj.execute_query(
+            DBConfig.CUSTOM_QUERIES["LATEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS"])
+        return self.db_obj.fetch_result_from_cursor()
+
+    def get_oldest_crawled_test_executions_data_for_distinct_projects(self):
+        self.db_obj.execute_query(
+            DBConfig.CUSTOM_QUERIES["OLDEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS"])
+        return self.db_obj.fetch_result_from_cursor()
+
+    def filter_test_executions_data_for_active_projects(self, test_executions_data):
+        # step-1: Get active project list
+        active_project_list = self.get_active_project_list()
+
+        # step-2: match, and apply filter against project name in test_execution_data
+        tmp_lst_for_active_projects = [project_record[1] for project_record in active_project_list]
+        final_filtered_result = [execution_record for execution_record in test_executions_data if
+                                 execution_record[1] in tmp_lst_for_active_projects]
+        return final_filtered_result
+
+    # -----------------------------------
+    # API for the Dashboard page
+    # -----------------------------------
 
     def get_overview_data(self):
         # We are going to give
@@ -90,6 +173,10 @@ class DBData(Configurations):
         # print("\n\nData for Dashboard =====> ", dashboard_data)
         return self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], dashboard_data)
 
+    # -----------------------------------
+    # API for the History page
+    # -----------------------------------
+
     def get_history_data(self):
         # We are going to give
         # --------------------------------------
@@ -104,53 +191,9 @@ class DBData(Configurations):
         # Return the history data
         return history_data
 
-    # ------------------------------------------------------------------------
-    # Methods for Internal usage
-    # ------------------------------------------------------------------------
-
-    def get_projects_list(self):
-        self.db_obj.select(self.project_table, "*")
-        return self.db_obj.fetch_result_from_cursor()
-
-    def get_active_project_list(self):
-        self.db_obj.select_where(self.project_table, "*", status="'active'")
-        return self.db_obj.fetch_result_from_cursor()
-
-    def get_test_executions_data(self):
-        self.db_obj.select(self.test_execution_table, "*")
-        return self.db_obj.fetch_result_from_cursor()
-
-    def get_test_executions_data_count(self):
-        self.db_obj.select(self.test_execution_table, "COUNT")
-        return self.db_obj.fetch_result_from_cursor()
-
-    def get_test_executions_data_for_active_project(self):
-        self.db_obj.select(self.test_execution_table, "*")
-        return self.filter_test_executions_data_for_active_projects(self.db_obj.fetch_result_from_cursor())
-
-    def get_test_executions_data_for_project(self, project_name):
-        # self.db_obj.select_where_with_limit(self.test_execution_table, '30', "*", project_name=project_name)
-        self.db_obj.select_where_with_limit_and_desc_order_by(self.test_execution_table, '30', 'execution_date', "*", project_name=project_name)
-        return self.db_obj.fetch_result_from_cursor()
-
-    def get_latest_crawled_test_executions_data_for_distinct_projects(self):
-        self.db_obj.execute_custom_query(
-            DBConfig.CUSTOM_QUERIES["LATEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS"])
-        return self.db_obj.fetch_result_from_cursor()
-
-    def get_oldest_crawled_test_executions_data_for_distinct_projects(self):
-        self.db_obj.execute_custom_query(
-            DBConfig.CUSTOM_QUERIES["OLDEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS"])
-        return self.db_obj.fetch_result_from_cursor()
-
-    def filter_test_executions_data_for_active_projects(self, test_executions_data):
-        # step-1: Get active project list
-        active_project_list = self.get_active_project_list()
-
-        # step-2: match, and apply filter against project name in test_execution_data
-        tmp_lst_for_active_projects = [project_record[1] for project_record in active_project_list]
-        final_filtered_result = [execution_record for execution_record in test_executions_data if execution_record[1] in tmp_lst_for_active_projects]
-        return final_filtered_result
+    # -----------------------------------
+    # API for the internal usage
+    # -----------------------------------
 
     @staticmethod
     def __parse_data_to_dict(parse_for_table: str, data: any) -> any:
@@ -160,14 +203,14 @@ class DBData(Configurations):
             for item in data:
                 # Preparing dict data to be appended in the list
                 # This format(keys) are going to be used in the templates directly.
-                print("\n\n===> EXECUTION RECORD: ", item)
+                # print("\n\n===> EXECUTION RECORD: ", item)
                 parsed_data_obj.append({"project_id": item[0], "project_name": item[1], "test_result": json.loads(item[2]), "source": item[3], "execution_date": item[5], "report_date": item[5], "crawled_date": item[6]})
         elif parse_for_table == 'projects':
             for item in data:
                 # Preparing dict data to be appended in the list
                 # SCHEMA: project_id, project_name, data_source, jenkins_url, jenkins_user, jenkins_password, status, created, last_modified
                 # This format(keys) are going to be used in the templates directly.
-                print("\n\n===> PROJECT RECORD: ", item)
+                # print("\n\n===> PROJECT RECORD: ", item)
                 parsed_data_obj.append({"PROJECT_ID": item[0], "PROJECT_NAME": item[1], "DATA_SOURCE": item[2], "JENKINS_URL": item[3], "JENKINS_USER": item[4], "JENKINS_PASSWORD": item[5], "STATUS": item[6], "CREATED": item[7], "LAST_MODIFIED": item[8]})
         else:
             # if table not recognised then return the given data
@@ -216,6 +259,7 @@ class DBData(Configurations):
 # For CLI Execution
 # ------------------
 if __name__ == "__main__":
-    o = DBData()
+    print(f"\n Running from terminal ... \n ")
+    o = DBAccess()
     o.get_dashboard_data()
 

@@ -13,10 +13,10 @@ import time
 
 queries = {
     'SELECT': 'SELECT %s FROM %s',
+    'SELECT_ALL': 'SELECT * FROM %s',
     'SELECT_WHERE': 'SELECT %s FROM %s WHERE %s',
     'SELECT_WHERE_WITH_LIMIT': 'SELECT %s FROM %s WHERE %s LIMIT %s',
     'SELECT_WHERE_WITH_LIMIT_AND_DESC_ORDER_BY': 'SELECT %s FROM %s WHERE %s ORDER BY %s DESC LIMIT %s',
-    'SELECT_ALL': 'SELECT * FROM %s',
     'INSERT': 'INSERT INTO %s (%s) VALUES(%s)',
     'UPDATE_WHERE': 'UPDATE %s SET %s WHERE %s',
     'DELETE_WHERE': 'DELETE FROM %s WHERE %s',
@@ -28,13 +28,17 @@ queries = {
 # =============================
 # Define the Base class
 # =============================
-class DatabaseObject(object):
+class DBEngine(object):
 
     def __init__(self, data_file):
         print(f"[DatabaseObject] DB Given to connect ===> : {data_file}")
         self.db = sqlite3.connect(data_file, check_same_thread=False)
         self.cursor = self.db.cursor()
         self.data_file = data_file
+
+    # -----------------------------------
+    # Basic sqlite APIs
+    # -----------------------------------
 
     def free(self):
         self.cursor.close()
@@ -55,17 +59,11 @@ class DatabaseObject(object):
     def fetch_many_result_from_cursor(self, size=1):
         return self.cursor.fetchmany(size=size)
 
-    def execute_custom_query(self, query):
-        if query.split(' ')[0] in ['SELECT']:
-            return self.read(query)
-        else:
-            return self.write(query)
-
     def read(self, query):
         # print("QUERY:", query)
         try:
             self.cursor.execute(query)
-            print(f'QUERY EXECUTED:==> "{query}"')
+            print(f'QUERY EXECUTED[R]:==> "{query}"')
             return self.cursor
         except sqlite3.OperationalError as e:
             print(f'[DB OP ERROR] Error while executing query: {query}\n', e)
@@ -80,7 +78,7 @@ class DatabaseObject(object):
             else:
                 self.cursor.execute(query)
             self.db.commit()
-            print(f'QUERY EXECUTED:==> "{query}"')
+            print(f'QUERY EXECUTED[W]:==> "{query}"')
             return self.cursor
         except sqlite3.IntegrityError as e:
             # Unique / Primary key rule failed
@@ -90,8 +88,38 @@ class DatabaseObject(object):
             print(f'[DB OP ERROR] Error while executing query: {query}\n', e)
             return None
 
+    # -----------------------------------
+    # To execute custom query string
+    # -----------------------------------
+
+    def execute_query(self, query):
+        """
+        To execute a custom query string
+
+        :param query:
+        :return: db cursor
+        """
+        if query.split(' ')[0] in ['SELECT']:
+            return self.read(query)
+        else:
+            return self.write(query)
+
+    # -----------------------------------
+    # Custom APIs related to CREATE
+    # -----------------------------------
+
+    def create_table(self, table_name, table_field_schema):
+        query = queries['CREATE_TABLE'] % (table_name, ','.join(table_field_schema))
+        return self.write(query)
+
+    # -----------------------------------
+    # Custom APIs related to SELECT
+    # -----------------------------------
+
     def select(self, table, *args):
         """
+        To select everything from table but for provided columns
+
         Usage:  obj.select(<TABLE_NAME>, <field_name1>, <field_name2>, ...)
                 obj.select('users', 'field_name1', 'field_name2', 'field_name3', 'field_name4')
         :param table:
@@ -102,8 +130,23 @@ class DatabaseObject(object):
         query = queries['SELECT'] % (vals, table)
         return self.read(query)
 
+    def select_everything(self, table):
+        """
+        To select everything from table
+
+        Usage:  obj.select(<TABLE_NAME>)
+                obj.select('users')
+
+        :param table:
+        :return: returns data for entire table
+        """
+        query = queries['SELECT_ALL'] % table
+        return self.read(query)
+
     def select_where(self, table, *args, **kwargs):
         """
+        To select provided column from table with WHERE condition
+
         Usage:  obj.select_where(<table_name>, <field_name1>, ..., <filed_name>=<filed_value>)
                 obj.select_where('sqlite_master', 'name', name="dev")
         :param table:
@@ -113,8 +156,8 @@ class DatabaseObject(object):
         """
         if len(kwargs) >= 1:
             vals = ','.join([field_name for field_name in args])
-            conds = ' and '.join(['%s=%s' % (k, v) for k, v in kwargs.items()])
-            query = queries['SELECT_WHERE'] % (vals, table, conds)
+            conditions = ' and '.join(['%s=%s' % (k, v) for k, v in kwargs.items()])
+            query = queries['SELECT_WHERE'] % (vals, table, conditions)
             return self.read(query)
         else:
             print('[ERROR]: No data condition provided for where cond')
@@ -122,20 +165,23 @@ class DatabaseObject(object):
 
     def select_where_with_limit(self, table, limit, *args, **kwargs):
         """
-                Usage:  obj.select_where(<table_name>, <limit>, <field_name1>, ..., <filed_name>=<filed_value>)
-                        obj.select_where('sqlite_master', '30', 'name', name="dev")
-                :param table:
-                :param limit: integer type for the limiting the selected record
-                :param args: denotes the fields to be selected
-                :param kwargs: denotes the where conditions
-                :return: entire selected record
-                """
+        To select provided column with WHERE condition with provided LIMIT
+
+        Usage:  obj.select_where(<table_name>, <limit>, <field_name1>, ..., <filed_name>=<filed_value>)
+                obj.select_where('sqlite_master', '30', 'name', name="dev")
+        :param table:
+        :param limit: integer type for the limiting the selected record
+        :param args: denotes the fields to be selected
+        :param kwargs: denotes the where conditions
+        :return: entire selected record
+        """
         if len(kwargs) >= 1:
             vals = ','.join([field_name for field_name in args])
-            conds = ' and '.join(['%s=%s' % (k, v) for k, v in kwargs.items()])
+            conditions = ' and '.join(['%s=%s' % (k, v) for k, v in kwargs.items()])
             if not limit:
+                # Setting limit by default; Should refer from Configurations
                 limit = '30'
-            query = queries['SELECT_WHERE_WITH_LIMIT'] % (vals, table, conds, limit)
+            query = queries['SELECT_WHERE_WITH_LIMIT'] % (vals, table, conditions, limit)
             return self.read(query)
         else:
             print('[ERROR]: No data condition provided for where cond')
@@ -143,6 +189,8 @@ class DatabaseObject(object):
 
     def select_where_with_limit_and_desc_order_by(self, table, limit, order_by_column: str, *args, **kwargs):
         """
+        To select provided column with WHERE condition with provided LIMIT with descending order.
+
         Usage:  obj.select_where(<table_name>, <limit>, <order_by_column>, <field_name1>, ..., <filed_name>=<filed_value>)
                 obj.select_where('sqlite_master', '30', 'report_date', 'name', name="dev")
         :param table:
@@ -154,19 +202,18 @@ class DatabaseObject(object):
         """
         if len(kwargs) >= 1:
             vals = ','.join([field_name for field_name in args])
-            conds = ' and '.join(['%s=%s' % (k, v) for k, v in kwargs.items()])
+            conditions = ' and '.join(['%s=%s' % (k, v) for k, v in kwargs.items()])
             if not limit:
                 limit = '30'
-            query = queries['SELECT_WHERE_WITH_LIMIT_AND_DESC_ORDER_BY'] % (vals, table, conds, order_by_column, limit)
+            query = queries['SELECT_WHERE_WITH_LIMIT_AND_DESC_ORDER_BY'] % (vals, table, conditions, order_by_column, limit)
             return self.read(query)
         else:
             print('[ERROR]: Some data were not provided to fetch from DB; Check for where cond, limit, order by column')
             return None
 
-    def select_all(self, table, *args):
-        vals = ','.join([field_name for field_name in args])
-        query = queries['SELECT_ALL'] % (vals, table)
-        return self.read(query)
+    # -----------------------------------
+    # Custom APIs related to INSERT
+    # -----------------------------------
 
     def insert(self, table_name, **kwargs):
         """
@@ -183,6 +230,10 @@ class DatabaseObject(object):
         query = queries['INSERT'] % (table_name, field_names, field_value_replacements)
         return self.write(query, values)
 
+    # -----------------------------------
+    # Custom APIs related to UPDATE
+    # -----------------------------------
+
     def update_where(self, table_name, set_args, **kwargs):
         """
         Usage:  obj.update_where(<table_name>, SET: {'field_name1': 'field_value1', ...}, WHERE: <field_name1>=<file_value1>, ...)
@@ -194,24 +245,24 @@ class DatabaseObject(object):
         :return:
         """
         updates = ','.join(['%s=?' % k for k in set_args])
-        conds = ' and '.join(['%s=?' % k for k in kwargs])
+        conditions = ' and '.join(['%s=?' % k for k in kwargs])
         vals = [set_args[k] for k in set_args]
         subs = [kwargs[k] for k in kwargs]
-        query = queries['UPDATE_WHERE'] % (table_name, updates, conds)
+        query = queries['UPDATE_WHERE'] % (table_name, updates, conditions)
         return self.write(query, vals + subs)
 
+    # -----------------------------------
+    # Custom APIs related to DELETE
+    # -----------------------------------
+
     def delete(self, table_name, **kwargs):
-        conds = ' and '.join(['%s=?' % k for k in kwargs])
+        conditions = ' and '.join(['%s=?' % k for k in kwargs])
         subs = [kwargs[k] for k in kwargs]
-        query = queries['DELETE'] % (table_name, conds)
+        query = queries['DELETE'] % (table_name, conditions)
         return self.write(query, subs)
 
     def delete_all(self, table_name):
         query = queries['DELETE_ALL'] % table_name
-        return self.write(query)
-
-    def create_table(self, table_name, table_field_schema):
-        query = queries['CREATE_TABLE'] % (table_name, ','.join(table_field_schema))
         return self.write(query)
 
     def drop_table(self, table_name):
@@ -223,7 +274,7 @@ class DatabaseObject(object):
 # Sample Usage:
 # ======================
 def sample_usage():
-    obj = DatabaseObject('./app/server/dbase/test.db')
+    obj = DBEngine('./app/server/dbase/test.db')
     # obj = DatabaseObject(DBConfig.db_file)
 
     # # Create a user base

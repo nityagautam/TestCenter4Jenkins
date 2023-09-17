@@ -1,7 +1,7 @@
 import datetime
 from app.server.config.db_configurations import DBConfig
 from app.server.config.configurations import Configurations
-from app.server.dbase.db_engine import DatabaseObject
+from app.server.dbase.DBEngine import DBEngine
 
 
 class Users(Configurations):
@@ -11,7 +11,7 @@ class Users(Configurations):
     def __init__(self):
         print("*" * 20, "\nPreparing Users from DB ...\n", "*" * 20, )
         # Initialize the DB file for data source
-        self.db_obj = DatabaseObject(DBConfig.db_file[Configurations.APP_ENVIRONMENT])
+        self.db_obj = DBEngine(DBConfig.db_file[Configurations.APP_ENVIRONMENT])
 
         # basic tables and its schema
         self.user_table = DBConfig.USER_TABLE
