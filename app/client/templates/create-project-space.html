@@ -49,37 +49,34 @@
                                             <!-- Form -->
                                             <!-- Adding a form here to create a new space (get the inputs from the user) -->
                                             <form class="row g-3 needs-validation" novalidate>
-                                                  <!-- Project/Space name <div class="col-md-4"> input-group input-group-text -->
-                                                  <div class="mb-3">
+                                                <!-- Project/Space name <div class="col-md-4"> input-group input-group-text -->
+                                                <div class="mb-3">
                                                     <label class="form-label" for="validationCustom01"> Space name </label>
                                                     <input type="text" class="form-control" id="validationCustom01" value="SampleSpace01" required>
                                                     <div class="valid-feedback"> Looks good! </div>
-                                                  </div>
+                                                </div>
 
                                                   <!-- Select data source (File/Jenkins) -->
-                                                  <div class="mb-3">
-                                                      <label for="validationCustom04" class="form-label"> Data source </label>
-                                                      <select class="form-select" id="validationCustom04" required>
+                                                <div class="mb-3">
+                                                    <label for="validationCustom04" class="form-label"> Data source </label>
+                                                    <select class="form-select" id="validationCustom04" required>
                                                           <option selected disabled value="">Choose...</option>
                                                           <option>Jenkins Server</option>
-                                                          <!-- <option>JUnit Test Result XML File</option> -->
-
-                                                      </select>
+                                                          <option>JUnit XML/JSON File</option>
+                                                    </select>
                                                     <div class="invalid-feedback">
                                                       Please select a valid state.
                                                     </div>
-                                                  </div>
+                                                </div>
 
-                                                  <!-- File to upload -->
-                                                  <!--
-                                                  <div class="mb-3">
+                                                <!-- File to upload -->
+                                                <div class="mb-3">
                                                       <label class="form-label" for="inputGroupFile01"> JUnit Test Result File</label>
                                                       <input type="file" class="form-control" id="inputGroupFile01">
-                                                  </div>
-                                                  -->
+                                                </div>
 
-                                                  <!-- Jenkins URL, and its credentials -->
 
+                                                <!-- Jenkins URL, and its credentials -->
                                                 <div class="col-md-12">
                                                     <label for="validationCustomURL" class="form-label"> Jenkins Server </label>
                                                     <div class="input-group has-validation">
@@ -134,7 +131,7 @@
                                                     </div>
                                                   </div>
                                                   <div class="col-12">
-                                                    <button class="btn btn-primary" type="submit"> Create new space </button>
+                                                    <button class="btn btn-primary" type="submit"> Create </button>
                                                   </div>
                                             </form>
 
