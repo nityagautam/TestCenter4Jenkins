@@ -61,6 +61,12 @@
                                         <h5 class="card-title"> Project: {{key}} </h5>
                                         <span class="badge bg-light text-dark"> Data: last {{data[key]|length}} executions </span>
                                         <span class="badge bg-light text-dark"> Summary: {{data[key][1]['test_result']}}</span>
+                                        <!-- Chart controls -->
+                                        <br/>
+                                        <span class="badge bg-dark" onclick="alert('Not available now.')" style="cursor: pointer;" data-bs-toggle="tooltip" title="Explore this project in different view"> Explore project </span>
+                                        <span class="badge bg-light text-dark"> || </span>
+                                        <span class="badge bg-dark" onclick="toggleCharts('{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}')" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Stacked-Line/Stacked-Bar Charts"> Toggle Chart </span>
+
                                     </div>
                                     <hr style="margin: none; padding: 0;"/>
                                     <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">
@@ -69,21 +75,9 @@
                                             {{data[key]}} <br/>
                                             -->
                                             <!-- Time series Line Chart Goes here --->
-                                            <canvas style="display: block;" class="barChartCanvas" id="myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                            <canvas style="display: block;" class="lineChartCanvas" id="myLineChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                            <canvas style="display: none;" class="barChartCanvas" id="myBarChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}" ></canvas>
                                         </p>
-
-                                        <span>
-                                        <!-- Chart controls -->
-                                            <hr/>
-                                            <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Explore this project in different view"> Explore project </span>
-                                            <span class="badge bg-light text-dark"> || </span>
-                                            <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Line/Stacked-Line Charts"> Toggle Chart </span>
-                                            <span class="badge bg-light text-dark"> || </span>
-                                            <span class="badge bg-dark" onclick="toggleChartFill(myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}, 'PASS');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the PASS series"> Toggle Fill for PASS </span>
-                                            <span class="badge bg-dark" onclick="toggleChartFill(myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}, 'FAIL');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the FAIL series"> Toggle Fill for FAIL </span>
-                                            <span class="badge bg-dark" onclick="toggleChartFill(myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}, 'ERROR');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the ERROR series"> Toggle Fill for ERROR </span>
-                                            <span class="badge bg-dark" onclick="toggleChartFill(myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}, 'SKIPPED');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the SKIPPED series"> Toggle Fill for SKIPPED </span>
-                                        </span>
                                     </div>
                                 </div> <br/>
                             </div>
@@ -125,13 +119,22 @@
 
     <script>
 
-    /* Generating multi-line charts for history */
+    /*
+    * Generating stacked multi-line/multi-bar charts for execution history
+    * ==========================================================================
+    */
+
+    // Adding this variable to add the delay animation into bar chart.
+    let delayed;
 
     {%if data|length >= 1 %}
         {% for key in data %}
 
-                var ctx = document.getElementById("myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
-                var myChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }} = new Chart(ctx, {
+                // THIS IS FOR STACKED MULTI-LINE CHART
+                // ----------------------------------------
+                var ctx = document.getElementById("myLineChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+
+                var myLineChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }} = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: [ /* Adding date series as X label; with 'Date String' */
@@ -148,8 +151,8 @@
                                                 {% endfor %}
                                         ],
                                         borderWidth: 2,
-                                        tension: 0.4,
-                                        fill: false,
+                                        tension: 0.5,
+                                        fill: true,
                                         borderColor: [ "rgb(60,186,159,1.0)" ],
                                         backgroundColor: [ "rgb(60,186,159,0.7)" ],
                                     },
@@ -161,8 +164,8 @@
                                                 {% endfor %}
                                         ],
                                         borderWidth: 2,
-                                        tension: 0.4,
-                                        fill: false,
+                                        tension: 0.5,
+                                        fill: true,
                                         borderColor: [ "rgb(196,88,80,1.0)" ],
                                         backgroundColor: [ "rgb(196,88,80,0.7)" ],
                                     },
@@ -175,7 +178,7 @@
                                         ],
                                         borderWidth: 0.7,
                                         tension: 0.5,
-                                        fill: false,
+                                        fill: true,
                                         borderColor: [ "rgb(255,165,0,1.0)" ],
                                         backgroundColor: [ "rgb(255,165,0,0.7)" ],
                                     },
@@ -188,13 +191,25 @@
                                         ],
                                         borderWidth: 0.7,
                                         tension: 0.5,
-                                        fill: false,
+                                        fill: true,
                                         borderColor: [ "rgb(108,117,125,1.0)" ],
                                         backgroundColor: [ "rgb(108,117,125,0.7)" ],
                                     },
                         ],
                     },
                     options: {
+                                animation:{
+                                    onComplete: () => {
+                                        delayed = true;
+                                    },
+                                    delay: (context) => {
+                                        let delay = 0;
+                                        if(context.type === 'data' && context.mode === 'default' && !delayed) {
+                                            delay = context.dataIndex * 150 + context.datasetIndex * 100;
+                                        }
+                                        return delay;
+                                    },
+                                },
                                 responsive: true,
                                 plugins: {
                                     legend: {
@@ -203,7 +218,7 @@
                                     },
                                     title: {
                                         display: true,
-                                        text: 'TIME SERIES DATA FOR TEST RESULTS'
+                                        text: 'PROJECT EXECUTION HISTORY (last {{ data[key]|length }} executions)'
                                     },
                                     colors: {
                                         enabled: true
@@ -224,14 +239,138 @@
                                         stacked: true,
                                         display: true,
                                         beginAtZero: true,
-                                        border: { color: 'black' },
+                                        border: { color: 'black', width: 2 },
                                     },
                                     x: {
                                         display: true,
                                         time: {
                                             unit: 'month'
                                         },
-                                        border: { color: 'black' },
+                                        border: { color: 'black', width: 2 },
+                                    }
+                                },
+                                /*
+                                pan: {
+                                  enabled: true,
+                                  mode: 'xy',
+                                },
+                                zoom: {
+                                  enabled: true,
+                                  mode: 'xy', // or 'x' for "drag" version
+                                },
+                                */
+                    },
+                });
+
+                // THIS IS FOR STACKED MULTI-BAR CHART
+                // ---------------------------------------
+                var ctx = document.getElementById("myBarChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                var myBarChart_{{ data[key][1]['project_name']|replace(' ' , '')|replace('-' , '') }} = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [ /* Adding date series as X label; with 'Date String' */
+                            {% for obj in data[key] %}
+                                new Date("{{obj['report_date']|safe}}").toDateString(),
+                            {% endfor %}
+                        ],
+                        datasets: [
+                                    {
+                                        label: 'PASS',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['pass']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        borderColor: [ "rgb(60,186,159,1.0)" ],
+                                        backgroundColor: [ "rgb(60,186,159,0.7)" ],
+                                    },
+                                    {
+                                        label: 'FAIL',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['fail']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        borderColor: [ "rgb(196,88,80,1.0)" ],
+                                        backgroundColor: [ "rgb(196,88,80,0.7)" ],
+                                    },
+                                    {
+                                        label: 'ERROR',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['error']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        borderColor: [ "rgb(255,165,0,1.0)" ],
+                                        backgroundColor: [ "rgb(255,165,0,0.7)" ],
+                                    },
+                                    {
+                                        label: 'SKIPPED',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['skipped']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        borderColor: [ "rgb(108,117,125,1.0)" ],
+                                        backgroundColor: [ "rgb(108,117,125,0.7)" ],
+                                    },
+                        ],
+                    },
+                    options: {
+                                animation:{
+                                    onComplete: () => {
+                                        delayed = false;
+                                    },
+                                    delay: (context) => {
+                                        let delay = 0;
+                                        if(context.type === 'data' && context.mode === 'default' && !delayed) {
+                                            delay = context.dataIndex * 150 + context.datasetIndex * 100;
+                                        }
+                                        return delay;
+                                    },
+                                },
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'PROJECT EXECUTION HISTORY (last {{ data[key]|length }} executions)'
+                                    },
+                                    colors: {
+                                        enabled: true
+                                    },
+                                    tooltip: {
+                                        mode: 'index'
+                                    },
+                                },
+                                interaction: {
+                                    /*
+                                    mode: 'nearest',
+                                    axis: 'x',
+                                    */
+                                    intersect: false
+                                },
+                                scales: {
+                                    y: {
+                                        stacked: true,
+                                        display: true,
+                                        beginAtZero: true,
+                                        border: { color: 'black', width: 2 },
+                                    },
+                                    x: {
+                                        stacked: true,
+                                        display: true,
+                                        time: {
+                                            unit: 'month'
+                                        },
+                                        border: { color: 'black', width: 2 },
                                     }
                                 },
                                 /*
@@ -250,8 +389,33 @@
         {%endfor%}
     {%endif%}
 
-    /* Toggle function for the charts fill */
+    /*
+    * Toggle actions for the charts
+    * ==================================
+    */
+    function toggleCharts(projectName) {
+        var myLineChartCanvas = document.getElementById("myLineChart_"+projectName)
+        var myBarChartCanvas = document.getElementById("myBarChart_"+projectName)
+        if(myBarChartCanvas.style.display == 'none'){
+            myBarChartCanvas.style.display = 'block';
+            myLineChartCanvas.style.display = 'none';
+        } else {
+            myBarChartCanvas.style.display = 'none';
+            myLineChartCanvas.style.display = 'block';
+        }
+    }
 
+
+    /* Toggle function for the charts fill */
+    /*
+    *
+    * Commenting out this functionality for now
+    *
+    * <span class="badge bg-dark" onclick="toggleChartFill(myLineChart_, 'PASS');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the PASS series"> Toggle Fill for PASS </span>
+    * <span class="badge bg-dark" onclick="toggleChartFill(myLineChart_, 'FAIL');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the FAIL series"> Toggle Fill for FAIL </span>
+    * <span class="badge bg-dark" onclick="toggleChartFill(myLineChart_, 'ERROR');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the ERROR series"> Toggle Fill for ERROR </span>
+    * <span class="badge bg-dark" onclick="toggleChartFill(myLineChart_, 'SKIPPED');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the SKIPPED series"> Toggle Fill for SKIPPED </span>
+    *
     function toggleChartFill(chartName, field) {
         if(field === 'PASS'){
             if(chartName.data.datasets[0].fill){
@@ -290,6 +454,7 @@
             }
         }
     }
+    */
 
     // ========================================================
     // SAMPLE / EXPERIMENT
