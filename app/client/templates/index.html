@@ -14,111 +14,122 @@
             <div class="container">
                 <br/><br/><br/><br/>
 
-                <!-- Accordian for Overview -->
-                <div class="accordion" id="accordionForOverview">
-                      <!-- First item -->
-                      <div class="accordion-item">
-                          <h2 class="accordion-header" id="headingOverview">
-                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOverview" aria-expanded="false" aria-controls="collapseOverview">
-                                Overview
-                              </button>
-                          </h2>
-                          <div id="collapseOverview" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionForOverview">
-                              <div class="accordion-body">
-                                  <h5 class="card-title">This is an overview of automation report dashboard.</h5>
-                                  <p>
-                                      This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
-                                      It is the overview of the all the test projects for the automation, which has been extracted/crawled
-                                      either from the jenkins or from the (HTML/Junit xml) report files. <br/>
-                                      To do any change, goto <a href="/settings" class="btn btn-outline-primary"> Settings </a> page
-                                  </p>
-                              </div>
-                          </div>
-                      </div>
-                </div> <br/><br/>
-
+                <!-- Card for Overview -->
+                <div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">
+									Overview
+									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
+									<span class="badge bg-secondary" style="font-size: x-small;"> "DEV" STAGE </span>
+								</h3>
+								<hr/>
+								<div class="home-page-desc">
+									<span> This page contains the summary overview data for the created projects. </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> <br/><br/><br/>
 
                 <!-- Summary Cards -->
                 <div class="row m-b-1 align-items-center">
 
-                    <div class="col-md-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title"> Project Space </h5>
-                            <p class="card-text">
-                                <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{ data['TOTAL_PROJECTS_COUNT'] }}
-                                <span class="badge bg-sm bg-success" style="font-size: x-small;"> {{data['TOTAL_ACTIVE_PROJECTS']}} Active </span>
-                                <span class="badge bg-secondary" style="font-size: x-small;"> {{data['TOTAL_ARCHIVED_PROJECTS']}} Archived </span>
-                                </span>
-                            </p>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title"> Executions </h5>
-                            <p class="card-text">
-                                <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{ data["TOTAL_EXECUTIONS_COUNT"] }}
-                                </span>
-                            </p>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title"> TestCases </h5>
-                            <p class="card-text">
-                                <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"]}}
-                                </span>
-                            </p>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title"> Avg Pass Rate </h5>
-                            <p class="card-text">
-                                <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{ data["TC_PASSED_FROM_LATEST_EXECUTIONS"] }}
-                                    <span class="badge bg-success bg-sm" style="font-size: x-small;"> {{((data["TC_PASSED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
-                                </span>
-                            </p>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title"> Avg Fail Rate </h5>
-                            <p class="card-text">
-                                <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{ data["TC_FAILED_FROM_LATEST_EXECUTIONS"] }}
-                                    <span class="badge bg-danger bg-sm" style="font-size: x-small;"> {{((data["TC_FAILED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
-                                </span>
-                            </p>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title"> Avg Error Rate </h5>
-                            <p class="card-text">
-                                <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                    {{ data["TC_ERROR_FROM_LATEST_EXECUTIONS"] }}
-                                    <span class="badge bg-warning bg-sm" style="font-size: x-small;"> {{((data["TC_ERROR_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|int}}% </span>
-                                </span>
-                            </p>
-                          </div>
-                        </div>
-                    </div>
+                    {%if data['PROJECTS_LIST']|length >= 1 %}
+                            <div class="col-md-2">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <h5 class="card-title"> Project Space </h5>
+                                    <p class="card-text">
+                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                            {{ data['TOTAL_PROJECTS_COUNT'] }}
+                                        <span class="badge bg-sm bg-success" style="font-size: x-small;"> {{data['TOTAL_ACTIVE_PROJECTS']}} Active </span>
+                                        <span class="badge bg-secondary" style="font-size: x-small;"> {{data['TOTAL_ARCHIVED_PROJECTS']}} Archived </span>
+                                        </span>
+                                    </p>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <h5 class="card-title"> Executions </h5>
+                                    <p class="card-text">
+                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                            {{ data["TOTAL_EXECUTIONS_COUNT"] }}
+                                        </span>
+                                    </p>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <h5 class="card-title"> TestCases </h5>
+                                    <p class="card-text">
+                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                            {{data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"]}}
+                                        </span>
+                                    </p>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <h5 class="card-title"> Avg Pass Rate </h5>
+                                    <p class="card-text">
+                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                            {{ data["TC_PASSED_FROM_LATEST_EXECUTIONS"]|safe }}
+                                            <span class="badge bg-success bg-sm" style="font-size: x-small;"> {{((data["TC_PASSED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|safe}}% </span>
+                                        </span>
+                                    </p>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <h5 class="card-title"> Avg Fail Rate </h5>
+                                    <p class="card-text">
+                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                            {{ data["TC_FAILED_FROM_LATEST_EXECUTIONS"] }}
+                                            <span class="badge bg-danger bg-sm" style="font-size: x-small;"> {{((data["TC_FAILED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='ceil')|int|safe}}% </span>
+                                        </span>
+                                    </p>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <h5 class="card-title"> Avg Skipped Rate </h5>
+                                    <p class="card-text">
+                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                            {{ data["TC_SKIPPED_FROM_LATEST_EXECUTIONS"] }}
+                                            <span class="badge bg-warning bg-sm" style="font-size: x-small;"> {{((data["TC_SKIPPED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='ceil')|int|safe}}% </span>
+                                        </span>
+                                    </p>
+                                  </div>
+                                </div>
+                            </div>
+                    {%else%}
+                            <!-- Show no data, because data is empty -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>
+                                            No projects data available yet, Crawler need to be executed.
+                                        </p>
+                                        <p>
+                                            <a href="/run-jenkins-crawler" class="btn btn-outline-primary"> Run Jenkins Crawler </a>
+                                        </p>
+                                    </div>
 
+                                </div>
+                            </div>
+                    {%endif%}
                 </div> <br/><br/>
 
                 <!-- Other data for overview -->

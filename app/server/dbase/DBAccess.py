@@ -11,19 +11,42 @@ class DBAccess(Configurations):
     def __init__(self):
         # Initialize the DB file for data source
         self.db_obj = DBEngine(DBConfig.db_file[Configurations.APP_ENVIRONMENT])
+        # self.db_obj = DBEngine("data.db")
 
         # basic tables and its schema
+        # 1- for users table
+        self.user_table = DBConfig.USER_TABLE
+        self.user_table_fields = DBConfig.USER_TABLE_FILED
+        # 2- for projects table
         self.project_table = DBConfig.PROJECT_TABLE
         self.project_table_fields = DBConfig.PROJECT_TABLE_FIELDS
+        # 3- for executions table
         self.test_execution_table = DBConfig.TEST_EXECUTION_TABLE
         self.test_execution_table_fields = DBConfig.TEST_EXECUTION_TABLE_FIELDS
 
         # Create the table (if they don't exist)
+        # 1- For users table
+        self.db_obj.create_table(self.user_table, self.user_table_fields)
+        # 2- For projects table
         self.db_obj.create_table(self.project_table, self.project_table_fields)
+        # 3- For executions table
         self.db_obj.create_table(self.test_execution_table, self.test_execution_table_fields)
 
+        # Add Default users, if no user found
+        if self.get_users_count() == 0:
+            self.db_obj.insert(self.user_table, username='root', password='root', created=datetime.datetime.now())
+            self.db_obj.insert(self.user_table, username='admin', password='admin', created=datetime.datetime.now())
+            self.db_obj.insert(self.user_table, username='test', password='password', created=datetime.datetime.now())
+
         # Create some dummy records
-        self.__insert_some_dummy_data()
+        # self.insert_some_prefix_data()
+
+        # Load User list
+        self.users = {}
+        self.fetch_users()
+
+    def disconnect(self):
+        self.db_obj.disconnect()
 
     # -----------------------------------
     # API for the 'users' table
@@ -39,6 +62,28 @@ class DBAccess(Configurations):
 
     def delete_user(self, username: str):
         pass
+
+    def get_users_count(self):
+        self.db_obj.select(self.user_table, "COUNT(1)")
+        user_count = self.db_obj.fetch_result_from_cursor()[0][0]
+        print(f"Total users: {user_count}")
+        return user_count
+
+    def fetch_users(self):
+        if not self.users:
+            cursor = self.db_obj.select(self.user_table, "*")
+            for user in cursor.fetchall():
+                print(f"==> Entry User: {user}")
+                self.users[user[1]] = user[2]
+            print(f"==> Prepared list of users: {self.users}")
+        return self.users
+
+    def authenticate(self, username, password):
+        if len(self.users) < 1:
+            # Load the users from db
+            self.fetch_users()
+        # Verify the user from users dictionary
+        return True if self.users.get(username) == password else False
 
     # -----------------------------------
     # API for the 'settings' table
@@ -60,8 +105,11 @@ class DBAccess(Configurations):
         return self.db_obj.fetch_result_from_cursor()
 
     def get_projects_count(self):
-        self.db_obj.select(self.project_table, "COUNT")
-        return self.db_obj.fetch_result_from_cursor()
+        print(f"\n Inserting dummy projects ...")
+        self.db_obj.select(self.project_table, "COUNT(1)")
+        projects_count = self.db_obj.fetch_result_from_cursor()[0][0]
+        print(f"Project count: {projects_count}")
+        return projects_count
 
     def get_active_project_list(self):
         self.db_obj.select_where(self.project_table, "*", status="'active'")
@@ -84,7 +132,7 @@ class DBAccess(Configurations):
 
     def get_test_executions_data_for_project(self, project_name):
         # self.db_obj.select_where_with_limit(self.test_execution_table, '30', "*", project_name=project_name)
-        self.db_obj.select_where_with_limit_and_desc_order_by(self.test_execution_table, '30', 'execution_date', "*",
+        self.db_obj.select_where_with_limit_and_desc_order_by(self.test_execution_table, '30', 'crawled_date', "*",
                                                               project_name=project_name)
         return self.db_obj.fetch_result_from_cursor()
 
@@ -130,35 +178,39 @@ class DBAccess(Configurations):
 
         # For Executions
         executions_data = self.get_test_executions_data()
-        #execution_data_for_active_projects = self.get_test_executions_data_for_active_project()
-        #total_executions_for_active_projects = len(execution_data_for_active_projects)
-        execution_data_for_active_projects_with_latest_crawled_date = self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], self.filter_test_executions_data_for_active_projects(self.get_latest_crawled_test_executions_data_for_distinct_projects()))
+        # execution_data_for_active_projects = self.get_test_executions_data_for_active_project()
+        # total_executions_for_active_projects = len(execution_data_for_active_projects)
+        execution_data_for_active_projects_with_latest_crawled_date = self.__parse_data_to_dict(
+            DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], self.filter_test_executions_data_for_active_projects(
+                self.get_latest_crawled_test_executions_data_for_distinct_projects()))
 
         # For TC: From the latest Executions
         total_tc, passed, failed, error, skipped = 0, 0, 0, 0, 0
         for record in execution_data_for_active_projects_with_latest_crawled_date:
             # test_result
-            total_tc += record['test_result']['pass'] + record['test_result']['fail'] + record['test_result']['error'] + record['test_result']['skipped']
-            passed += record['test_result']['pass']
-            failed += record['test_result']['fail']
-            error += record['test_result']['error']
-            skipped += record['test_result']['skipped']
+            total_tc += record['test_result']['pass_count'] + record['test_result']['fail_count'] + \
+                        record['test_result']['skip_count']
+            passed += record['test_result']['pass_count']
+            failed += record['test_result']['fail_count']
+            skipped += record['test_result']['skip_count']
+            error += 0
 
         # Defining schema for overview data (for HTML Templates)
         # And setting the value as well
-        overview_data = {"PROJECTS_LIST": self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["PROJECTS"], projects_list),
-                         "TOTAL_PROJECTS_COUNT": total_projects_count,
-                         "TOTAL_ACTIVE_PROJECTS": active_projects_count,
-                         "TOTAL_ARCHIVED_PROJECTS": archived_projects_count,
+        overview_data = {
+            "PROJECTS_LIST": self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["PROJECTS"], projects_list),
+            "TOTAL_PROJECTS_COUNT": total_projects_count,
+            "TOTAL_ACTIVE_PROJECTS": active_projects_count,
+            "TOTAL_ARCHIVED_PROJECTS": archived_projects_count,
 
-                         "TOTAL_EXECUTIONS_COUNT": len(executions_data),
-                         "LATEST_EXECUTION_FOR_ACTIVE_PROJECTS": execution_data_for_active_projects_with_latest_crawled_date,
+            "TOTAL_EXECUTIONS_COUNT": len(executions_data),
+            "LATEST_EXECUTION_FOR_ACTIVE_PROJECTS": execution_data_for_active_projects_with_latest_crawled_date,
 
-                         "TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS": total_tc,
-                         "TC_PASSED_FROM_LATEST_EXECUTIONS": passed,
-                         "TC_FAILED_FROM_LATEST_EXECUTIONS": failed,
-                         "TC_ERROR_FROM_LATEST_EXECUTIONS": error,
-                         "TC_SKIPPED_FROM_LATEST_EXECUTIONS": skipped}
+            "TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS": total_tc,
+            "TC_PASSED_FROM_LATEST_EXECUTIONS": passed,
+            "TC_FAILED_FROM_LATEST_EXECUTIONS": failed,
+            "TC_ERROR_FROM_LATEST_EXECUTIONS": error,
+            "TC_SKIPPED_FROM_LATEST_EXECUTIONS": skipped}
         return overview_data
 
     def get_dashboard_data(self):
@@ -169,7 +221,8 @@ class DBAccess(Configurations):
 
         # Now in Action
         # ---------------
-        dashboard_data = self.filter_test_executions_data_for_active_projects(self.get_latest_crawled_test_executions_data_for_distinct_projects())
+        dashboard_data = self.filter_test_executions_data_for_active_projects(
+            self.get_latest_crawled_test_executions_data_for_distinct_projects())
         # print("\n\nData for Dashboard =====> ", dashboard_data)
         return self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], dashboard_data)
 
@@ -185,8 +238,11 @@ class DBAccess(Configurations):
         history_data = {}
         for project_record in self.get_projects_list():
             project_name = project_record[1]
-            history_data[project_name] = self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], self.get_test_executions_data_for_project("'" + project_name + "'"))
-            # print("\n\n====>\n", history_data[project_name])
+            history_data[project_name] = self.__parse_data_to_dict(
+                DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"],
+                self.get_test_executions_data_for_project("'" + project_name + "'")
+            )
+            print("\n\n====>\n", history_data[project_name])
 
         # Return the history data
         return history_data
@@ -202,16 +258,41 @@ class DBAccess(Configurations):
         if parse_for_table == 'executions':
             for item in data:
                 # Preparing dict data to be appended in the list
-                # This format(keys) are going to be used in the templates directly.
+                # SCHEMA: check the db_configurations for 'executions' table
                 # print("\n\n===> EXECUTION RECORD: ", item)
-                parsed_data_obj.append({"project_id": item[0], "project_name": item[1], "test_result": json.loads(item[2]), "source": item[3], "execution_date": item[5], "report_date": item[5], "crawled_date": item[6]})
+                parsed_data_obj.append(
+                    {
+                        "project_id": item[0],
+                        "project_name": item[1],
+                        "jenkins_job_build_no": item[3],
+                        "jenkins_job_build_url": item[4],
+                        "duration_in_sec": item[5],
+                        "suite_names": item[6],
+                        "test_result": json.loads(item[7]),
+                        "source": item[8],
+                        "jenkins_job_build_timestamp": item[9],
+                        "crawled_date": item[10]
+                    }
+                )
         elif parse_for_table == 'projects':
             for item in data:
                 # Preparing dict data to be appended in the list
-                # SCHEMA: project_id, project_name, data_source, jenkins_url, jenkins_user, jenkins_password, status, created, last_modified
-                # This format(keys) are going to be used in the templates directly.
+                # SCHEMA: check the db_configurations for 'projects' table
                 # print("\n\n===> PROJECT RECORD: ", item)
-                parsed_data_obj.append({"PROJECT_ID": item[0], "PROJECT_NAME": item[1], "DATA_SOURCE": item[2], "JENKINS_URL": item[3], "JENKINS_USER": item[4], "JENKINS_PASSWORD": item[5], "STATUS": item[6], "CREATED": item[7], "LAST_MODIFIED": item[8]})
+                parsed_data_obj.append(
+                    {
+                        "PROJECT_ID": item[0],
+                        "PROJECT_NAME": item[1],
+                        "DATA_SOURCE": item[2],
+                        "JENKINS_JOB_NAME": item[3],
+                        "JENKINS_URL": item[4],
+                        "JENKINS_USER": item[5],
+                        "JENKINS_PASSWORD": item[6],
+                        "STATUS": item[7],
+                        "CREATED": item[8],
+                        "LAST_MODIFIED": item[9]
+                    }
+                )
         else:
             # if table not recognised then return the given data
             return data
@@ -224,35 +305,75 @@ class DBAccess(Configurations):
     # DUMMY DATA CREATION
     # ---------------------------------------------------------------------------------------------
 
-    def __insert_some_dummy_data(self):
+    def insert_some_prefix_data(self):
+        # ==> Insert some data in to "users" table
+        # ---------------------------------------------------------------------------------------------
+        # self.db_obj.insert(self.user_table, username='root', password='root', created=datetime.datetime.now())
 
         # ==> Insert some data in to "projects" table
         # ---------------------------------------------------------------------------------------------
-        # self.db_obj.insert(self.project_table, project_id=1, project_name="Helix-QAC Eclipse Plugin", data_source='Jenkins', jenkins_url='http://localhost:8080', jenkins_user='NIL', jenkins_password='NIL', status='active', created=datetime.datetime.now(), last_modified=datetime.datetime.now())
-        # self.db_obj.insert(self.project_table, project_id=2, project_name="Helix-QAC VSCode Plugin", data_source='XML', jenkins_url='NIL', jenkins_user='NIL', jenkins_password='NIL', status='active', created=datetime.datetime.now(), last_modified=datetime.datetime.now())
-        # self.db_obj.insert(self.project_table, project_id=3, project_name="Helix-QAC VisualStudio Plugin", data_source='XML', jenkins_url='NIL', jenkins_user='NIL', jenkins_password='NIL', status='active', created=datetime.datetime.now(), last_modified=datetime.datetime.now())
-        # self.db_obj.insert(self.project_table, project_id=4, project_name="Helix-QAC QACLI", data_source='XML', jenkins_url='NIL', jenkins_user='NIL', jenkins_password='NIL', status='active', created=datetime.datetime.now(), last_modified=datetime.datetime.now())
-        # self.db_obj.insert(self.project_table, project_id=5, project_name="Validate CLI", data_source='XML', jenkins_url='NIL', jenkins_user='NIL', jenkins_password='NIL', status='active', created=datetime.datetime.now(), last_modified=datetime.datetime.now())
-        # self.db_obj.insert(self.project_table, project_id=6, project_name="Validate Portal UI", data_source='XML', jenkins_url='NIL', jenkins_user='NIL', jenkins_password='NIL', status='active', created=datetime.datetime.now(),last_modified=datetime.datetime.now())
-        # self.db_obj.insert(self.project_table, project_id=7, project_name="Helix-QAC Dashboard", data_source='XML', jenkins_url='NIL', jenkins_user='NIL',jenkins_password='NIL', status='active', created=datetime.datetime.now(), last_modified=datetime.datetime.now())
-        #
+        print(f"\n\nInserting some pre-fixed projects ...")
+        jobs = ["FW-430/QAF_430_Test_Eclipse_Win10x64_EN",
+                "FW-430/QAF_430_Test_Eclipse_Centos7x64_EN",
+
+                "FW-430/QAF_430_Test_GUI_Win11x64_EN_Regression",
+                "FW-430/QAF_430_Test_GUI_Win11x64_EN_Sanity",
+                "FW-430/QAF_430_Test_GUI_Win11x64_JP_Regression",
+                "FW-430/QAF_430_Test_GUI_Win11x64_JP_sanity",
+
+                "FW-430/QAF_430_Qacli_UI_Test_AdminAndUser_Win10x64",
+                "FW-430/QAF_430_Qacli_UI_Test_AdminAndAdmin_Win11x64",
+
+                "FW-430/Squish_VS2022_Win10x64_EN_Regression",
+                "FW-430/Squish_VS2022_Win10x64_EN_Sanity",
+                "FW-430/Squish_VS2019_Win10x64_EN_Regression",
+                "FW-430/Squish_VS2019_Win10x64_EN_Sanity",
+
+                "FW-430/VSCode_Win11_EN_Sanity",
+                "FW-430/VSCode_Win10_EN_Sanity",
+                ]
+        project_id = 1
+        for job in jobs:
+            self.db_obj.insert(self.project_table,
+                               project_id=project_id,
+                               project_name=job.split("/")[1],
+                               data_source='Jenkins',
+                               jenkins_job_name=job,
+                               jenkins_url='"https://jenkins.qac.perforce.com"',
+                               jenkins_user='amishra',
+                               jenkins_password='Me@here1',
+                               status='active',
+                               created=datetime.datetime.now(),
+                               last_modified=datetime.datetime.now()
+                               )
+            project_id += 1
+
         # # Update a project as an archived project where project_name is given
         # # ---------------------------------------------------------------------------------------------
         # self.db_obj.update_where(self.project_table, {"status": "archived"}, project_name="Validate CLI")
         # self.db_obj.update_where(self.project_table, {"status": "active"}, project_name="Helix-QAC Dashboard")
 
-        # ==> Insert more data in to "executions" table
-        # ---------------------------------------------------------------------------------------------
-        # self.db_obj.insert(self.test_execution_table, project_id=1, project_name="Helix-QAC Eclipse Plugin", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        # self.db_obj.insert(self.test_execution_table, project_id=2, project_name="Helix-QAC VSCode Plugin", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        # self.db_obj.insert(self.test_execution_table, project_id=3, project_name="Helix-QAC VisualStudio Plugin", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        # self.db_obj.insert(self.test_execution_table, project_id=4, project_name="Helix-QAC QACLI", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        # self.db_obj.insert(self.test_execution_table, project_id=5, project_name="Validate CLI", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        # self.db_obj.insert(self.test_execution_table, project_id=6, project_name="Validate Portal UI", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        # self.db_obj.insert(self.test_execution_table, project_id=7, project_name="Helix-QAC Dashboard", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        # self.db_obj.insert(self.test_execution_table, project_id=8, project_name="Alpha-1", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        # self.db_obj.insert(self.test_execution_table, project_id=9, project_name="Beta-1", test_results='{"pass": '+str(random.randrange(10, 200))+', "fail": '+str(random.randrange(10, 200))+', "error": '+str(random.randrange(10, 200))+', "skipped": '+str(random.randrange(10, 200))+'}', source="XML", source_value="XML_file_PATH", execution_date=datetime.datetime.now(), crawled_date=datetime.datetime.now())
-        pass
+    # ---------------------------------------------------------------------------------------------
+    # Write crawled execution DATA from jenkins crawler
+    # ---------------------------------------------------------------------------------------------
+    def set_execution_data_from_jenkins(self, data, project_id, project_name):
+        # ==> Insert data in to "executions" table from the jenkins crawler (for DS, see crawl_jenkins.py)
+        for execution_data in data:
+            self.db_obj.insert(self.test_execution_table,
+                               project_id=project_id,
+                               project_name=project_name,
+                               jenkins_job_name=execution_data["jenkins_job_name"],
+                               jenkins_job_build_no=execution_data["jenkins_job_build_no"],
+                               jenkins_job_build_url=execution_data["jenkins_job_build_url"],
+                               duration_in_sec=execution_data["duration_in_sec"],
+                               suite_names=", ".join(execution_data["suite_names"]),
+                               test_result='{"pass_count": ' + str(execution_data["test_result"]["pass_count"]) +
+                                           ', "fail_count": ' + str(execution_data["test_result"]["fail_count"]) +
+                                           ', "skip_count": ' + str(execution_data["test_result"]["skip_count"]) + '}',
+                               source="Jenkins",
+                               jenkins_job_build_timestamp=execution_data["jenkins_job_build_timestamp"],
+                               crawled_date=execution_data["crawled_date"]
+                               )
 
 
 # ------------------
@@ -261,5 +382,5 @@ class DBAccess(Configurations):
 if __name__ == "__main__":
     print(f"\n Running from terminal ... \n ")
     o = DBAccess()
-    o.get_dashboard_data()
-
+    print("\n\n", o.get_dashboard_data())
+    # o.insert_some_prefix_data()

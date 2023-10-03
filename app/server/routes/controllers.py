@@ -1,5 +1,5 @@
 """
-  @author Ashutosh Mishra (@github: nityagautam)
+  @author Ashutosh Mishra (amishra)(@github: nityagautam)
 
   Software Engineer & Explorer
   nityanarayan44@gmail.com
@@ -8,10 +8,9 @@
 """
 # import app.server
 from app.server import app as application
-from flask import redirect, render_template, session
+from flask import redirect, jsonify, request, json, flash
 from app.server.routes.authentication import not_authorised, route_gateway
-from app.server.config.ui_configurations import UIConfigurations
-from app.server.dbase import sample_data
+from threading import Thread
 
 
 # ==========================================================================
@@ -53,10 +52,18 @@ def settings():
     return not_authorised()
 
 
-@application.route('/create-project-space')
+@application.route('/create-project-space', methods=['GET', 'POST'])
 def create_new_project_space():
     if route_gateway.is_session_active():
-        return route_gateway.get_template("/create-project-space")
+        if request.method == 'POST':
+            print(f"\n Collecting the data for new project: ")
+            for k, v in request.form.items():
+                print(f"Key: {k}, Value: {v}")
+
+            flash(f"Request created successfully.")
+            return redirect('/create-project-space')
+        else:
+            return route_gateway.get_template("/create-project-space")
     return not_authorised()
 
 
@@ -65,6 +72,17 @@ def about():
     if route_gateway.is_session_active():
         return route_gateway.get_template("/about")
     return not_authorised()
+
+
+# @application.route('/run-jenkins-crawler', methods=['GET'])
+# def start_jenkins_crawler():
+#     # TODO: Need to implement API_KEY for auth
+#     global thread
+#     if route_gateway.is_session_active():
+#         thread = Thread(target=Crawler().run())
+#         thread.start()
+#         return jsonify({"is_alive": thread.is_alive()})
+#     return not_authorised()
 
 
 @application.route('/utility', methods=['GET'])

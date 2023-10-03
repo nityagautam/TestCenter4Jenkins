@@ -1,5 +1,9 @@
-flask==2.2.3
+flask~=2.2.3
 jinja2==3.1.2
-passlib
+passlib~=1.7.4
 sqlite3server
+python-jenkins~=1.8.1
+requests~=2.31.0
+beautifulsoup4
+jenkinsapi
 python-jenkins

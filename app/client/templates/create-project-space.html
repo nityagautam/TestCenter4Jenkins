@@ -38,28 +38,37 @@
                       </div>
                 </div> <br/> <br/>
 
+                 <div class="row">
+                    <!-- If we get any flushed message-->
+                    <div class="col">
+                        {{get_flashed_messages()[0]}}
+                    </div>
+                 </div>
+
                 <div class="row">
+                    <!-- If we get any flushed message-->
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title"> <strong> Create new space for a project. </strong></h4>
+                                <span>{{get_flashed_messages()[0]}}</span>
                             </div>
                             <hr/>
                             <div class="card-body">
                                             <!-- Form -->
                                             <!-- Adding a form here to create a new space (get the inputs from the user) -->
-                                            <form class="row g-3 needs-validation" novalidate>
+                                            <form class="row g-3 needs-validation" action="/create-project-space" method="POST" novalidate>
                                                 <!-- Project/Space name <div class="col-md-4"> input-group input-group-text -->
                                                 <div class="mb-3">
                                                     <label class="form-label" for="validationCustom01"> Space name </label>
-                                                    <input type="text" class="form-control" id="validationCustom01" value="SampleSpace01" required>
+                                                    <input type="text" class="form-control" id="validationCustom01" name="project_name" value="SampleSpace01" required>
                                                     <div class="valid-feedback"> Looks good! </div>
                                                 </div>
 
                                                   <!-- Select data source (File/Jenkins) -->
                                                 <div class="mb-3">
                                                     <label for="validationCustom04" class="form-label"> Data source </label>
-                                                    <select class="form-select" id="validationCustom04" required>
+                                                    <select class="form-select" id="validationCustom04" name="project_source"  required>
                                                           <option selected disabled value="">Choose...</option>
                                                           <option>Jenkins Server</option>
                                                           <option>JUnit XML/JSON File</option>
@@ -81,17 +90,17 @@
                                                     <label for="validationCustomURL" class="form-label"> Jenkins Server </label>
                                                     <div class="input-group has-validation">
                                                         <span class="input-group-text" id="inputGroupForURL">URL</span>
-                                                        <input type="text" class="form-control" id="validationCustomURL" aria-describedby="inputGroupPrepend" value="http://localhost:8080/" required>
+                                                        <input type="text" class="form-control" id="validationCustomURL" name="jenkins_url"  aria-describedby="inputGroupPrepend" value="http://localhost:8080/" required>
                                                         <div class="invalid-feedback">
                                                             Please choose a username.
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="validationCustomJobName" class="form-label">Jenkins Job Name</label>
+                                                    <label for="validationCustomJobName" class="form-label">Jenkins Job FullName</label>
                                                     <div class="input-group has-validation">
                                                         <span class="input-group-text" id="inputGroupForJobName">#</span>
-                                                        <input type="text" class="form-control" id="validationCustomJobName" aria-describedby="inputGroupPrepend" required>
+                                                        <input type="text" class="form-control" id="validationCustomJobName" name="jenkins_job_name"  aria-describedby="inputGroupPrepend" required>
                                                         <div class="invalid-feedback">
                                                             Please choose a username.
                                                         </div>
@@ -102,7 +111,7 @@
                                                     <label for="validationCustomUsername" class="form-label">Jenkins Username</label>
                                                     <div class="input-group has-validation">
                                                         <span class="input-group-text" id="inputGroupForUsername">@</span>
-                                                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                                                        <input type="text" class="form-control" id="validationCustomUsername" name="jenkins_username"  aria-describedby="inputGroupPrepend" required>
                                                         <div class="invalid-feedback">
                                                             Please choose a username.
                                                         </div>
@@ -112,7 +121,7 @@
                                                     <label for="validationCustomPassword" class="form-label">Jenkins user password</label>
                                                     <div class="input-group has-validation">
                                                       <span class="input-group-text" id="inputGroupForPassword">*</span>
-                                                      <input type="password" class="form-control" id="validationCustomPassword" aria-describedby="inputGroupPrepend" required>
+                                                      <input type="password" class="form-control" id="validationCustomPassword" name="jenkins_password"  aria-describedby="inputGroupPrepend" required>
                                                       <div class="invalid-feedback">
                                                         Please choose a username.
                                                       </div>
@@ -123,7 +132,7 @@
                                                     <div class="form-check">
                                                       <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
                                                       <label class="form-check-label" for="invalidCheck">
-                                                        Agree to terms and conditions
+                                                        Archive this project
                                                       </label>
                                                       <div class="invalid-feedback">
                                                         You must agree before submitting.

@@ -1,0 +1,59 @@
+===================================
+projects table
+===================================
+
+Table name: projects
+fields:
+		'project_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
+		'project_name TEXT',
+		'data_source TEXT',
+		'jenkins_url TEXT',
+		'jenkins_user TEXT',
+		'jenkins_password TEXT',
+		'status TEXT',
+		'created TIMESTAMP',
+		'last_modified TIMESTAMP'
+
+New/Updated fields:
+		'project_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
+		'project_name TEXT',
+		'data_source TEXT',
+		'jenkins_job_name TEXT',
+		'jenkins_url TEXT',
+		'jenkins_user TEXT',
+		'jenkins_password TEXT',
+		'status TEXT',
+		'created TIMESTAMP',
+		'last_modified TIMESTAMP'
+
+===================================
+Execution table for Jenkins data
+===================================
+
+Table name: execution
+fields:
+		- 'project_id INTEGER NOT NULL',
+		- 'project_name TEXT',
+		- 'test_results TEXT',
+		- 'source TEXT',             
+		- 'source_value TEXT',
+		- 'execution_date TIMESTAMP',
+		- 'crawled_date TIMESTAMP'
+	
+New/Updated Fields for execution table 
+		
+		'project_id INTEGER NOT NULL',
+		'project_name TEXT',
+		'jenkins_job_name TEXT',
+		'jenkins_job_build_no INTEGER',
+		'jenkins_job_build_url TEXT',
+		'jenkins_job_build_timestamp INTEGER',
+		'suite_names TEXT',
+		'total_count INTEGER',
+		'pass_count INTEGER',
+		'fail_count INTEGER',
+		'skip_count INTEGER',
+		'source TEXT',
+		'crawled_date TIMESTAMP'
+	
+===================================================================

@@ -32,7 +32,7 @@ class DBEngine(object):
 
     def __init__(self, data_file):
         print(f"[DatabaseObject] DB Given to connect ===> : {data_file}")
-        self.db = sqlite3.connect(data_file, check_same_thread=False)
+        self.db = sqlite3.connect(data_file, check_same_thread=True)
         self.cursor = self.db.cursor()
         self.data_file = data_file
 

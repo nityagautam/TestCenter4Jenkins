@@ -15,7 +15,7 @@
             {% include 'navbar.html' %}
 
             <!-- Content Area -->
-            <div class="container">
+            <div class="container-fluid">
                 <br/><br/><br/><br/> <!-- Important to not start from very top, hence breaking for 4 lines. -->
 
                 <!-- Give some initial brief/info "table-hover table-group-divider" -->
@@ -49,19 +49,18 @@
                     <!-- Loading all the projects available -->
                     {%if data|length >= 1 %}
                         {% for project in data %}
-                            <div class="col-md-6">
+                            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
                                 <div class="card custom-card">
 
                                     <!-- Card header with basic info goes here -->
                                     <div class="card-body">
                                         <h5 class="card-title"> {{ project['project_name'] }} </h5>
                                         <!-- <p class="card-text"> </p> -->
-                                        <span class="badge bg-light text-dark" id="reportDate_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"> Dated: {{ project.report_date }} </span>
+                                        <span class="badge bg-light text-dark" id="reportDate_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"> Dated: {{ project['crawled_date'] }} </span>
                                         <span class="badge bg-light text-dark"> Summary: </span>
-                                        <span class="badge bg-success" data-bs-toggle="tooltip" title="{{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% tests are passing.">           {{ ((project['test_result']['pass']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% Pass </span>
-                                        <span class="badge bg-danger" data-bs-toggle="tooltip" title="{{ ((project['test_result']['fail']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% tests are failing.">            {{ ((project['test_result']['fail']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Fail </span>
-                                        <span class="badge bg-warning text-dark" data-bs-toggle="tooltip" title="{{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% tests are having some kind of error."> {{ ((project['test_result']['error']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Error </span>
-                                        <span class="badge bg-secondary" data-bs-toggle="tooltip" title="{{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='floor')|int }}% tests are Skipped">         {{ ((project['test_result']['skipped']*100)/(project['test_result']['pass']+project['test_result']['fail']+project['test_result']['error']+project['test_result']['skipped']))|round(method='ceil')|int }}% Skipped </span>
+                                        <span class="badge bg-success" data-bs-toggle="tooltip" title="{{ ((project['test_result']['pass_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are passing.">           {{ ((project['test_result']['pass_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% Pass </span>
+                                        <span class="badge bg-danger" data-bs-toggle="tooltip" title="{{ ((project['test_result']['fail_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are failing.">            {{ ((project['test_result']['fail_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='ceil')|int }}% Fail </span>
+                                        <span class="badge bg-secondary" data-bs-toggle="tooltip" title="{{ ((project['test_result']['skip_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are Skipped">         {{ ((project['test_result']['skip_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='ceil')|int }}% Skipped </span>
 
                                     </div>
 
@@ -76,7 +75,7 @@
                                     <hr style="margin: 0px; padding: 0;"/>
                                     <div class="card-body">
                                         <span class="badge bg-light text-dark"> Actions: </span>
-                                        <span class="badge bg-dark" onclick="alert('Not available.');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Browse Report </span>
+                                        <span class="badge bg-dark" onclick="location.href='{{project['jenkins_job_build_url']|safe}}';" style="cursor: pointer;" data-bs-toggle="tooltip" title="Browse the build/report"> Browse Jenkins </span>
                                         <span class="badge bg-light text-dark"> || </span>
                                         <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Toggle Chart </span>
                                     </div>
@@ -88,7 +87,8 @@
                             <!-- Adding javascript for the data fulfil/process in the card -->
                             <script>
                                 var ele = document.getElementById("reportDate_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}");
-                                ele.innerText = "Dated: " + new Date("{{project['report_date']|safe}}").toDateString() ;
+                                ele.innerText = "Dated: " + new Date({{project['jenkins_job_build_timestamp']|safe}}).toDateString();
+                                // ele.innerText = "Dated: " + new Date("{{project['crawled_date']|safe}}").toDateString() ;
                                 // console.log("Replacing report date for :: {{ project.project_name|replace(' ' , '')|replace('-' , '') }}");
                             </script>
 
