@@ -12,7 +12,7 @@ class UIConfigurations(Configurations):
         "app_name": Configurations.APP_NAME,
         "app_version": f"v[{Configurations.APP_VERSION}]",
         "app_author": f"{Configurations.AUTHOR_NAME}",
-        "app_title": f"TEST CENTER",
+        "app_title": f"TEST CENTER 4 JENKINS",
         "app_poc_tag": "POC PROTOTYPE-1",
         "app_experimental_tag": f"Experimental",
     }

@@ -31,7 +31,7 @@ queries = {
 class DBEngine(object):
 
     def __init__(self, data_file):
-        print(f"[DatabaseObject] DB Given to connect ===> : {data_file}")
+        print(f"  [DatabaseObject] DB Given to connect ===> : {data_file}")
         self.db = sqlite3.connect(data_file, check_same_thread=True)
         self.cursor = self.db.cursor()
         self.data_file = data_file
@@ -63,7 +63,7 @@ class DBEngine(object):
         # print("QUERY:", query)
         try:
             self.cursor.execute(query)
-            print(f'QUERY EXECUTED[R]:==> "{query}"')
+            print(f'|  QUERY EXECUTED[R]:==> "{query}"')
             return self.cursor
         except sqlite3.OperationalError as e:
             print(f'[DB OP ERROR] Error while executing query: {query}\n', e)
@@ -78,7 +78,7 @@ class DBEngine(object):
             else:
                 self.cursor.execute(query)
             self.db.commit()
-            print(f'QUERY EXECUTED[W]:==> "{query}"')
+            print(f'|  QUERY EXECUTED[W]:==> "{query}"')
             return self.cursor
         except sqlite3.IntegrityError as e:
             # Unique / Primary key rule failed
@@ -148,7 +148,7 @@ class DBEngine(object):
         To select provided column from table with WHERE condition
 
         Usage:  obj.select_where(<table_name>, <field_name1>, ..., <filed_name>=<filed_value>)
-                obj.select_where('sqlite_master', 'name', name="dev")
+                obj.select_where('table1', 'name', name="dev")
         :param table:
         :param args: denotes the fields to be selected
         :param kwargs: denotes the where conditions
@@ -258,7 +258,7 @@ class DBEngine(object):
     def delete(self, table_name, **kwargs):
         conditions = ' and '.join(['%s=?' % k for k in kwargs])
         subs = [kwargs[k] for k in kwargs]
-        query = queries['DELETE'] % (table_name, conditions)
+        query = queries['DELETE_WHERE'] % (table_name, conditions)
         return self.write(query, subs)
 
     def delete_all(self, table_name):

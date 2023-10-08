@@ -14,33 +14,28 @@
             <!-- Navbar Area -->
             {% include 'navbar.html' %}
 
-            <!-- Content Area -->
-            <div class="container-fluid">
+            <!-- Content '-fluid' Area -->
+            <div class="container">
                 <br/><br/><br/><br/> <!-- Important to not start from very top, hence breaking for 4 lines. -->
 
-                <!-- Give some initial brief/info "table-hover table-group-divider" -->
-                <div class="accordion" id="accordionExample">
-
-                      <!-- Second item -->
-                      <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Dashboard View
-                          </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                            <strong>Create a new space for a dashboard with some file or Jenkins link.</strong>
-                              <p>
-                                  This page is for the consolidated view for all automation jobs at one single place to make Testers/Manager/Devs life easy. <br/>
-                                  In case you want to modify something, go to the settings page.
-                                  <a href="#" class="btn btn-outline-primary"> Settings </a>
-                              </p>
-
-                          </div>
-                        </div>
-                      </div>
-                </div> <br/> <br/>
+                <div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">
+                                    <i class="bi bi-speedometer2"></i> &nbsp;
+									Dashboard View
+									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
+									<span class="badge bg-secondary" style="font-size: x-small;"> "DEV" STAGE </span>
+								</h3>
+								<hr/>
+								<div class="home-page-desc">
+									<span> This page contains all the execution history for the created projects. </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> <br/><br/><br/>
 
 
                 <!-- Summary view card -->
@@ -49,7 +44,7 @@
                     <!-- Loading all the projects available -->
                     {%if data|length >= 1 %}
                         {% for project in data %}
-                            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                            <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <div class="card custom-card">
 
                                     <!-- Card header with basic info goes here -->
@@ -57,11 +52,12 @@
                                         <h5 class="card-title"> {{ project['project_name'] }} </h5>
                                         <!-- <p class="card-text"> </p> -->
                                         <span class="badge bg-light text-dark" id="reportDate_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"> Dated: {{ project['crawled_date'] }} </span>
-                                        <span class="badge bg-light text-dark"> Summary: </span>
-                                        <span class="badge bg-success" data-bs-toggle="tooltip" title="{{ ((project['test_result']['pass_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are passing.">           {{ ((project['test_result']['pass_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% Pass </span>
-                                        <span class="badge bg-danger" data-bs-toggle="tooltip" title="{{ ((project['test_result']['fail_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are failing.">            {{ ((project['test_result']['fail_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='ceil')|int }}% Fail </span>
-                                        <span class="badge bg-secondary" data-bs-toggle="tooltip" title="{{ ((project['test_result']['skip_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are Skipped">         {{ ((project['test_result']['skip_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='ceil')|int }}% Skipped </span>
-
+                                        <!-- <span class="badge bg-light text-dark"> Summary: </span> -->
+                                        {%if (project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count'])|int > 0 %}
+                                            <span class="badge bg-success" data-bs-toggle="tooltip" title="{{ ((project['test_result']['pass_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are passing.">           {{ ((project['test_result']['pass_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% Pass </span>
+                                            <span class="badge bg-danger" data-bs-toggle="tooltip" title="{{ ((project['test_result']['fail_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are failing.">            {{ ((project['test_result']['fail_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='ceil')|int }}% Fail </span>
+                                            <span class="badge bg-secondary" data-bs-toggle="tooltip" title="{{ ((project['test_result']['skip_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are Skipped">         {{ ((project['test_result']['skip_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='ceil')|int }}% Skipped </span>
+                                        {%endif%}
                                     </div>
 
                                     <!-- Here goes our charts -->
@@ -75,9 +71,11 @@
                                     <hr style="margin: 0px; padding: 0;"/>
                                     <div class="card-body">
                                         <span class="badge bg-light text-dark"> Actions: </span>
+                                        <span class="badge bg-dark" onclick="alert(' Trends/History not available yet.');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Browse history"> History </span>
+                                        <span class="badge bg-light text-dark"> || </span>
                                         <span class="badge bg-dark" onclick="location.href='{{project['jenkins_job_build_url']|safe}}';" style="cursor: pointer;" data-bs-toggle="tooltip" title="Browse the build/report"> Browse Jenkins </span>
                                         <span class="badge bg-light text-dark"> || </span>
-                                        <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Toggle Chart </span>
+                                        <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Line/Doughnut Charts"> Toggle Chart </span>
                                     </div>
 
                                 </div>
@@ -99,10 +97,10 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <p>
-                                            No projects available yet, consider creating one
+                                            No execution available yet, consider running the crawler now.
                                         </p>
                                         <p>
-                                            <a href="/create-new-space" class="btn btn-outline-primary"> Create new space </a>
+                                            <a href="/run-jenkins-crawler" class="btn btn-outline-primary"> Run Jenkins Crawler </a>
                                         </p>
                                     </div>
 
@@ -147,16 +145,19 @@
                         type: 'bar',
                         data: {
                             labels: [
-                                {% for keys, val in project.test_result.items() %}
-                                "{{ keys|safe }}",
+                                {% for keys, val in project['test_result'].items() %}
+                                "{{ keys.split('_')[0]|safe }}",
                                 {% endfor %}
                             ],
-                            datasets: [{
+                            datasets: [
+                                        {
+                                        /* label: ['PASS','FAIL', 'SKIP'], */
                                         data: [
-                                            {% for keys, val in project.test_result.items() %}
+                                            {% for keys, val in project['test_result'].items() %}
                                             {{ val }},
                                             {% endfor %}
                                         ],
+                                        fill: true,
                                         borderColor:[
                                           "rgb(60,186,159,1.0)",
                                           "rgb(196,88,80,1.0)",
@@ -190,6 +191,9 @@
                                     colors: {
                                       enabled: true
                                     },
+                                    tooltip: {
+                                        mode: 'index'
+                                    },
                                 },
                                 scales: {
                                     y: {
@@ -214,7 +218,7 @@
                         data: {
                             labels: [
                                 {% for keys, val in project.test_result.items() %}
-                                "{{ keys|safe }}",
+                                "{{ keys.split('_')[0]|safe }}",
                                 {% endfor %}
                             ],
                             datasets: [{
@@ -222,13 +226,6 @@
                                             {% for keys, val in project.test_result.items() %}
                                             {{ val }},
                                             {% endfor %}
-                                        ],
-                                        borderColor:[
-                                          "rgb(60,186,159,1.0)",
-                                          "rgb(196,88,80,1.0)",
-                                          "rgb(255,165,0,1.0)",
-                                          "rgb(108,117,125,1.0)",
-                                          "rgb(100,107,105,1.0)",
                                         ],
                                         backgroundColor: [
                                           "rgb(60,186,159,0.7)",
@@ -246,8 +243,7 @@
                                 responsive: true,
                                 maintainAspectRatio: true,
                                 aspectRatio: 2,
-                                cutoutPercentage: 75,
-                                cutout: "75%", /* Maybe in new version of chart instead of cutoutPercentage */
+                                cutout: "50%", /* Maybe in new version of chart instead of cutoutPercentage */
                                 plugins: {
                                     legend: {
                                         position: 'bottom',

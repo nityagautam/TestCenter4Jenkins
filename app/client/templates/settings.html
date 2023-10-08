@@ -14,52 +14,140 @@
             <div class="container">
                 <br/><br/><br/><br/>
 
-                <!-- Give some initial brief/info "table-hover table-group-divider" -->
-                <div class="accordion" id="accordionExample">
-                      <!-- First item -->
-                      <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Settings
-                          </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                                <strong>This</strong> page is for Settings. <br/>
-                                <a href="/index" class="btn btn-outline-primary"> Go to the Overview page </a>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Second item -->
-                      <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Create new spce
-                          </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                            <strong>Create a new space for a dashboard with some file or Jenkins link.</strong>
-                              <p>
-                                  Now, You can provide, <code>Project/Space name</code>, <code>Source file</code>, <code> Jenkins URL along with credentials </code>
-                                  to extract all the data and create a view here.
-                              </p>
-
-                          </div>
-                        </div>
-                      </div>
-                </div> <br/> <br/>
-
+                <!-- Card for Overview -->
                 <div class="row">
-                    <div class="col">
-                        <p>
-                            forms will go here ...
-                        </p>
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">
+									Control Center / Settings
+									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
+									<span class="badge bg-secondary" style="font-size: x-small;"> "DEV" STAGE </span>
+								</h3>
+								<hr/>
+								<div class="home-page-desc">
+									<span> This page is control center for settings and other activities. </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> <br/><br/><br/>
+
+                <!-- Notification -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    Notifications
+                                </h3>
+                                <hr/>
+                                <div class="home-page-desc">
+                                    {{get_flashed_messages()[0]}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div> <br/><br/>
 
+                <!-- Control Center -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    Control Center
+                                </h3>
+                                <hr/>
+                                <div class="home-page-desc">
+
+                                    <!-- 1-Card -->
+                                    <div class="row ">
+                                        <div class="col-md-2">
+                                            <div class="home-page-desc">
+                                                <a href="#" class="btn btn-outline-primary" onclick="makeRequestForCrawler('/api/v1/run-jenkins-crawler');"> Start Jenkins Crawler </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- 2-Card -->
+                                        <div class="col-md-2">
+                                            <div class="home-page-desc">
+                                                <a href="#" class="btn btn-outline-danger" onclick="alert('Not Available.');"> Stop Jenkins Crawler </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- 3-Card -->
+                                        <div class="col-md-2">
+                                            <div class="home-page-desc">
+                                                <a href="#" class="btn btn-outline-danger" onclick="alert('Not Available.');"> Delete old execution </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- 4-Card -->
+                                        <div class="col-md-2">
+                                            <div class="home-page-desc">
+                                                <a href="#" class="btn btn-outline-danger" onclick="alert('Not Available.');"> Delete all execution data </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- 5-Card -->
+                                        <div class="col-md-2">
+                                            <div class="home-page-desc">
+                                                <a href="#" class="btn btn-outline-danger" onclick="alert('Not Available.');"> Delete everything </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
+
+                <!-- Settings -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    Settings
+                                </h3>
+                                <hr/>
+
+                                <!-- loop for all projects fields -->
+                                <div class="col-md-12">
+                                    <label for="validationCustomURL" class="form-label"> (*) Jenkins Server </label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupForURL">URL</span>
+                                        <input type="text" class="form-control" id="validationCustomURL" name="jenkins_url"  aria-describedby="inputGroupPrepend" value="https://jenkins.qac.perforce.com" required>
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <hr/>
+                                <!-- Save/Update Control btns -->
+                                <div class="home-page-desc">
+                                    <a href="#" class="btn btn-outline-primary" onclick="alert('Not Available.');"> UPDATE </a>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div> <br/><br/>
+
             </div>
+
+            <!-- Toast for page; also include the script to raise; Usage: raiseToast(msg); -->
+            {% include 'toast.html' %}
+
+            <!-- Custom script -->
+            <script src="{{url_for('static', filename='js/custom_script.js')}}"></script>
+            {% include 'toast.html' %}
 
             <!-- Page Footer Area -->
             {% include 'footer.html' %}

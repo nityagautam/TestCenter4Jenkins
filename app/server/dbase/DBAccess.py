@@ -66,16 +66,16 @@ class DBAccess(Configurations):
     def get_users_count(self):
         self.db_obj.select(self.user_table, "COUNT(1)")
         user_count = self.db_obj.fetch_result_from_cursor()[0][0]
-        print(f"Total users: {user_count}")
+        # print(f"Total users: {user_count}")
         return user_count
 
     def fetch_users(self):
         if not self.users:
             cursor = self.db_obj.select(self.user_table, "*")
             for user in cursor.fetchall():
-                print(f"==> Entry User: {user}")
+                # print(f"[DBAccess] Entry User: {user}")
                 self.users[user[1]] = user[2]
-            print(f"==> Prepared list of users: {self.users}")
+            # print(f"==> Prepared list of users: {self.users}")
         return self.users
 
     def authenticate(self, username, password):
@@ -100,6 +100,35 @@ class DBAccess(Configurations):
     # -----------------------------------
     # API for the 'projects' table
     # -----------------------------------
+    def add_project(self, data, check_duplicate: bool = True):
+        # - Insert data in to "executions" table from the jenkins crawler (for DS, see crawl_jenkins.py)
+        if data:
+
+            # 1- Verify if project name already exists
+            if check_duplicate:
+                query = f"SELECT * FROM {self.project_table} WHERE project_name='{data['project_name']}' LIMIT 1"
+                self.db_obj.execute_query(query)
+                query_res = self.db_obj.fetch_result_from_cursor()
+
+                if len(query_res) > 0:
+                    print(f"[WRITE PROJECT TO DB] Seems like project name already exists in DB: \n {query_res} ")
+                    return False
+
+            # 2- Insert the data for creation of new project
+            self.db_obj.insert(self.project_table,
+                               project_name=data["project_name"],
+                               data_source=data["data_source"],
+                               jenkins_job_name=data["jenkins_job_name"],
+                               jenkins_url=data["jenkins_url"],
+                               jenkins_user=data["jenkins_user"],
+                               jenkins_password=data["jenkins_password"],
+                               status='active',
+                               tags=data["tags"],
+                               created=datetime.datetime.now(),
+                               last_modified=datetime.datetime.now()
+                               )
+            return True
+
     def get_projects_list(self):
         self.db_obj.select(self.project_table, "*")
         return self.db_obj.fetch_result_from_cursor()
@@ -115,12 +144,54 @@ class DBAccess(Configurations):
         self.db_obj.select_where(self.project_table, "*", status="'active'")
         return self.db_obj.fetch_result_from_cursor()
 
+    def set_project_as_active(self, project_name: str = ""):
+        self.db_obj.update_where(self.project_table, {"status": "active"}, project_name=project_name)
+        # print(self.db_obj.fetch_result_from_cursor())
+        return True
+
+    def set_project_as_archived(self, project_name: str = ""):
+        self.db_obj.update_where(self.project_table, {"status": "archived"}, project_name=project_name)
+        # print(self.db_obj.fetch_result_from_cursor())
+        return True
+
+    def delete_project(self, project_name: str = ""):
+        self.db_obj.delete(self.project_table, project_name=project_name)
+        # print(self.db_obj.fetch_result_from_cursor())
+        return True
+
     # -----------------------------------
     # API for the 'executions' table
     # -----------------------------------
+    def add_execution_data(self, data, project_id, project_name, data_source: str = "Jenkins"):
+        # ==> Insert data in to "executions" table from the jenkins crawler (for DS, see crawl_jenkins.py)
+        for execution_data in data:
+            if execution_data:
+                self.db_obj.insert(self.test_execution_table,
+                                   project_id=project_id,
+                                   project_name=project_name,
+                                   jenkins_job_name=execution_data["jenkins_job_name"],
+                                   jenkins_job_build_no=execution_data["jenkins_job_build_no"],
+                                   jenkins_job_build_url=execution_data["jenkins_job_build_url"],
+                                   duration_in_sec=execution_data["duration_in_sec"],
+                                   suite_names=", ".join(execution_data["suite_names"]),
+                                   test_result='{"pass_count": ' + str(execution_data["test_result"]["pass_count"]) +
+                                               ', "fail_count": ' + str(execution_data["test_result"]["fail_count"]) +
+                                               ', "skip_count": ' + str(execution_data["test_result"]["skip_count"]) + '}',
+                                   data_source=data_source,
+                                   tags=execution_data["tags"],
+                                   jenkins_job_build_timestamp=execution_data["jenkins_job_build_timestamp"],
+                                   crawled_date=execution_data["crawled_date"]
+                                   )
+
     def get_test_executions_data(self):
         self.db_obj.select(self.test_execution_table, "*")
         return self.db_obj.fetch_result_from_cursor()
+
+    def get_builds_from_execution_data(self, jenkins_job_name):
+        query = f"SELECT jenkins_job_build_no FROM executions WHERE jenkins_job_name='{jenkins_job_name}'"
+        self.db_obj.execute_query(query)
+        data = self.db_obj.fetch_result_from_cursor()
+        return data
 
     def get_test_executions_data_count(self):
         self.db_obj.select(self.test_execution_table, "COUNT")
@@ -132,7 +203,10 @@ class DBAccess(Configurations):
 
     def get_test_executions_data_for_project(self, project_name):
         # self.db_obj.select_where_with_limit(self.test_execution_table, '30', "*", project_name=project_name)
-        self.db_obj.select_where_with_limit_and_desc_order_by(self.test_execution_table, '30', 'crawled_date', "*",
+        self.db_obj.select_where_with_limit_and_desc_order_by(self.test_execution_table,
+                                                              '30',
+                                                              'jenkins_job_build_timestamp',
+                                                              "*",
                                                               project_name=project_name)
         return self.db_obj.fetch_result_from_cursor()
 
@@ -157,18 +231,12 @@ class DBAccess(Configurations):
         return final_filtered_result
 
     # -----------------------------------
-    # API for the Dashboard page
+    # API for the Various pages
     # -----------------------------------
 
     def get_overview_data(self):
-        # We are going to give
+        # Data for the overview/index page
         # --------------------------------------
-        # - projects list (no of projs, active/archived)
-        # - no of execution
-        # - pass rate
-        # - apply filter to have active projects only
-        # - the latest project executions history (each active project with the latest crawled date)
-        # -
 
         # For Projects
         projects_list = self.get_projects_list()
@@ -226,15 +294,10 @@ class DBAccess(Configurations):
         # print("\n\nData for Dashboard =====> ", dashboard_data)
         return self.__parse_data_to_dict(DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"], dashboard_data)
 
-    # -----------------------------------
-    # API for the History page
-    # -----------------------------------
-
     def get_history_data(self):
         # We are going to give
         # --------------------------------------
         # - from executions, history for each project
-        # TODO: We should apply some limits
         history_data = {}
         for project_record in self.get_projects_list():
             project_name = project_record[1]
@@ -242,7 +305,7 @@ class DBAccess(Configurations):
                 DBConfig.DATA_PARSING_FOR_TABLE["EXECUTIONS"],
                 self.get_test_executions_data_for_project("'" + project_name + "'")
             )
-            print("\n\n====>\n", history_data[project_name])
+            # print("\n\n====>\n", history_data[project_name])
 
         # Return the history data
         return history_data
@@ -264,14 +327,16 @@ class DBAccess(Configurations):
                     {
                         "project_id": item[0],
                         "project_name": item[1],
+                        "jenkins_job_name": item[2],
                         "jenkins_job_build_no": item[3],
                         "jenkins_job_build_url": item[4],
                         "duration_in_sec": item[5],
                         "suite_names": item[6],
                         "test_result": json.loads(item[7]),
                         "source": item[8],
-                        "jenkins_job_build_timestamp": item[9],
-                        "crawled_date": item[10]
+                        "tags": item[9],
+                        "jenkins_job_build_timestamp": item[10],
+                        "crawled_date": item[11],
                     }
                 )
         elif parse_for_table == 'projects':
@@ -289,8 +354,9 @@ class DBAccess(Configurations):
                         "JENKINS_USER": item[5],
                         "JENKINS_PASSWORD": item[6],
                         "STATUS": item[7],
-                        "CREATED": item[8],
-                        "LAST_MODIFIED": item[9]
+                        "TAGS": item[8],
+                        "CREATED": item[9],
+                        "LAST_MODIFIED": item[10]
                     }
                 )
         else:
@@ -304,76 +370,10 @@ class DBAccess(Configurations):
     # ---------------------------------------------------------------------------------------------
     # DUMMY DATA CREATION
     # ---------------------------------------------------------------------------------------------
-
-    def insert_some_prefix_data(self):
-        # ==> Insert some data in to "users" table
-        # ---------------------------------------------------------------------------------------------
-        # self.db_obj.insert(self.user_table, username='root', password='root', created=datetime.datetime.now())
-
-        # ==> Insert some data in to "projects" table
-        # ---------------------------------------------------------------------------------------------
-        print(f"\n\nInserting some pre-fixed projects ...")
-        jobs = ["FW-430/QAF_430_Test_Eclipse_Win10x64_EN",
-                "FW-430/QAF_430_Test_Eclipse_Centos7x64_EN",
-
-                "FW-430/QAF_430_Test_GUI_Win11x64_EN_Regression",
-                "FW-430/QAF_430_Test_GUI_Win11x64_EN_Sanity",
-                "FW-430/QAF_430_Test_GUI_Win11x64_JP_Regression",
-                "FW-430/QAF_430_Test_GUI_Win11x64_JP_sanity",
-
-                "FW-430/QAF_430_Qacli_UI_Test_AdminAndUser_Win10x64",
-                "FW-430/QAF_430_Qacli_UI_Test_AdminAndAdmin_Win11x64",
-
-                "FW-430/Squish_VS2022_Win10x64_EN_Regression",
-                "FW-430/Squish_VS2022_Win10x64_EN_Sanity",
-                "FW-430/Squish_VS2019_Win10x64_EN_Regression",
-                "FW-430/Squish_VS2019_Win10x64_EN_Sanity",
-
-                "FW-430/VSCode_Win11_EN_Sanity",
-                "FW-430/VSCode_Win10_EN_Sanity",
-                ]
-        project_id = 1
-        for job in jobs:
-            self.db_obj.insert(self.project_table,
-                               project_id=project_id,
-                               project_name=job.split("/")[1],
-                               data_source='Jenkins',
-                               jenkins_job_name=job,
-                               jenkins_url='"https://jenkins.qac.perforce.com"',
-                               jenkins_user='amishra',
-                               jenkins_password='Me@here1',
-                               status='active',
-                               created=datetime.datetime.now(),
-                               last_modified=datetime.datetime.now()
-                               )
-            project_id += 1
-
-        # # Update a project as an archived project where project_name is given
-        # # ---------------------------------------------------------------------------------------------
-        # self.db_obj.update_where(self.project_table, {"status": "archived"}, project_name="Validate CLI")
-        # self.db_obj.update_where(self.project_table, {"status": "active"}, project_name="Helix-QAC Dashboard")
-
-    # ---------------------------------------------------------------------------------------------
-    # Write crawled execution DATA from jenkins crawler
-    # ---------------------------------------------------------------------------------------------
-    def set_execution_data_from_jenkins(self, data, project_id, project_name):
-        # ==> Insert data in to "executions" table from the jenkins crawler (for DS, see crawl_jenkins.py)
-        for execution_data in data:
-            self.db_obj.insert(self.test_execution_table,
-                               project_id=project_id,
-                               project_name=project_name,
-                               jenkins_job_name=execution_data["jenkins_job_name"],
-                               jenkins_job_build_no=execution_data["jenkins_job_build_no"],
-                               jenkins_job_build_url=execution_data["jenkins_job_build_url"],
-                               duration_in_sec=execution_data["duration_in_sec"],
-                               suite_names=", ".join(execution_data["suite_names"]),
-                               test_result='{"pass_count": ' + str(execution_data["test_result"]["pass_count"]) +
-                                           ', "fail_count": ' + str(execution_data["test_result"]["fail_count"]) +
-                                           ', "skip_count": ' + str(execution_data["test_result"]["skip_count"]) + '}',
-                               source="Jenkins",
-                               jenkins_job_build_timestamp=execution_data["jenkins_job_build_timestamp"],
-                               crawled_date=execution_data["crawled_date"]
-                               )
+    # # Update a project as an archived project where project_name is given
+    # # ---------------------------------------------------------------------------------------------
+    # self.db_obj.update_where(self.project_table, {"status": "archived"}, project_name="Validate CLI")
+    # self.db_obj.update_where(self.project_table, {"status": "active"}, project_name="Helix-QAC Dashboard")
 
 
 # ------------------

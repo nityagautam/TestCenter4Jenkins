@@ -27,6 +27,7 @@ class DBConfig(Configurations):
                             'jenkins_user TEXT',
                             'jenkins_password TEXT',
                             'status TEXT',
+                            'tags TEXT',
                             'created TIMESTAMP',
                             'last_modified TIMESTAMP']
 
@@ -39,7 +40,8 @@ class DBConfig(Configurations):
                                    'duration_in_sec INTEGER',
                                    'suite_names TEXT',
                                    'test_result TEXT',
-                                   'source TEXT',
+                                   'data_source TEXT',
+                                   'tags TEXT',
                                    'jenkins_job_build_timestamp INTEGER',
                                    'crawled_date TIMESTAMP']
     # Within the test_result: {
@@ -55,8 +57,8 @@ class DBConfig(Configurations):
     }
 
     CUSTOM_QUERIES = {
-        "OLDEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS": "SELECT project_id, project_name, test_results, execution_date, crawled_date FROM executions GROUP BY project_name ORDER BY MIN(crawled_date)",
-        "LATEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS": "SELECT * FROM executions GROUP BY project_name ORDER BY MAX(crawled_date)"
+        "OLDEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS": "SELECT project_id, project_name, test_results, execution_date, crawled_date FROM executions GROUP BY project_name ORDER BY MIN(jenkins_job_build_timestamp)",
+        "LATEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS": "SELECT * FROM executions GROUP BY project_name ORDER BY MAX(jenkins_job_build_timestamp)"
     }
 
     TABLE_JOINS = {

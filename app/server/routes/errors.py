@@ -9,7 +9,7 @@
 from app.server import app as application
 from flask import flash
 from app.server.config.ui_configurations import UIConfigurations
-from app.server.routes.authentication import not_authorised, route_gateway
+from app.server.routes.authentication import not_authorised, gateway
 
 
 # ==============================================================
@@ -19,9 +19,9 @@ from app.server.routes.authentication import not_authorised, route_gateway
 # 404 Handler; We can also pass the specific request errors codes to the decorator;
 @application.errorhandler(404)
 def not_found(err):
-    if route_gateway.is_session_active():
+    if gateway.is_session_active():
         flash(UIConfigurations.ERROR_MESSAGES['404'])
-        return route_gateway.get_error_template("/error", err, 404)
+        return gateway.get_error_template("/error", err, 404)
     return not_authorised()
 
 
@@ -29,9 +29,9 @@ def not_found(err):
 @application.errorhandler(TypeError)
 def type_error(err):
     application.logger.exception(err)
-    if route_gateway.is_session_active():
+    if gateway.is_session_active():
         flash(UIConfigurations.ERROR_MESSAGES['500'])
-        return route_gateway.get_error_template("/error", err, 500)
+        return gateway.get_error_template("/error", err, 500)
     return not_authorised()
     # return render_template("error.html", app_data=app_ui_config, error_data=err), 500
 
@@ -40,9 +40,9 @@ def type_error(err):
 @application.errorhandler(Exception)
 def unknown_error(err):
     application.logger.exception(err)
-    if route_gateway.is_session_active():
+    if gateway.is_session_active():
         flash(UIConfigurations.ERROR_MESSAGES['500'])
-        return route_gateway.get_error_template("/error", err, 500)
+        return gateway.get_error_template("/error", err, 500)
     return not_authorised()
     # return render_template("error.html", app_data=app_ui_config, error_data=err), 500
 

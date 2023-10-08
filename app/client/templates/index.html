@@ -6,7 +6,6 @@
 
     <body>
 
-
             <!-- Navbar Area -->
             {% include 'navbar.html' %}
 
@@ -20,117 +19,126 @@
 						<div class="card">
 							<div class="card-body">
 								<h3 class="card-title">
+                                    <i class="bi bi-binoculars"></i> &nbsp;
 									Overview
 									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
 									<span class="badge bg-secondary" style="font-size: x-small;"> "DEV" STAGE </span>
 								</h3>
 								<hr/>
 								<div class="home-page-desc">
-									<span> This page contains the summary overview data for the created projects. </span>
+									<span> This page contains the summary overview data for the existing projects/spaces. </span>
 								</div>
+
+                                <!-- Overview/Summary Cards -->
+                                <br/>
+                                <div class="row m-b-1 align-items-center">
+
+                                    {%if data['PROJECTS_LIST']|length >= 1 %}
+                                            <div class="col-md-2">
+                                                <div class="card">
+                                                  <div class="card-body">
+                                                    <h5 class="card-title"> Project Space </h5>
+                                                    <p class="card-text">
+                                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                                            {{ data['TOTAL_PROJECTS_COUNT'] }}
+                                                        <span class="badge bg-sm bg-success" style="font-size: x-small;"> {{data['TOTAL_ACTIVE_PROJECTS']}} Active </span>
+                                                        <span class="badge bg-secondary" style="font-size: x-small;"> {{data['TOTAL_ARCHIVED_PROJECTS']}} Archived </span>
+                                                        </span>
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="card">
+                                                  <div class="card-body">
+                                                    <h5 class="card-title"> Executions </h5>
+                                                    <p class="card-text">
+                                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                                            {{ data["TOTAL_EXECUTIONS_COUNT"] }}
+                                                        </span>
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="card">
+                                                  <div class="card-body">
+                                                    <h5 class="card-title"> TestCases </h5>
+                                                    <p class="card-text">
+                                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                                            {{data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"]}}
+                                                        </span>
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                            </div>
+
+                                            {%if (data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"]*100)|int > 0 %}
+
+                                            <div class="col-md-2">
+                                                <div class="card">
+                                                  <div class="card-body">
+                                                    <h5 class="card-title"> Avg Pass Rate </h5>
+                                                    <p class="card-text">
+                                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                                            {{ data["TC_PASSED_FROM_LATEST_EXECUTIONS"]|safe }}
+                                                            <span class="badge bg-success bg-sm" style="font-size: x-small;"> {{((data["TC_PASSED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|safe}}% </span>
+                                                        </span>
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="card">
+                                                  <div class="card-body">
+                                                    <h5 class="card-title"> Avg Fail Rate </h5>
+                                                    <p class="card-text">
+                                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                                            {{ data["TC_FAILED_FROM_LATEST_EXECUTIONS"] }}
+                                                            <span class="badge bg-danger bg-sm" style="font-size: x-small;"> {{((data["TC_FAILED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='ceil')|int|safe}}% </span>
+                                                        </span>
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="card">
+                                                  <div class="card-body">
+                                                    <h5 class="card-title"> Avg Skipped Rate </h5>
+                                                    <p class="card-text">
+                                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
+                                                            {{ data["TC_SKIPPED_FROM_LATEST_EXECUTIONS"] }}
+                                                            <span class="badge bg-warning bg-sm" style="font-size: x-small;"> {{((data["TC_SKIPPED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='ceil')|int|safe}}% </span>
+                                                        </span>
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            {%endif%}
+                                    {%else%}
+                                            <!-- Show no data, because data is empty -->
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <p>
+                                                            No projects data available yet, Crawler need to be executed.
+                                                        </p>
+                                                        <p>
+                                                            <a href="/run-jenkins-crawler" class="btn btn-outline-primary"> Run Jenkins Crawler </a>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                    {%endif%}
+                                </div>
+
+
 							</div>
 						</div>
 					</div>
 				</div> <br/><br/><br/>
 
-                <!-- Summary Cards -->
-                <div class="row m-b-1 align-items-center">
-
-                    {%if data['PROJECTS_LIST']|length >= 1 %}
-                            <div class="col-md-2">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h5 class="card-title"> Project Space </h5>
-                                    <p class="card-text">
-                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                            {{ data['TOTAL_PROJECTS_COUNT'] }}
-                                        <span class="badge bg-sm bg-success" style="font-size: x-small;"> {{data['TOTAL_ACTIVE_PROJECTS']}} Active </span>
-                                        <span class="badge bg-secondary" style="font-size: x-small;"> {{data['TOTAL_ARCHIVED_PROJECTS']}} Archived </span>
-                                        </span>
-                                    </p>
-                                  </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h5 class="card-title"> Executions </h5>
-                                    <p class="card-text">
-                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                            {{ data["TOTAL_EXECUTIONS_COUNT"] }}
-                                        </span>
-                                    </p>
-                                  </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h5 class="card-title"> TestCases </h5>
-                                    <p class="card-text">
-                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                            {{data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"]}}
-                                        </span>
-                                    </p>
-                                  </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h5 class="card-title"> Avg Pass Rate </h5>
-                                    <p class="card-text">
-                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                            {{ data["TC_PASSED_FROM_LATEST_EXECUTIONS"]|safe }}
-                                            <span class="badge bg-success bg-sm" style="font-size: x-small;"> {{((data["TC_PASSED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='floor')|safe}}% </span>
-                                        </span>
-                                    </p>
-                                  </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h5 class="card-title"> Avg Fail Rate </h5>
-                                    <p class="card-text">
-                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                            {{ data["TC_FAILED_FROM_LATEST_EXECUTIONS"] }}
-                                            <span class="badge bg-danger bg-sm" style="font-size: x-small;"> {{((data["TC_FAILED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='ceil')|int|safe}}% </span>
-                                        </span>
-                                    </p>
-                                  </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h5 class="card-title"> Avg Skipped Rate </h5>
-                                    <p class="card-text">
-                                        <span class="badge bg-light text-dark" style="font-size: x-large;">
-                                            {{ data["TC_SKIPPED_FROM_LATEST_EXECUTIONS"] }}
-                                            <span class="badge bg-warning bg-sm" style="font-size: x-small;"> {{((data["TC_SKIPPED_FROM_LATEST_EXECUTIONS"]/data["TOTAL_TESTCASES_FROM_LATEST_EXECUTIONS"])*100)|round(method='ceil')|int|safe}}% </span>
-                                        </span>
-                                    </p>
-                                  </div>
-                                </div>
-                            </div>
-                    {%else%}
-                            <!-- Show no data, because data is empty -->
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <p>
-                                            No projects data available yet, Crawler need to be executed.
-                                        </p>
-                                        <p>
-                                            <a href="/run-jenkins-crawler" class="btn btn-outline-primary"> Run Jenkins Crawler </a>
-                                        </p>
-                                    </div>
-
-                                </div>
-                            </div>
-                    {%endif%}
-                </div> <br/><br/>
 
                 <!-- Other data for overview -->
                 <div class="accordion" id="accordionExample">
@@ -146,40 +154,48 @@
                                   <!-- Show the table for all the available projects -->
                                     <table class="table table-sm table-hover"> <!-- table-bordered border-primary -->
                                           <thead class="table-group-divider">
-                                            <tr>
-<!--                                              <th scope="col">#</th>-->
-                                              <th scope="col">Projects</th>
-                                              <th scope="col">Created</th>
-                                              <th scope="col">Source</th>
-                                              <th scope="col">Status</th>
-                                              <th scope="col">Manage</th>
-                                            </tr>
+                                              <tr>
+                                                  <!-- <th scope="col">#</th>-->
+                                                  <th scope="col">Projects</th>
+                                                  <th scope="col">Tags</th>
+                                                  <th scope="col">Created</th>
+                                                  <th scope="col">Source</th>
+                                                  <th scope="col">Status</th>
+                                                  <th scope="col">Manage</th>
+                                              </tr>
                                           </thead>
                                           <tbody class="table-group-divider">
                                                 <!-- Loading all the projects available LATEST_EXECUTION_FOR_ACTIVE_PROJECTS -->
                                                 {%if data['PROJECTS_LIST']|length >= 1 %}
                                                     {% for project in data['PROJECTS_LIST'] %}
-                                                            <tr>
-<!--                                                              <th scope="row"> {{project["project_id"]}} </th>-->
+                                                          <tr>
+                                                              <!-- <th scope="row"> {{project["project_id"]}} </th>-->
                                                               <td scope="row"> {{project["PROJECT_NAME"]}} </td>
+                                                              <!-- <td> {{project["JENKINS_JOB_NAME"]}} </td> -->
+                                                              <td> {{project["TAGS"]}} </td>
                                                               <td> {{project["CREATED"]}} </td>
                                                               <td> {{project["DATA_SOURCE"]}} </td>
                                                               <td> {{project["STATUS"]}} </td>
                                                               <td>
-                                                                  <img src="{{url_for('static', filename='images/edit.svg')}}" alt="Edit" width="15px" data-bs-toggle="tooltip" title="Edit the project: {{project['project_name']}}"/>
-                                                                  <img src="{{url_for('static', filename='images/archive.svg')}}" alt="Archive" width="15px" data-bs-toggle="tooltip" title="Archive this project: {{project['project_name']}}"/>
+                                                                  <i onclick="makeRequestForProject('Making request');" class="bi bi-pencil" data-bs-toggle="tooltip" title="Edit this project {{project['PROJECT_NAME']}}"></i>
+                                                                  <i onclick="makeRequestForProject('/api/v1/delete-project', '{{project['PROJECT_NAME']}}');" class="bi bi-trash3" data-bs-toggle="tooltip" title="Delete this project {{project['PROJECT_NAME']}}"></i>
+                                                                  {%if project["STATUS"] == 'active' %}
+                                                                      <i onclick="makeRequestForProject('/api/v1/archive-project', '{{project['PROJECT_NAME']}}');" class="bi bi-archive" data-bs-toggle="tooltip" title="Archive this project {{project['PROJECT_NAME']}}"></i>
+                                                                  {%else%}
+                                                                      <i onclick="makeRequestForProject('/api/v1/activate-project', '{{project['PROJECT_NAME']}}');" class="bi bi-basket3" data-bs-toggle="tooltip" title="Activate this project {{project['PROJECT_NAME']}}"></i>
+                                                                  {%endif%}
                                                               </td>
-                                                            </tr>
+                                                          </tr>
                                                     {%endfor%}
                                                 {%else%}
-                                                    <!-- Show no data, because data is empty -->
+                                                    <!-- Show options to create new projects, because data is empty -->
                                                     <tr>
-                                                        <th scope="row" colspan="4"> No projects available yet, consider creating one </th>
-                                                        <td> <a href="/create-new-space" class="btn btn-outline-primary"> Create new space </a> </td>
+                                                        <th scope="row" colspan="6"> No projects available yet, consider creating one </th>
                                                     </tr>
                                                 {%endif%}
                                           </tbody>
                                         </table>
+                                        <a href="/create-project-space" class="btn btn-outline-primary"> Create new space </a>
                                 </div>
                             </div>
                       </div>
@@ -200,6 +216,7 @@
                                             <tr>
                                                 <!-- <th scope="col">#</th>-->
                                                 <th scope="col">Projects</th>
+                                                <!-- <th scope="col">Job Name</th> -->
                                                 <th scope="col">Source</th>
                                                 <th scope="col">Crawled Date</th>
                                                 <th scope="col">Results</th>
@@ -212,27 +229,36 @@
                                                         <tr>
                                                             <!-- <th scope="row"> {{project["project_id"]}} </th>-->
                                                             <td scope="row"> {{project["project_name"]}} </td>
+                                                            <!-- <td> {{project["jenkins_job_name"]}} </td> -->
                                                             <td> {{project["source"]}} </td>
                                                             <td> {{project["crawled_date"]}} </td>
                                                             <td> {{project["test_result"]}} </td>
                                                         </tr>
                                                     {%endfor%}
+
                                                 {%else%}
                                                     <!-- Show no data, because data is empty -->
                                                     <tr>
-                                                        <th scope="row" colspan="4"> No projects available yet, consider creating one </th>
-                                                        <td> <a href="/create-new-space" class="btn btn-outline-primary"> Create new space </a> </td>
+                                                        <th scope="row" colspan="5"> No projects available yet, consider running the jenkins crawler. </th>
                                                     </tr>
                                                 {%endif%}
                                         </tbody>
                                     </table>
-
+                                    <!-- We need to provide a link to run crawler here -->
+                                    <a href="#" class="btn btn-outline-primary" onclick="makeRequestForCrawler('/api/v1/run-jenkins-crawler');"> Run Jenkins Crawler Now </a>
                                 </div>
                             </div>
                       </div>
                 </div> <br/> <br/>
 
             </div>
+
+            <!-- Toast for page; also include the script to raise; Usage: raiseToast(msg); -->
+            {% include 'toast.html' %}
+
+            <!-- Custom script -->
+            <script src="{{url_for('static', filename='js/custom_script.js')}}"></script>
+            {% include 'toast.html' %}
 
             <!-- Page Footer Area -->
             {% include 'footer.html' %}
@@ -241,11 +267,12 @@
 
     <script>
 
-            /* To toggle the class for an element. x*/
-              function myFunction() {
-                  var element = document.body;
-                  element.classList.toggle("dark-mode");
-              }
+        /* To toggle the class for an element. x*/
+        function myFunction() {
+            var element = document.body;
+            element.classList.toggle("dark-mode");
+        }
+
     </script>
 
 </html>

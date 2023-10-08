@@ -21,5 +21,5 @@ app.secret_key = Configurations.APP_SECRET_KEY
 # ==========================================================================
 # Now, Importing server routes
 # ==========================================================================
-from app.server.routes import authentication, errors, controllers, apis
+from app.server.routes import authentication, errors, router, apis
 

@@ -22,6 +22,8 @@
 						<div class="card">
 							<div class="card-body">
 								<h3 class="card-title">
+                                    <i class="bi bi-clock-history"></i>
+                                    &nbsp;
 									Project Execution History
 									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
 									<span class="badge bg-secondary" style="font-size: x-small;"> "DEV" STAGE </span>
@@ -70,7 +72,7 @@
                                             <canvas style="display: none;" class="barChartCanvas" id="myBarChart_{{ key|replace(' ' , '')|replace('-' , '') }}" ></canvas>
 
                                             <!--  Line Chart for Execution time for each build Goes here --->
-                                            <canvas style="display: none; height: 50px;" class="barChartCanvas" id="myTimeLineChart_{{ key|replace(' ' , '')|replace('-' , '') }}" ></canvas>
+                                            <canvas height="50px" style="display: block; height: 50px;" class="barChartCanvas" id="myTimeLineChart_{{ key|replace(' ' , '')|replace('-' , '') }}" ></canvas>
 
                                         </p>
                                     </div>
@@ -84,13 +86,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title"> Project: DUMMY </h5>
-                                <span class="badge bg-light text-dark"> Report Date: dummy </span>
-                                <span class="badge bg-light text-dark"> Summary: dummy </span>
-                                <span class="badge bg-dark" onclick="" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Bar/Doughnut Charts"> Charts </span>
+                                <span class="badge bg-light text-dark"> Report Date: Today </span>
+                                <span class="badge bg-light text-dark"> Summary: DUMMY </span>
+                                <span class="badge bg-dark" onclick="toggleDummyChart();" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle Show/Hide for dummy Chart"> Toggle Dummy chart view </span>
                                 <br/>
                                 <p class="card-text">
                                     <!-- Time series Line Chart Goes here --->
-                                    <canvas style="display: block;" class="barChartCanvas" id="dummy_lineChart"></canvas>
+                                    <canvas style="display: none;" class="barChartCanvas" id="dummy_lineChart"></canvas>
                                 </p>
 
                                 <!-- Controls for Chart -->
@@ -486,6 +488,15 @@
         }
     }
 
+    /* Toggle Dummy chart */
+    function toggleDummyChart(){
+        var chart_element = document.getElementById("dummy_lineChart");
+        if(chart_element.style.display == 'none'){
+            chart_element.style.display = 'block';
+        } else {
+            chart_element.style.display = 'none';
+        }
+    }
 
     /* Toggle function for the charts fill */
     /*

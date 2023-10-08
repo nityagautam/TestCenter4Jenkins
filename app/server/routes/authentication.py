@@ -15,14 +15,14 @@ from app.server.routes import Gateway
 # Create an object for gateway;
 # And entire app will use this object by importing
 # It deals with Authentications, Session, UserDB
-route_gateway = Gateway()
+gateway = Gateway()
 
 
 @application.route('/', methods=['POST', 'GET'])
 def root():
     if not session.get('logged_in'):
         print('>>> User is not authorised: ', session.get('logged_in'))
-        return render_template("login.html", data="Any message on the login page")
+        return render_template("login.html", ui_config={"APP_META": UIConfigurations.APP_META, "ROUTES": UIConfigurations.ROUTES}, data="Any message on the login page")
     else:
         print('>>> User is authorised, let in')
         return redirect('/home')
@@ -33,10 +33,10 @@ def login():
     # Check requests for the form login
     if request.method == 'POST':
         print(f">>> Login request came with [User : '{request.form['username']}', Password: '{request.form['username']}']")
-        if route_gateway.is_valid_user(request.form["username"], request.form['password']):
+        if gateway.is_valid_user(request.form["username"], request.form['password']):
             print(f'>>> Login Accepted for user: {request.form["username"]}')
             session['logged_in'] = True
-            # Currently supporting single user login at a ginven time
+            # Since, session is a cookie stored in the client computer so multi user can login
             session['user'] = request.form['username']
             return redirect('/home')
         else:
@@ -51,7 +51,7 @@ def login():
 
 @application.route("/logout", methods=['POST', 'GET'])
 def logout():
-    route_gateway.logout_from_session(request.args.get('username'))
+    gateway.logout_from_session(request.args.get('username'))
     flash(UIConfigurations.ERROR_MESSAGES['USER_LOGGED_OUT'])
     return root()
     # return "Logged out"

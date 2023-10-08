@@ -7,6 +7,7 @@ from app.server.dbase.DBAccess import DBAccess
 class Gateway(UIConfigurations):
     def __init__(self):
         # - Fetch users list
+        self.db_access_obj = None
         self.user_lists = None
 
     # Fetch users from DB
@@ -14,7 +15,11 @@ class Gateway(UIConfigurations):
     def get_users_from_db(self):
         try:
             if not self.user_lists:
-                self.user_lists = DBAccess().fetch_users()
+                if self.db_access_obj:
+                    self.user_lists = self.db_access_obj.fetch_users()
+                else:
+                    self.db_access_obj = DBAccess()
+                    self.user_lists = self.db_access_obj.fetch_users()
             return self.user_lists
         except Exception as e:
             print(e)
@@ -33,7 +38,7 @@ class Gateway(UIConfigurations):
 
     def logout_from_session(self, username):
         session['logged_in'] = False
-        session.pop('username', None)
+        session.pop(username, None)
         return True
 
     # Get the UI Configurations (for templates)

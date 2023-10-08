@@ -120,7 +120,10 @@ class HTMLGenerator:
 # --------------------------
 if __name__ == "__main__":
     #initiate the squish xml file crawlers
-    dict_output = SquishXMLParser('C:\\Users\\mishra.ashutosh\\Downloads\\TC1\\2020-04-07T16-40-13+0530\\results.xml').initialize()
+    #dict_output = SquishXMLParser('C:\\Users\\mishra.ashutosh\\Downloads\\TC1\\2020-04-07T16-40-13+0530\\results.xml').initialize()
     #print(">>> For XML file, dict/json has been generated: \n\n", json.dumps(dict_output) )
-    html_output = HTMLGenerator(dict_data=dict_output).generate(output_file_name='index.html')
+    #html_output = HTMLGenerator(dict_data=dict_output).generate(output_file_name='index.html')
     #print(">>> Generated HTML: \n\n", html_output )
+    dict_output = SquishXMLParser('./results.xml')
+    html_output = HTMLGenerator(dict_data=dict_output).generate(output_file_name='index.html')
+    

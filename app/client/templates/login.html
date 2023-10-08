@@ -1,183 +1,221 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Login page for Report Dashboard">
-    <meta name="author" content="amishra@perforce.com">
-    <meta name="generator" content="amishra@perforce.com">
-    <link rel="icon" href="{{url_for('static', filename='images/logo.svg')}}">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="Login page for Report Dashboard" name="description">
+    <meta content="amishra@perforce.com" name="author">
+    <meta content="amishra@perforce.com" name="generator">
+    <link href="{{url_for('static', filename='images/logo.svg')}}" rel="icon">
     <!-- Using Bootstrap v5.3 -->
     <title>Signin-Dashboard</title>
-    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
     <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='css/sign-in.css')}}" rel="stylesheet">
-  </head>
+    <!-- Custom stylesheet-->
+    <link href="{{url_for('static', filename='css/custom-style.css')}}" rel="stylesheet">
 
-  <body class="text-center">
+    <!-- bootstrap icons from cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <div class="container">
-        <main class="form-signin w-200 m-auto main-form-with-border">
-          <form class="col-sm-12" action="/login" method="POST">
-<!--            <i class="bi bi-person-circle bi-10x " style="font-size: 2.5em !important; height: 100px; width: 100px; display: block; background:DodgerBlue;"></i>-->
-            <img class="mb-6" src="{{url_for('static', filename='images/person-circle.svg')}}" alt="Report Dashboard" tooltip="Report Dashboard" width="72" height="57">
+    <!-- Bootstrap scripts -->
+    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+</head>
+
+<body class="text-center">
+
+<!-- Navigation Bar -->
+<nav class="navbar fixed-top navbar-expand-lg" style="background: #34495e;">
+    <div class="container-fluid">
+
+        <a class="navbar-brand orange-font" href="/" style=""> {{ ui_config['APP_META']['app_title'] }} </a>
+
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <main class="form-signin w-200 m-auto main-form-with-border">
+        <form action="/login" class="col-sm-12" method="POST">
+            <!--            <i class="bi bi-person-circle bi-10x " style="font-size: 2.5em !important; height: 100px; width: 100px; display: block; background:DodgerBlue;"></i>-->
+            <img alt="Report Dashboard" class="mb-6" height="57"
+                 src="{{url_for('static', filename='images/person-circle.svg')}}" tooltip="Report Dashboard" width="72">
             <h1 class="h3 mb-4 fw-normal">Sign-in</h1>
 
             <p style="color: red;"> {{get_flashed_messages()[0]}} </p>
             <div class="form-floating">
-              <input type="username" class="form-control" id="floatingInput" name="username" placeholder="username">
-              <label for="floatingInput">Username</label>
+                <input class="form-control" id="floatingInput" name="username" placeholder="username" type="username">
+                <label for="floatingInput">Username</label>
             </div>
+            <br/>
             <div class="form-floating">
-              <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
-              <label for="floatingPassword">Password</label>
+                <input class="form-control" id="floatingPassword" name="password" placeholder="Password"
+                       type="password">
+                <label for="floatingPassword">Password</label>
             </div>
 
             <div class="checkbox mb-3">
-              <label>
-                <input type="checkbox" value="remember-me"> Remember me
-              </label>
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-          </form>
+        </form>
 
-        </main>
+    </main>
 
-        <!-- SPACE FOR TOASTER -->
-        <div>
-            <br/>
-            <p class="mt-5 mb-3 text-muted"> If you want to create your own account, then plz contact to admin. </p>
-            <hr/>
-            <button type="button" class="btn btn-secondary" id="liveToastBtn"> Check for Notice </button>
-            <button type="button" class="btn btn-secondary" id="viewSlides"> About application </button>
+    <!-- SPACE FOR TOASTER -->
+    <div>
+        <br/>
+        <p class="mt-5 mb-3 text-muted"> If you want to create your own account, then plz contact to admin. </p>
+        <hr/>
+        <button class="btn btn-secondary" id="liveToastBtn" type="button"> Check for Notice</button>
+        <button class="btn btn-secondary" id="viewSlides" type="button"> About application</button>
 
-            <!-- Toast with Header [Good for the message with context and icon(ofcourse keep ur icon small)] -->
-            <div class="toast-container position-fixed bottom-0 end-0 p-3">
-              <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <!-- Toast with Header [Good for the message with context and icon(ofcourse keep ur icon small)] -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div aria-atomic="true" aria-live="assertive" class="toast" id="liveToast" role="alert">
                 <div class="toast-header">
-                  <img src="{{url_for('static', filename='images/logo.svg')}}" class="rounded me-1" alt="...">
-                  <strong class="me-auto"> Info </strong>
-                  <small> &nbsp; </small>
-                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <img alt="..." class="rounded me-1" src="{{url_for('static', filename='images/logo.svg')}}">
+                    <strong class="me-auto"> Info </strong>
+                    <small> &nbsp; </small>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="toast" type="button"></button>
                 </div>
                 <div class="toast-body">
-                  Default login credential is amishra/user
+                    Default login credential is amishra/user
                 </div>
-              </div>
-            </div>
-
-            <!-- Toast without Header [Good for just msg flash] -->
-            <div  id="liveToast1" class="toast position-fixed bottom-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="d-flex">
-                <div class="toast-body">
-                  Hi! Default login credential is amishra/user
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-              </div>
             </div>
         </div>
 
-        <!-- Space for slide presentation about the page -->
-        <hr/><br/><br/>
-        <div id="slidePresentation" style="display: none; background: gray;">
-                <div id="carouselExampleCaptions" class="carousel slide">
-                  <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                  </div>
-                  <div class="carousel-inner">
-                    <div class="carousel-item active">
-                      <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">
-                      <div class="carousel-caption d-none d-md-block">
-                        <h5>First slide label</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
-                      </div>
-                    </div>
-                    <div class="carousel-item">
-                      <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">
-                      <div class="carousel-caption d-none d-md-block">
-                        <h5>Second slide label</h5>
-                        <p>Some representative placeholder content for the second slide.</p>
-                      </div>
-                    </div>
-                    <div class="carousel-item">
-                      <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">
-                      <div class="carousel-caption d-none d-md-block">
-                        <h5>Third slide label</h5>
-                        <p>Some representative placeholder content for the third slide.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                  </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                  </button>
+        <!-- Toast without Header [Good for just msg flash] -->
+        <div aria-atomic="true" aria-live="assertive" class="toast position-fixed bottom-0 end-0" id="liveToast1"
+             role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Hi! Default login credential is amishra/user
                 </div>
-
-<!--            <div id="carouselExample" class="carousel slide">-->
-<!--              <div class="carousel-inner">-->
-<!--                <div class="carousel-item active">-->
-<!--                  <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">-->
-<!--                </div>-->
-<!--                <div class="carousel-item">-->
-<!--                  <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">-->
-<!--                </div>-->
-<!--                <div class="carousel-item">-->
-<!--                  <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">-->
-<!--                <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
-<!--                <span class="visually-hidden">Previous</span>-->
-<!--              </button>-->
-<!--              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">-->
-<!--                <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
-<!--                <span class="visually-hidden">Next</span>-->
-<!--              </button>-->
-<!--            </div>-->
+                <button aria-label="Close" class="btn-close me-2 m-auto" data-bs-dismiss="toast" type="button"></button>
+            </div>
         </div>
-
     </div>
 
+    <!-- Space for slide presentation about the page -->
+    <hr/>
+    <br/><br/>
+    <div id="slidePresentation" style="display: none; background: gray;">
+        <div class="carousel slide" id="carouselExampleCaptions">
+            <div class="carousel-indicators">
+                <button aria-current="true" aria-label="Slide 1" class="active" data-bs-slide-to="0"
+                        data-bs-target="#carouselExampleCaptions" type="button"></button>
+                <button aria-label="Slide 2" data-bs-slide-to="1" data-bs-target="#carouselExampleCaptions"
+                        type="button"></button>
+                <button aria-label="Slide 3" data-bs-slide-to="2" data-bs-target="#carouselExampleCaptions"
+                        type="button"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img alt="..." class="d-block w-100" src="{{url_for('static', filename='images/logo.svg')}}">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>First slide label</h5>
+                        <p>Some representative placeholder content for the first slide.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img alt="..." class="d-block w-100" src="{{url_for('static', filename='images/logo.svg')}}">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Second slide label</h5>
+                        <p>Some representative placeholder content for the second slide.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img alt="..." class="d-block w-100" src="{{url_for('static', filename='images/logo.svg')}}">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Third slide label</h5>
+                        <p>Some representative placeholder content for the third slide.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleCaptions"
+                    type="button">
+                <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleCaptions"
+                    type="button">
+                <span aria-hidden="true" class="carousel-control-next-icon"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
 
-  </body>
-    <script>
-        const toastTrigger = document.getElementById('liveToastBtn');
-        const toastLiveExample = document.getElementById('liveToast1');
-        // Default view
+        <!--            <div id="carouselExample" class="carousel slide">-->
+        <!--              <div class="carousel-inner">-->
+        <!--                <div class="carousel-item active">-->
+        <!--                  <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">-->
+        <!--                </div>-->
+        <!--                <div class="carousel-item">-->
+        <!--                  <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">-->
+        <!--                </div>-->
+        <!--                <div class="carousel-item">-->
+        <!--                  <img src="{{url_for('static', filename='images/logo.svg')}}" class="d-block w-100" alt="...">-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">-->
+        <!--                <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+        <!--                <span class="visually-hidden">Previous</span>-->
+        <!--              </button>-->
+        <!--              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">-->
+        <!--                <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+        <!--                <span class="visually-hidden">Next</span>-->
+        <!--              </button>-->
+        <!--            </div>-->
+    </div>
+
+</div>
+
+
+</body>
+<script>
+    const toastTrigger = document.getElementById('liveToastBtn');
+    const toastLiveExample = document.getElementById('liveToast1');
+    // Default view
+    const toast = new bootstrap.Toast(toastLiveExample);
+    toast.show();
+
+    // Trigger the toast for click event based on some button
+    if (toastTrigger) {
+      toastTrigger.addEventListener('click', () => {
         const toast = new bootstrap.Toast(toastLiveExample);
         toast.show();
+      })
+      console.log('toast got executed...');
+    }
 
-        // Trigger the toast for click event based on some button
-        if (toastTrigger) {
-          toastTrigger.addEventListener('click', () => {
-            const toast = new bootstrap.Toast(toastLiveExample);
-            toast.show();
-          })
-          console.log('toast got executed...');
+    // Activate the slide presentation
+    const slideTrigger = document.getElementById('viewSlides');
+    const slideContainer = document.getElementById('slidePresentation');
+    // Trigger the toast for click event based on some button
+    if (slideTrigger) {
+      slideTrigger.addEventListener('click', () => {
+        console.log('Slide Click got executed...');
+        if(slideContainer.style.display === 'none'){
+              slideContainer.style.display = 'block';
+        } else {
+              slideContainer.style.display = 'none';
         }
-
-        // Activate the slide presentation
-        const slideTrigger = document.getElementById('viewSlides');
-        const slideContainer = document.getElementById('slidePresentation');
-        // Trigger the toast for click event based on some button
-        if (slideTrigger) {
-          slideTrigger.addEventListener('click', () => {
-            console.log('Slide Click got executed...');
-            if(slideContainer.style.display === 'none'){
-                  slideContainer.style.display = 'block';
-            } else {
-                  slideContainer.style.display = 'none';
-            }
-          })
-        }
+      })
+    }
 
 
-    </script>
+</script>
 </html>

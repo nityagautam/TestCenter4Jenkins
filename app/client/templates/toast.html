@@ -1,0 +1,39 @@
+            <!-- SPACE FOR TOASTER -->
+            <div>
+                <!-- Toast with Header [Good for the message with context and icon(ofcourse keep ur icon small)] -->
+                <div class="toast-container position-fixed top-0 end-0 p-3">
+                    <div aria-atomic="true" aria-live="assertive" class="toast" id="liveToast" role="alert">
+                        <div class="toast-header" style="background: #34495e; color: orange;">
+                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Information"></i>
+                            <strong class="me-auto"> &nbsp; Information </strong>
+                            <small> Just now </small>
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="toast" type="button" style="color: orange;">
+                                <!-- <span aria-hidden="true">&times;</span> -->
+                            </button>
+                        </div>
+                        <div class="toast-body" id="toastMsgBody">
+                            THIS IS TOAST MESSAGE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                /* Raise a toast message */
+                function raiseToast(msg) {
+                    // Toaster element
+                    const liveToast = document.getElementById('liveToast');
+
+                    // Toast body message element
+                    const toastMsg = document.getElementById('toastMsgBody');
+
+                    // Raise and Show
+                    toastMsg.innerText = msg;
+                    const toast = new bootstrap.Toast(liveToast);
+                    toast.show();
+                }
+
+                // HOW TO USE TOAST
+                // raiseToast("Hi, I am a toast message");
+                // raiseToast("I am alive now.");
+            </script>

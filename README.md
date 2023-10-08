@@ -1,13 +1,18 @@
 ### Reporting Dashboard v2.0
 <hr/>
 
+###### TODO LIST
+- Verify Project name while creation
+- Delete Project
+- Edit Project
+
 ###### Screenshots
 1- Overview page
-![Overview page screenshot](./Screenshot-overview-page.png)
+![Overview page screenshot](./app/client/static/images/app_screenshots/Screenshot-overview-page.png)
 2- Dashboard page
-![Dashboard page screenshot](./Screenshot-dashboard-page.png)
-3- Hostory page
-![History page screenshot](./Screenshot-History-Page.png)
+![Dashboard page screenshot](./app/client/static/images/app_screenshots/Screenshot-dashboard-page.png)
+3- History page
+![History page screenshot](./app/client/static/images/app_screenshots/Screenshot-History-Page.png)
 
 ###### Description
 It is the combination of few services which gets/crawls the reports and manage the report on the disk as well as in to the database; it keeps cleaning the old records and keeps last 20-30(as configured) records.
@@ -17,7 +22,7 @@ It is the combination of few services which gets/crawls the reports and manage t
 # ReportDashboard
 #               \____ app                           # This is the application source dir
 #                   |____ client
-#                       |____ static                # This contains all the static sources like: js, css
+#                       |____ static                # This contains all the static sources like: js, css, images, etc
 #                       |____ templates             # This contains all the HTML source files
 #
 #                   |____ server
@@ -77,8 +82,10 @@ Just clone the repo/code and install the requirements;
 <!-- Do not Edit below this line -->
 <hr/>
 
-###### Other things
-Simply goes here
+###### Bootstrap Resources
+- Icons: https://icons.getbootstrap.com/
+- Elements: 
+- etc:
 
 
 ###### Template Rendering args
