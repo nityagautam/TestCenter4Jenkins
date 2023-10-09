@@ -1,0 +1,14 @@
+<!--
+Page Footer
+==================
+- Expecting 'ui_configuration' object (aka app_data=ui_configuration); Refer app/server/config/ui_configurations.py for more.
+
+-->
+            <div class="footer">
+                <hr/>
+                <span class="badge rounded-pill text-bg-dark"> Built with Python3+Flask+Bootstrap5.3 </span>
+				<span class="badge rounded-pill text-bg-dark"> Author: {{ui_config['APP_META']['app_author']}} </span>
+				<span class="badge rounded-pill text-bg-dark"> Version: {{ui_config['APP_META']['app_version']}} </span>
+                <span class="badge rounded-pill text-bg-dark"> Build: [{{ui_config['APP_META']['app_experimental_tag']}}]</span>
+                <hr/>
+            </div>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+
+
+                <!-- Give some initial brief/info "table-hover table-group-divider" -->
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"> {{get_flashed_messages()[0]}} </h5>
+                            <p class="card-text">
+							  	<code> {{ error_data }} </code>
+                            </p>
+                            <p class="card-text">
+								<a href="/" class="btn btn-outline-primary"> Navigate back to Home </a>
+                            </p>
+                          </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
+
+            </div>
+
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
+
+    </body>
+
+    <script>
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
+
+</html>

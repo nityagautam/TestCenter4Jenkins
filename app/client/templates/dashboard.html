@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+    <head>
+        <!-- scripts: Chart libs -->
+            <!-- Older Chart <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>-->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content '-fluid' Area -->
+            <div class="container">
+                <br/><br/><br/><br/> <!-- Important to not start from very top, hence breaking for 4 lines. -->
+
+                <div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">
+                                    <i class="bi bi-speedometer2"></i> &nbsp;
+									Dashboard View
+									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
+									<span class="badge bg-secondary" style="font-size: x-small;"> "DEV" STAGE </span>
+								</h3>
+								<hr/>
+								<div class="home-page-desc">
+									<span> This page contains all the execution history for the created projects. </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> <br/><br/><br/>
+
+
+                <!-- Summary view card -->
+                <div class="row m-b-1 align-items-center">
+
+                    <!-- Loading all the projects available -->
+                    {%if data|length >= 1 %}
+                        {% for project in data %}
+                            <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="card custom-card">
+
+                                    <!-- Card header with basic info goes here -->
+                                    <div class="card-body">
+                                        <h5 class="card-title"> {{ project['project_name'] }} </h5>
+                                        <!-- <p class="card-text"> </p> -->
+                                        <span class="badge bg-light text-dark" id="reportDate_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"> Dated: {{ project['crawled_date'] }} </span>
+                                        <!-- <span class="badge bg-light text-dark"> Summary: </span> -->
+                                        {%if (project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count'])|int > 0 %}
+                                            <span class="badge bg-success" data-bs-toggle="tooltip" title="{{ ((project['test_result']['pass_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are passing.">           {{ ((project['test_result']['pass_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% Pass </span>
+                                            <span class="badge bg-danger" data-bs-toggle="tooltip" title="{{ ((project['test_result']['fail_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are failing.">            {{ ((project['test_result']['fail_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='ceil')|int }}% Fail </span>
+                                            <span class="badge bg-secondary" data-bs-toggle="tooltip" title="{{ ((project['test_result']['skip_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='floor')|int }}% tests are Skipped">         {{ ((project['test_result']['skip_count']*100)/(project['test_result']['pass_count']+project['test_result']['fail_count']+project['test_result']['skip_count']))|round(method='ceil')|int }}% Skipped </span>
+                                        {%endif%}
+                                    </div>
+
+                                    <!-- Here goes our charts -->
+                                    <hr style="margin: 0px; padding: 0;"/>
+                                    <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">
+                                        <canvas style="display: block;" class="doughnutChartCanvas" id="doughnutChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                        <canvas style="display: none;" class="barChartCanvas" id="barChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                    </div>
+
+                                    <!--  Controls goes here -->
+                                    <hr style="margin: 0px; padding: 0;"/>
+                                    <div class="card-body">
+                                        <span class="badge bg-light text-dark"> Actions: </span>
+                                        <span class="badge bg-dark" onclick="alert(' Trends/History not available yet.');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Browse history"> History </span>
+                                        <span class="badge bg-light text-dark"> || </span>
+                                        <span class="badge bg-dark" onclick="location.href='{{project['jenkins_job_build_url']|safe}}';" style="cursor: pointer;" data-bs-toggle="tooltip" title="Browse the build/report"> Browse Jenkins </span>
+                                        <span class="badge bg-light text-dark"> || </span>
+                                        <span class="badge bg-dark" onclick="toggleCharts('{{ project.project_name|replace(' ' , '')|replace('-' , '') }}');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Line/Doughnut Charts"> Toggle Chart </span>
+                                    </div>
+
+                                </div>
+                                <br/>
+                            </div>
+
+                            <!-- Adding javascript for the data fulfil/process in the card -->
+                            <script>
+                                var ele = document.getElementById("reportDate_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}");
+                                ele.innerText = "Dated: " + new Date({{project['jenkins_job_build_timestamp']|safe}}).toDateString();
+                                // ele.innerText = "Dated: " + new Date("{{project['crawled_date']|safe}}").toDateString() ;
+                                // console.log("Replacing report date for :: {{ project.project_name|replace(' ' , '')|replace('-' , '') }}");
+                            </script>
+
+                        {%endfor%}
+                    {%else%}
+                            <!-- Show no data, because data is empty -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>
+                                            No execution available yet, consider running the crawler now.
+                                        </p>
+                                        <p>
+                                            <a href="/run-jenkins-crawler" class="btn btn-outline-primary"> Run Jenkins Crawler </a>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                    {%endif%}
+                </div> <br/><br/>
+
+            </div> <!-- End of the container -->
+
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
+
+    </body>
+
+    <script type="text/javascript">
+        function toggleCharts(projectId){
+            var barChartCanvas = document.getElementById("barChart_"+projectId)
+            var doughnutChartCanvas = document.getElementById("doughnutChart_"+projectId)
+            if(barChartCanvas.style.display == 'none'){
+                barChartCanvas.style.display = 'block';
+                doughnutChartCanvas.style.display = 'none';
+            } else {
+                barChartCanvas.style.display = 'none';
+                doughnutChartCanvas.style.display = 'block';
+            }
+        }
+    </script>
+
+    <!-- Javascript actions for charts -->
+    {%if data|length >= 1 %}
+        {% for project in data %}
+            <script type="text/javascript">
+
+                  /*
+                    ======================================
+                    For the Bar chart
+                    ======================================
+                  */
+                  var ctx = document.getElementById("barChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                  var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [
+                                {% for keys, val in project['test_result'].items() %}
+                                "{{ keys.split('_')[0]|safe }}",
+                                {% endfor %}
+                            ],
+                            datasets: [
+                                        {
+                                        /* label: ['PASS','FAIL', 'SKIP'], */
+                                        data: [
+                                            {% for keys, val in project['test_result'].items() %}
+                                            {{ val }},
+                                            {% endfor %}
+                                        ],
+                                        fill: true,
+                                        borderColor:[
+                                          "rgb(60,186,159,1.0)",
+                                          "rgb(196,88,80,1.0)",
+                                          "rgb(255,165,0,1.0)",
+                                          "rgb(108,117,125,1.0)",
+                                          "rgb(100,107,105,1.0)",
+                                        ],
+                                        backgroundColor: [
+                                          "rgb(60,186,159,0.7)",
+                                          "rgb(196,88,80,0.7)",
+                                          "rgb(255,165,0,0.7)",
+                                          "rgb(108,117,125,0.7)",
+                                          "rgb(100,107,105,0.7)",
+                                        ],
+                                        borderWidth: 2,
+                                        borderRadius: 5,
+                                        borderSkipped: false,
+                            }]
+                        },
+                        options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display:false,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'LATEST TEST RESULT'
+                                    },
+                                    colors: {
+                                      enabled: true
+                                    },
+                                    tooltip: {
+                                        mode: 'index'
+                                    },
+                                },
+                                scales: {
+                                    y: {
+                                        display: true,
+                                        beginAtZero: true
+                                    },
+                                    x: {
+                                        display: true,
+                                    }
+                                }
+                        }
+                  });
+
+                  /*
+                    ======================================
+                    For the Doughnut chart
+                    ======================================
+                  */
+                  var ctx = document.getElementById("doughnutChart_{{ project.project_name|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                  var myChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: [
+                                {% for keys, val in project.test_result.items() %}
+                                "{{ keys.split('_')[0]|safe }}",
+                                {% endfor %}
+                            ],
+                            datasets: [{
+                                        data: [
+                                            {% for keys, val in project.test_result.items() %}
+                                            {{ val }},
+                                            {% endfor %}
+                                        ],
+                                        backgroundColor: [
+                                          "rgb(60,186,159,0.7)",
+                                          "rgb(196,88,80,0.7)",
+                                          "rgb(255,165,0,0.7)",
+                                          "rgb(108,117,125,0.7)",
+                                          "rgb(100,107,105,0.7)",
+                                        ],
+                                        borderWidth: 2,
+                                        borderRadius: 5,
+                                        borderSkipped: false,
+                            }]
+                        },
+                        options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                aspectRatio: 2,
+                                cutout: "50%", /* Maybe in new version of chart instead of cutoutPercentage */
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'LATEST TEST RESULT'
+                                    },
+                                    colors: {
+                                      enabled: true
+                                    },
+
+                                },
+                                scales: {
+                                        x: {
+                                            display: false,
+                                        },
+                                        y: {
+                                            display: false,
+                                        },
+                                }
+                        }
+
+                  });
+            </script>
+        {%endfor%}
+    {%endif%}
+
+    <script>
+            // Once dom is loaded
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
+
+</html>

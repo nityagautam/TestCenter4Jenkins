@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js" integrity="sha512-wUYbRPLV5zs6IqvWd88HIqZU/b8TBx+I8LEioQ/UC0t5EMCLApqhIAnUg7EsAzdbhhdgW07TqYDdH3QEXRcPOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content Area -->
+            <div class="container container-lg container-xl">
+                <br/><br/><br/><br/>  <!-- Important to not start from very top, hence breaking for 4 lines. -->
+
+                <div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">
+                                    <i class="bi bi-clock-history"></i>
+                                    &nbsp;
+									Project Execution History
+									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
+									<span class="badge bg-secondary" style="font-size: x-small;"> "DEV" STAGE </span>
+								</h3>
+								<hr/>
+								<div class="home-page-desc">
+									<span> This page contains all the execution history for the created projects. </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> <br/><br/><br/>
+
+                <!--
+                    ---------------------------------------
+                    Card for trends
+                    ---------------------------------------
+                -->
+                <div class="row m-b-1 align-items-center">
+                    <!-- REAL DATA -->
+                    {%if data|length >= 1 %}
+                        {% for key in data %}
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">
+                                        <h5 class="card-title"> Project: {{key}} </h5>
+                                        <span class="badge bg-light text-dark"> Data: last {{data[key]|length}} executions </span>
+                                        <span class="badge bg-light text-dark"> Actions: </span>
+                                        <!-- Chart controls -->
+                                        <span id="link_{{key|replace(' ' , '')|replace('-' , '')}}" class="badge bg-dark" onclick="alert('Redirecting to jenkins ...');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Browse Jenkins for this project"> Browse Jenkins </span>
+                                        <span class="badge bg-light text-dark"> || </span>
+                                        <span class="badge bg-dark" onclick="alert('Not available now.')" style="cursor: pointer;" data-bs-toggle="tooltip" title="Explore this project in different view"> Explore project </span>
+                                        <span class="badge bg-light text-dark"> || </span>
+                                        <span class="badge bg-dark" onclick="toggleCharts('{{ key|replace(' ' , '')|replace('-' , '') }}')" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle between Stacked-Line/Stacked-Bar Charts"> Toggle Chart </span>
+                                        <span class="badge bg-light text-dark"> || </span>
+                                        <span class="badge bg-dark" onclick="toggleExecutionTimeLineChart('{{ key|replace(' ' , '')|replace('-' , '') }}')" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle execution time Chart"> Toggle Execution Time Chart </span>
+                                    </div>
+                                    <hr style="margin: none; padding: 0;"/>
+                                    <div class="card-body align-items-center" style="/* Lets don't set H/W; height:40vh; width:42vw; */">
+                                        <p class="card-text">
+                                            <!--
+                                            {{data[key]}} <br/>
+                                            -->
+                                            <!-- Execution result Line/Bar Chart Goes here --->
+                                            <canvas style="display: block;" class="lineChartCanvas" id="myLineChart_{{ key|replace(' ' , '')|replace('-' , '') }}"></canvas>
+                                            <canvas style="display: none;" class="barChartCanvas" id="myBarChart_{{ key|replace(' ' , '')|replace('-' , '') }}" ></canvas>
+
+                                            <!--  Line Chart for Execution time for each build Goes here --->
+                                            <canvas height="50px" style="display: block; height: 50px;" class="barChartCanvas" id="myTimeLineChart_{{ key|replace(' ' , '')|replace('-' , '') }}" ></canvas>
+
+                                        </p>
+                                    </div>
+                                </div> <br/>
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+
+                    <!-- DUMMY DATA -->
+                    <div class="col-md-12 col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"> Project: DUMMY </h5>
+                                <span class="badge bg-light text-dark"> Report Date: Today </span>
+                                <span class="badge bg-light text-dark"> Summary: DUMMY </span>
+                                <span class="badge bg-dark" onclick="toggleDummyChart();" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle Show/Hide for dummy Chart"> Toggle Dummy chart view </span>
+                                <br/>
+                                <p class="card-text">
+                                    <!-- Time series Line Chart Goes here --->
+                                    <canvas style="display: none;" class="barChartCanvas" id="dummy_lineChart"></canvas>
+                                </p>
+
+                                <!-- Controls for Chart -->
+                                <span class="badge bg-dark" onclick="toggleFill('PASS');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the PASS series"> Toggle Fill for PASS </span>
+                                <span class="badge bg-dark" onclick="toggleFill('FAIL');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the FAIL series"> Toggle Fill for FAIL </span>
+                                <span class="badge bg-dark" onclick="toggleFill('SKIPPED');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the SKIPPED series"> Toggle Fill for SKIPPED </span>
+                            </div>
+                        </div> <br/>
+                    </div>
+
+                </div> <br/><br/>
+
+
+            </div> <!-- End of the container -->
+
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
+
+    </body>
+
+    <script>
+
+    /*
+    * Generating stacked multi-line/multi-bar charts for execution history
+    * ==========================================================================
+    */
+
+    // Adding this variable to add the delay animation into bar chart.
+    let delayed;
+
+    {%if data|length >= 1 %}
+        {% for key in data %}
+
+                // Setting the jenkins url link
+                var btn_link = document.getElementById("link_{{key|replace(' ' , '')|replace('-' , '')}}")
+                {% for obj in data[key] %}
+                    btn_link.addEventListener('click',function(){
+                        location.href = '{{obj['jenkins_job_build_url']|safe}}';
+                    });
+                {% endfor %}
+
+                // THIS IS FOR STACKED MULTI-LINE CHART
+                // ----------------------------------------
+                var ctx = document.getElementById("myLineChart_{{ key|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                var myLineChart_{{ key|replace(' ' , '')|replace('-' , '') }} = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [ /* Adding date series as X label; with 'Date String' */
+                            {% for obj in data[key] %}
+                                new Date({{obj['jenkins_job_build_timestamp']|safe}}).toDateString(),
+                            {% endfor %}
+                        ],
+                        datasets: [
+                                    {
+                                        label: 'PASS',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['pass_count']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        tension: 0.5,
+                                        fill: true,
+                                        borderColor: [ "rgb(60,186,159,1.0)" ],
+                                        backgroundColor: [ "rgb(60,186,159,0.7)" ],
+                                    },
+                                    {
+                                        label: 'FAIL',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['fail_count']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        tension: 0.5,
+                                        fill: true,
+                                        borderColor: [ "rgb(196,88,80,1.0)" ],
+                                        backgroundColor: [ "rgb(196,88,80,0.7)" ],
+                                    },
+                                    {
+                                        label: 'SKIPPED',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['skip_count']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 0.7,
+                                        tension: 0.5,
+                                        fill: true,
+                                        borderColor: [ "rgb(108,117,125,1.0)" ],
+                                        backgroundColor: [ "rgb(108,117,125,0.7)" ],
+                                    },
+                        ],
+                    },
+                    options: {
+                                animation:{
+                                    onComplete: () => {
+                                        delayed = true;
+                                    },
+                                    delay: (context) => {
+                                        let delay = 0;
+                                        if(context.type === 'data' && context.mode === 'default' && !delayed) {
+                                            delay = context.dataIndex * 150 + context.datasetIndex * 100;
+                                        }
+                                        return delay;
+                                    },
+                                },
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'PROJECT EXECUTION HISTORY (last {{ data[key]|length }} executions)'
+                                    },
+                                    colors: {
+                                        enabled: true
+                                    },
+                                    tooltip: {
+                                        mode: 'index'
+                                    },
+                                },
+                                interaction: {
+                                    /*
+                                    mode: 'nearest',
+                                    axis: 'x',
+                                    */
+                                    intersect: false
+                                },
+                                scales: {
+                                    y: {
+                                        stacked: true,
+                                        display: true,
+                                        beginAtZero: true,
+                                        border: { color: 'black', width: 2 },
+                                    },
+                                    x: {
+                                        display: true,
+                                        time: {
+                                            unit: 'month'
+                                        },
+                                        border: { color: 'black', width: 2 },
+                                    }
+                                },
+                                /*
+                                pan: {
+                                  enabled: true,
+                                  mode: 'xy',
+                                },
+                                zoom: {
+                                  enabled: true,
+                                  mode: 'xy', // or 'x' for "drag" version
+                                },
+                                */
+                    },
+                });
+
+                // THIS IS FOR STACKED MULTI-BAR CHART
+                // ---------------------------------------
+                var ctx = document.getElementById("myBarChart_{{ key|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                var myBarChart_{{ key|replace(' ' , '')|replace('-' , '') }} = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [ /* Adding date series as X label; with 'Date String' */
+                            {% for obj in data[key] %}
+                                new Date({{obj['jenkins_job_build_timestamp']|safe}}).toDateString(),
+                            {% endfor %}
+                        ],
+                        datasets: [
+                                    {
+                                        label: 'PASS',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['pass_count']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        borderColor: [ "rgb(60,186,159,1.0)" ],
+                                        backgroundColor: [ "rgb(60,186,159,0.7)" ],
+                                    },
+                                    {
+                                        label: 'FAIL',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['fail_count']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        borderColor: [ "rgb(196,88,80,1.0)" ],
+                                        backgroundColor: [ "rgb(196,88,80,0.7)" ],
+                                    },
+                                    {
+                                        label: 'SKIPPED',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['test_result']['skip_count']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        borderColor: [ "rgb(108,117,125,1.0)" ],
+                                        backgroundColor: [ "rgb(108,117,125,0.7)" ],
+                                    },
+                        ],
+                    },
+                    options: {
+                                animation:{
+                                    onComplete: () => {
+                                        delayed = false;
+                                    },
+                                    delay: (context) => {
+                                        let delay = 0;
+                                        if(context.type === 'data' && context.mode === 'default' && !delayed) {
+                                            delay = context.dataIndex * 150 + context.datasetIndex * 100;
+                                        }
+                                        return delay;
+                                    },
+                                },
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'PROJECT EXECUTION HISTORY (last {{ data[key]|length }} executions)'
+                                    },
+                                    colors: {
+                                        enabled: true
+                                    },
+                                    tooltip: {
+                                        mode: 'index'
+                                    },
+                                },
+                                interaction: {
+                                    /*
+                                    mode: 'nearest',
+                                    axis: 'x',
+                                    */
+                                    intersect: false
+                                },
+                                scales: {
+                                    y: {
+                                        stacked: true,
+                                        display: true,
+                                        beginAtZero: true,
+                                        border: { color: 'black', width: 2 },
+                                    },
+                                    x: {
+                                        stacked: true,
+                                        display: true,
+                                        time: {
+                                            unit: 'month'
+                                        },
+                                        border: { color: 'black', width: 2 },
+                                    }
+                                },
+                                /*
+                                pan: {
+                                  enabled: true,
+                                  mode: 'xy',
+                                },
+                                zoom: {
+                                  enabled: true,
+                                  mode: 'xy', // or 'x' for "drag" version
+                                },
+                                */
+                    },
+                });
+
+                // THIS IS FOR "Execution Time" LINE CHART
+                // ----------------------------------------
+                var ctx = document.getElementById("myTimeLineChart_{{ key|replace(' ' , '')|replace('-' , '') }}").getContext('2d');
+                var myBarChart_{{ key|replace(' ' , '')|replace('-' , '') }} = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [ /* Adding date series as X label; with 'Date String' */
+                            {% for obj in data[key] %}
+                                'build-{{obj['jenkins_job_build_no']|safe}}',
+                            {% endfor %}
+                        ],
+                        datasets: [
+                                    {
+                                        label: 'DURATION_IN_SEC',
+                                        data: [
+                                                {% for obj in data[key] %}
+                                                    {{ obj['duration_in_sec']|safe }},
+                                                {% endfor %}
+                                        ],
+                                        borderWidth: 2,
+                                        tension: 0.5,
+                                        fill: true,
+                                        borderColor: [ "rgb(60,186,159,1.0)" ],
+                                        backgroundColor: [ "rgb(60,186,159,0.7)" ],
+                                        borderWidth: 2,
+                                    },
+                        ],
+                    },
+                    options: {
+                                animation:{
+                                    onComplete: () => {
+                                        delayed = true;
+                                    },
+                                    delay: (context) => {
+                                        let delay = 0;
+                                        if(context.type === 'data' && context.mode === 'default' && !delayed) {
+                                            delay = context.dataIndex * 150 + context.datasetIndex * 100;
+                                        }
+                                        return delay;
+                                    },
+                                },
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'EXECUTION TIME IN SECONDS (last {{ data[key]|length }} executions)'
+                                    },
+                                    colors: {
+                                        enabled: true
+                                    },
+                                    tooltip: {
+                                        mode: 'index'
+                                    },
+                                },
+                                interaction: {
+                                    /*
+                                    mode: 'nearest',
+                                    axis: 'x',
+                                    */
+                                    intersect: false
+                                },
+                                scales: {
+                                    y: {
+                                        stacked: true,
+                                        display: true,
+                                        beginAtZero: true,
+                                        border: { color: 'black', width: 2 },
+                                    },
+                                    x: {
+                                        display: true,
+                                        time: {
+                                            unit: 'month'
+                                        },
+                                        border: { color: 'black', width: 2 },
+                                    }
+                                },
+                                /*
+                                pan: {
+                                  enabled: true,
+                                  mode: 'xy',
+                                },
+                                zoom: {
+                                  enabled: true,
+                                  mode: 'xy', // or 'x' for "drag" version
+                                },
+                                */
+                    },
+                });
+
+        {%endfor%}
+    {%endif%}
+
+    /*
+    * Toggle actions for the charts
+    * ==================================
+    */
+    function toggleCharts(projectName) {
+        var myLineChartCanvas = document.getElementById("myLineChart_"+projectName)
+        var myBarChartCanvas = document.getElementById("myBarChart_"+projectName)
+        if(myBarChartCanvas.style.display == 'none'){
+            myBarChartCanvas.style.display = 'block';
+            myLineChartCanvas.style.display = 'none';
+        } else {
+            myBarChartCanvas.style.display = 'none';
+            myLineChartCanvas.style.display = 'block';
+        }
+    }
+
+    // To toggle through the time line chart
+    function toggleExecutionTimeLineChart(projectName) {
+        // myTimeLineChart_{{ key|replace(' ' , '')|replace('-' , '') }}
+        var myTimeLineChartCanvas = document.getElementById("myTimeLineChart_"+projectName)
+        if(myTimeLineChartCanvas.style.display == 'none'){
+            myTimeLineChartCanvas.style.display = 'block';
+        } else {
+            myTimeLineChartCanvas.style.display = 'none';
+        }
+    }
+
+    /* Toggle Dummy chart */
+    function toggleDummyChart(){
+        var chart_element = document.getElementById("dummy_lineChart");
+        if(chart_element.style.display == 'none'){
+            chart_element.style.display = 'block';
+        } else {
+            chart_element.style.display = 'none';
+        }
+    }
+
+    /* Toggle function for the charts fill */
+    /*
+    *
+    * Commenting out this functionality for now
+    *
+    * <span class="badge bg-dark" onclick="toggleChartFill(myLineChart_, 'PASS');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the PASS series"> Toggle Fill for PASS </span>
+    * <span class="badge bg-dark" onclick="toggleChartFill(myLineChart_, 'FAIL');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the FAIL series"> Toggle Fill for FAIL </span>
+    * <span class="badge bg-dark" onclick="toggleChartFill(myLineChart_, 'ERROR');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the ERROR series"> Toggle Fill for ERROR </span>
+    * <span class="badge bg-dark" onclick="toggleChartFill(myLineChart_, 'SKIPPED');" style="cursor: pointer;" data-bs-toggle="tooltip" title="Toggle fill the SKIPPED series"> Toggle Fill for SKIPPED </span>
+    *
+    function toggleChartFill(chartName, field) {
+        if(field === 'PASS'){
+            if(chartName.data.datasets[0].fill){
+                chartName.data.datasets[0].fill = false;
+                chartName.update();
+            } else {
+                chartName.data.datasets[0].fill = true;
+                chartName.update();
+            }
+        }
+        else if(field === 'FAIL'){
+            if(chartName.data.datasets[1].fill){
+                chartName.data.datasets[1].fill = false;
+                chartName.update();
+            } else {
+                chartName.data.datasets[1].fill = true;
+                chartName.update();
+            }
+        }
+        else if(field === 'ERROR'){
+            if(chartName.data.datasets[2].fill){
+                chartName.data.datasets[2].fill = false;
+                chartName.update();
+            } else {
+                chartName.data.datasets[2].fill = true;
+                chartName.update();
+            }
+        }
+        else if(field === 'SKIPPED'){
+            if(chartName.data.datasets[3].fill){
+                chartName.data.datasets[3].fill = false;
+                chartName.update();
+            } else {
+                chartName.data.datasets[3].fill = true;
+                chartName.update();
+            }
+        }
+    }
+    */
+
+    // ========================================================
+    // SAMPLE / EXPERIMENT
+    // ========================================================
+
+    /* DUMMY LINE CHART */
+
+            var ctx = document.getElementById("dummy_lineChart").getContext('2d');
+            var myLineChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                                datasets: [
+                                    { label: 'PASS', data: [25, 59, 80, 81, 56], tension: 0.3, fill: true, borderColor: [ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ], backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],},
+                                    { label: 'FAIL', data: [60, 19, 38, 10, 60], tension: 0.3, fill: true, borderColor: [ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ], backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],},
+                                    { label: 'ERROR', data: [10, 39, 18, 15, 46], tension: 0.3, fill: true, borderColor: [ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ], backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],},
+                                    { label: 'SKIPPED', data: [20, 79, 38, 11, 64], tension: 0.3, fill: true, borderColor: [ "rgb(60,186,159,1.0)", "rgb(196,88,80,1.0)", "rgb(255,165,0,1.0)", "rgb(108,117,125,1.0)", "rgb(100,107,105,1.0)", ], backgroundColor: [ "rgb(60,186,159,0.7)", "rgb(196,88,80,0.7)", "rgb(255,165,0,0.7)", "rgb(108,117,125,0.7)", "rgb(100,107,105,0.7)", ],},
+                                ],
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'TIME SERIES DATA FOR TEST RESULTS'
+                                    },
+                                    colors: {
+                                        enabled: true
+                                    },
+                                },
+                                scales: {
+                                    y: {
+                                        display: true,
+                                        beginAtZero: true
+                                    },
+                                    x: {
+                                        display: true,
+                                        time: {
+                                            unit: 'month'
+                                        }
+                                    }
+                                },
+                                pan: {
+                                  enabled: true,
+                                  mode: 'xy',
+                                },
+                                zoom: {
+                                  enabled: true,
+                                  mode: 'xy', // or 'x' for "drag" version
+                                },
+                            }
+            });
+
+    /* Controls to toggle the fill in the Dummy chart */
+    function toggleFill(field) {
+        if(field === 'PASS'){
+            if(myLineChart.data.datasets[0].fill){
+                myLineChart.data.datasets[0].fill = false;
+                myLineChart.update();
+            } else {
+                myLineChart.data.datasets[0].fill = true;
+                myLineChart.update();
+            }
+        }
+        else if(field === 'FAIL'){
+            if(myLineChart.data.datasets[1].fill){
+                myLineChart.data.datasets[1].fill = false;
+                myLineChart.update();
+            } else {
+                myLineChart.data.datasets[1].fill = true;
+                myLineChart.update();
+            }
+        }
+        else if(field === 'ERROR'){
+            if(myLineChart.data.datasets[2].fill){
+                myLineChart.data.datasets[2].fill = false;
+                myLineChart.update();
+            } else {
+                myLineChart.data.datasets[2].fill = true;
+                myLineChart.update();
+            }
+        }
+        else if(field === 'SKIPPED'){
+            if(myLineChart.data.datasets[3].fill){
+                myLineChart.data.datasets[3].fill = false;
+                myLineChart.update();
+            } else {
+                myLineChart.data.datasets[3].fill = true;
+                myLineChart.update();
+            }
+        }
+    }
+
+
+    </script>
+
+</html>

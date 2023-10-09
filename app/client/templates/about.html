@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+    <head>
+        <!-- scripts: Chart libs -->
+            <!-- Older Chart <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>-->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">
+									{{pagename}}
+									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
+									<span class="badge bg-secondary" style="font-size: x-small;"> THIS APPLICATION IS STILL IN "DEV" STAGE.</span>
+								</h3>
+								<hr/>
+								<div class="home-page-desc">
+									<span> {{ui_config["ROUTES"]["/about"]["data"]["desc"]}} </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> <br/>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="border-width: 0px;">
+                            <div class="card-body">
+                                <h4 class="card-title"> Components </h4>
+                                <div>
+									<ul>
+										{% for line in ui_config["ROUTES"]["/about"]["data"]["info"] %}
+										<li> {{ line }} </li>
+										{% endfor %}
+									</ul>
+								</div>
+
+								<br/>
+								<h6 class="title m-b-2"> Figure-1 (Application working flow)  </h6>
+								<img height="600" src="{{url_for('static', filename='images/automation_dashboard.png')}}" alt="Dashboard architecture"> </img>
+                            </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
+
+
+
+
+            </div> <!-- End of the container -->
+
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
+
+    </body>
+
+    <script>
+            // Once dom is loaded
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
+
+</html>

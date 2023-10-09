@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+
+    <head>
+		<link rel="stylesheet" href="{{url_for('static', filename='css/d3.clock.css')}}">
+    </head>
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">
+									Utility Page
+									<span class="badge bg-dark" style="font-size: x-small;"> {{ui_config["APP_META"]["app_poc_tag"]}} </span>
+									<span class="badge bg-secondary" style="font-size: x-small;"> THIS APPLICATION IS STILL IN "DEV" STAGE.</span>
+								</h3>
+								<hr/>
+								<div class="home-page-desc">
+									<span> This page contains all kind of utility. </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> <br/>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="border-width: 0px;">
+                            <div class="card-body">
+                                <h4 class="card-title"> CLOCK </h4>
+                                <div>
+									<!-- Clock design elements starts here -->
+											<!-- partial:index.partial.html -->
+											<svg>
+												<defs>
+														<pattern id="dotPattern"
+																 x="0" y="0" width="10" height="10"
+																 patternUnits="userSpaceOnUse">
+															<circle class="bgDot" cx="3" cy="3" r="2" />
+														</pattern>
+
+													<radialGradient id="backHoleBelowClock" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+														<stop offset="50%"  style="stop-color:rgb(0,0,0);stop-opacity:0.7"/>
+														<stop offset="100%"	style="stop-color:rgb(0,0,0);stop-opacity:0"/>
+													</radialGradient>
+
+													<radialGradient id="blackVignette" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+														<stop offset="40%" style="stop-color:rgb(0,0,0);stop-opacity:0" />
+														<stop offset="100%" style="stop-color:rgb(0,0,0);stop-opacity:1" />
+													</radialGradient>
+
+													<filter id="glow">
+														<feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+														<feMerge>
+																<feMergeNode in="coloredBlur"/>
+																<feMergeNode in="SourceGraphic"/>
+														</feMerge>
+													</filter>
+
+													<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+														<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="shadow"/>
+														<feOffset dx="1" dy="1"/>
+														<feMerge>
+															<feMergeNode/>
+															<feMergeNode in="SourceGraphic"/>
+														</feMerge>
+													</filter>
+
+												</defs>
+
+												<!-- Background objects -->
+												<rect x="0" y="0" width="100%" height="100%" style="stroke: #000000; fill: url(#dotPattern);" />
+												<ellipse cx="500" cy="240" rx="300" ry="300" fill="url(#backHoleBelowClock)"/>
+												<ellipse cx="500" cy="240" rx="600" ry="600" fill="url(#blackVignette)"/>
+
+												<!-- Clock objects -->
+
+												<!-- Hour -->
+												<circle class="clockCircle hour" cx="570" cy="240" r="150" stroke-width="6" />
+												<path id="arcHour" class="clockArc hour" stroke-width="6" stroke-linecap="round" filter="url(#glow)" />
+												<circle class="clockDot hour" r="8" filter="url(#glow)" />
+
+												<!-- Minute -->
+												<circle class="clockCircle minute" cx="570" cy="240" r="170" stroke-width="3" />
+												<path id="arcMinute" class="clockArc minute" stroke-width="3" stroke-linecap="round" filter="url(#glow)" />
+												<circle class="clockDot minute" r="5" filter="url(#glow)" />
+
+												<!-- Seconds -->
+												<circle class="clockCircle second" cx="570" cy="240" r="190" stroke-width="2" />
+												<path id="arcSecond" class="clockArc second" stroke-width="1" stroke-linecap="round" filter="url(#glow)" />
+												<circle class="clockDot second" r="2" filter="url(#glow)" />
+
+												<!-- Caption objects -->
+												<text id="time" class="caption timeText" x="570" y="240" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)"></text>
+												<text id="timeSeconds" class="caption timeSecondsText" x="570" y="300" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)"></text>
+
+												<rect x="40" y="130" width="350" height="0.5" style="stroke: #ffffff; fill: url(#dotPattern);" />
+												<text id="day" class="caption dayText" x="350" y="160" stroke-width="0" text-anchor="end" alignment-baseline="middle"  filter="url(#shadow)"></text>
+												<text id="year-and-date" class="caption dateText" x="350" y="200" stroke-width="0" text-anchor="end" alignment-baseline="middle" filter="url(#shadow)"></text>
+												<text id="timezone" class="caption" x="350" y="230" stroke-width="0" text-anchor="end" alignment-baseline="middle"  filter="url(#shadow)">TZ</text>
+
+												<!-- 3 other timezones -->
+												<rect x="40" y="240" width="320" height="0.5" style="stroke: #ffffff; fill: url(#glow);" />
+												<text id="istTime" class="otherTimeText" x="180" y="270" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="India Standard Time">IST</text>
+												<text id="jstTime" class="otherTimeText" x="200" y="310" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="Japan Standard Time">JST</text>
+												<text id="edtTime" class="otherTimeText" x="220" y="350" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="EDT, Newyork, US Time">EDT</text>
+												<text id="gmtTime" class="otherTimeText" x="230" y="390" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="GMT, London, UK Time">GMT</text>
+
+												<!-- other -->
+												<text id="author" class="authorText" x="650" y="470" stroke-width="0" text-anchor="middle" alignment-baseline="middle"  filter="url(#shadow)" style="cursor: pointer;" data-bs-toggle="tooltip" title="Author">Author</text>
+
+												<!-- Debug stuff -->
+												<text id="msg" class="caption msgText" x="80" y="470" stroke-width="0" text-anchor="end" alignment-baseline="middle" filter="url(#shadow)"></text>
+
+											</svg>
+
+									<!-- Clock design ends here -->
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <br/><br/>
+
+
+
+
+            </div> <!-- End of the container -->
+
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
+
+    </body>
+
+	<!-- Load resource now at the end -->
+	<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.23/moment-timezone-with-data.min.js"></script>
+<!--	<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>-->
+<!--	<script src='https://momentjs.com/downloads/moment-timezone.js'></script>-->
+	<script src='//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js'></script>
+	<script  src="{{url_for('static', filename='js/d3.clock.js')}}"></script>
+	<script></script>
+
+</html>

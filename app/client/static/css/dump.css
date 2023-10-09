@@ -1,0 +1,188 @@
+/*
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.App {
+  text-align: center;
+}
+
+.move-in-circle {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .move-in-circle {
+    animation: App-logo-spin infinite 5s linear;
+  }
+}
+
+.App-logo {
+  height: 05vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  display: flex;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  position: fixed;
+  width: 100%;
+}
+
+.app-menu {
+  width: "70%";
+  font-size: calc(10px + 1vmin);
+}
+
+.app-header-bar {
+  padding: 3vh;
+  display:flex;
+  flex-direction:row;
+  width: 100%;
+}
+.app-title {
+  font-size: larger;
+  word-break: keep-all;
+  width: 30%;
+  display:flex;
+  flex-direction:row;
+  white-space: nowrap;
+}
+
+.app-version {
+  font-size: xx-small;
+}
+
+.info-bar {
+  background-color: black;
+  color: yellow;
+}
+
+.control-bar {
+  background-color: #3c4452;
+  color: white;
+  padding: 1vh;
+  display:flex;
+  flex-direction:row;
+}
+
+.app-data-area {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    width: 100%;
+}
+
+.card1 {
+    padding: 10px;
+    margin: 10px;
+    background-color: white;
+    color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    box-shadow: -5px 1px 5px rgba(0,0,0, 0.6);
+
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.app-footer {
+  margin-top: 20vh;
+  color: black;
+}
+
+.footer-separator {
+  background-color: cadetblue;
+  color: cadetblue;
+  size: 20px;
+  width: 80%;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+td {
+  padding: 5px;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+a:hover {
+  color: white;
+  text-decoration: none;
+  border-bottom-style: solid;
+  border-bottom-width: 5px;
+  border-bottom-color: white;
+}
+*/
+
+/*
+=============================
+Custom Marquee Styling starts
+=============================
+*/
+.marquee {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.marquee span {
+  display: inline-block;
+  width: max-content;
+
+  padding-left: 100%;
+  /* show the marquee just outside the paragraph */
+  will-change: transform;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee span:hover {
+  animation-play-state: paused
+}
+
+@keyframes marquee {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
+}
+
+/* Respect user preferences about animations */
+@media (prefers-reduced-motion: reduce) {
+  .marquee span {
+    animation-iteration-count: 1;
+    animation-duration: 0.01;
+    /* instead of animation: none, so an animationend event is
+     * still available, if previously attached.
+     */
+    width: auto;
+    padding-left: 0;
+  }
+}
+/*
+=============================
+Custom Marquee styling ends
+=============================
+*/

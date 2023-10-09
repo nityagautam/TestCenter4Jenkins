@@ -1,0 +1,61 @@
+/*
+====================================================
+Custom style for my new pages starts from here
+====================================================
+*/
+
+/* For every element text should be quite sharp and thin */
+* {
+     font-weight: 100 !important;
+}
+
+/* THIS IS FOR THE THEME TOGGLE */
+body {
+  background-color: white;
+  color: black;
+}
+.dark-theme {
+  background-color: black;
+  color: white;
+}
+
+.active-link {
+    color: white !important;
+    border-width: 2px;
+    border-color: white;
+    border-bottom-style: double;
+    border-bottom-color: white;
+}
+.nav-link:hover {
+    color: white !important;
+    border-width: 2px;
+    border-color: white;
+    border-bottom-style: double;
+    border-bottom-color: orange;
+}
+
+.white-font {
+    color: white !important;
+}
+
+.orange-font {
+    color: orange !important;
+}
+
+.custom-card {
+    border-radius: 3px !important;
+    border-style: double !important;
+}
+
+.sidebar-bottom {
+    position: fixed; 
+    bottom: 0px; 
+    padding: 5px;
+}
+
+.footer {
+    /*
+    position: absolute;
+    bottom: 0;
+    */
+}

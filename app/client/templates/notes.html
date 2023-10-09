@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Following inclusion contains the HEAD tag data -->
+    {% include 'head.html' %}
+    <head>
+        <!-- scripts: Chart libs -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    </head>
+    <body>
+
+
+            <!-- Navbar Area -->
+            {% include 'navbar.html' %}
+
+            <!-- Content Area -->
+            <div class="container">
+                <br/><br/><br/><br/>
+                <div class="row">
+                    <div class="col">
+                        Add your temporary notes here:
+						<div class="desc">
+							<!-- <form method="POST" action="/get-todo"> -->
+								<textarea id="toDoText" name="todotxt" style='height: 100px; width: 100%' placeholder='Type something here ...'></textarea>
+								<input type="submit" value="ADD" onclick="javascript:addToTempList();"/>
+							<!-- </form> -->
+						</div>
+
+                    </div>
+                </div> <br/><br/>
+                <p> <b>Added Notes:</b> </p>
+
+                <hr/>
+
+				<!-- Added Notes goes in inside this area -->
+                <div class="row m-b-1 align-items-center">
+
+					<div class="added_notes" id="addedNotes">
+						<!-- Note will be added here -->
+					</div>
+                </div> <br/><br/>
+
+            </div> <!-- End of the container -->
+
+            <!-- Page Footer Area -->
+            {% include 'footer.html' %}
+
+    </body>
+
+    <script>
+            // Once dom is loaded
+
+            // Function to add the note into temporary list.
+	function addToTempList(){
+		var myDiv = document.getElementById("addedNotes");
+
+		// If Some text has been witten in the text area;
+		if(document.getElementById("toDoText").value !== '' || document.getElementById("toDoText").value.length > 0 ){
+			console.info('Note Added: ', document.getElementById("toDoText").value);
+			// creating checkbox element
+			var checkbox = document.createElement('input');
+			// Assigning the attributes
+			checkbox.type = "checkbox";
+			checkbox.name = "name";
+			checkbox.value = "value";
+			checkbox.id = "id"+Date();
+
+			// creating label for checkbox
+			var label = document.createElement('label');
+			// assigning attributes for
+			label.className = "label label-default";
+			label.style = "padding: 3px; white-space: break-spaces;";
+			// the created label tag
+			label.htmlFor = checkbox.id;
+			label.innerText = document.getElementById("toDoText").value;
+
+			// Create new line with seperator
+			var seperator = document.createElement('hr');
+
+			// appending the checkbox
+			// and label to div
+			myDiv.appendChild(checkbox);
+			myDiv.appendChild(label);
+			myDiv.appendChild(seperator);
+			document.getElementById("toDoText").value = '';
+		}
+	}
+
+            /* To toggle the class for an element. x*/
+              function myFunction() {
+                  var element = document.body;
+                  element.classList.toggle("dark-mode");
+              }
+    </script>
+
+</html>

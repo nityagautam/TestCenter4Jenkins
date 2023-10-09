@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Following inclusion contains the HEAD tag data -->
+{% include 'head.html' %}
+
+<body>
+
+
+<!-- Navbar Area -->
+{% include 'navbar.html' %}
+
+        <!-- Content Area -->
+        <div class="container">
+            <br/><br/><br/><br/>
+
+
+            <!-- Give some initial brief/info "table-hover table-group-divider" -->
+            <div class="accordion" id="accordionExample">
+
+                <!-- Second item -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button aria-controls="collapseTwo" aria-expanded="false" class="accordion-button collapsed"
+                                data-bs-target="#collapseTwo" data-bs-toggle="collapse" type="button">
+                            Create new spce
+                        </button>
+                    </h2>
+                    <div aria-labelledby="headingTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample"
+                         id="collapseTwo">
+                        <div class="accordion-body">
+                            <strong>Create a new space for a dashboard with some file or Jenkins link.</strong>
+                            <p>
+                                You need to provide, <code>Project/Space name</code>, <code>Jenkins job FullName</code>, <code>Source
+                                file</code>, <code>Jenkins URL along with credentials </code>
+                                to extract all the data and create view in the dashboard.
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/> <br/>
+
+            <div class="row">
+                <!-- If we get any flushed message-->
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title"><strong> Create new space for a project. </strong></h4>
+                            {%if 'success' in get_flashed_messages()[0] %}
+                                <span style="color: green;">{{get_flashed_messages()[0]}}</span>
+                            {%else%}
+                                <span style="color: red;">{{get_flashed_messages()[0]}}</span>
+                            {%endif%}
+                        </div>
+                        <hr/>
+                        <div class="card-body">
+                            <!-- Form -->
+                            <!-- Adding a form here to create a new space (get the inputs from the user) -->
+                            <form action="/create-project-space" class="row g-3 needs-validation" method="POST" validate>
+                                <!-- Project/Space name <div class="col-md-4"> input-group input-group-text -->
+                                <div class="mb-3">
+                                    <label class="form-label" for="project_name"> (*) Project name </label>
+                                    <input class="form-control" id="project_name" name="project_name" onkeypress="return verify_alpha(event)"
+                                           required type="text" value="SampleProjectSpace-01">
+                                    <div class="valid-feedback"> Looks good!</div>
+                                </div>
+
+                                <!-- Select data source (File/Jenkins) -->
+                                <div class="mb-3">
+                                    <label class="form-label" for="validationCustom04"> (*) Data source </label>
+                                    <select class="form-select" id="validationCustom04" name="data_source" required>
+                                        <option disabled selected value="">Choose...</option>
+                                        <option>Jenkins</option>
+                                        <!-- <option>JUnit-XML</option>-->
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select a valid state.
+                                    </div>
+                                </div>
+
+                                <!-- File to upload -->
+                                <!--
+                                <div class="mb-3">
+                                      <label class="form-label" for="inputGroupFile01"> JUnit Test Result File</label>
+                                      <input type="file" class="form-control" id="inputGroupFile01">
+                                </div>
+                                -->
+
+                                <!-- Jenkins URL, and its credentials -->
+                                <div class="col-md-12">
+                                    <label class="form-label" for="validationCustomURL"> (*) Jenkins Server </label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupForURL">URL</span>
+                                        <input aria-describedby="inputGroupPrepend" class="form-control" id="validationCustomURL" name="jenkins_url"
+                                               required type="text"
+                                               value="https://jenkins.qac.perforce.com">
+                                        <div class="invalid-feedback">
+                                            Please choose jenkins server url.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="validationCustomJobName"> (*) Jenkins Job FullName</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupForJobName">#</span>
+                                        <input aria-describedby="inputGroupPrepend" class="form-control" id="validationCustomJobName"
+                                               name="jenkins_job_name" required type="text">
+                                        <div class="invalid-feedback">
+                                            Please choose a job name.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label" for="validationCustomUsername"> (*) Jenkins Username</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupForUsername">@</span>
+                                        <input aria-describedby="inputGroupPrepend" class="form-control" id="validationCustomUsername"
+                                               name="jenkins_user" required type="text">
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" for="validationCustomPassword"> (*) Jenkins user password</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupForPassword">*</span>
+                                        <input aria-describedby="inputGroupPrepend" class="form-control" id="validationCustomPassword"
+                                               name="jenkins_password" required type="password">
+                                        <div class="invalid-feedback">
+                                            Please choose a password.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="invalidCheck" name="archive_status" type="checkbox"
+                                               value="">
+                                        <label class="form-check-label" for="invalidCheck">
+                                            Archive this project
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="form-label" for="tags"> Tags (Use Comma ',' for separation) </label>
+                                    <input class="form-control" id="tags" name="tags" onkeypress="return verify_tags(event)"
+                                           type="text" value=" " required>
+                                    <div class="valid-feedback"> Looks good!</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <button class="btn btn-primary" type="submit"> Create </button>
+                                </div>
+                            </form>
+
+
+                            <!-- End form -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/><br/>
+
+        </div>
+
+        <!-- Toast for page; also include the script to raise; Usage: raiseToast(msg); -->
+        {% include 'toast.html' %}
+        {%if get_flashed_messages()[0] %}
+            <script> raiseToast('{{get_flashed_messages()[0]}}'); </script>
+        {%endif%}
+
+        <!-- Page Footer Area -->
+        {% include 'footer.html' %}
+
+</body>
+
+<script>
+
+    /* To toggle the class for an element. x*/
+    function myFunction() {
+        var element = document.body;
+        element.classList.toggle("dark-mode");
+    }
+
+    /* Verify Input for special characters */
+    function verify_alpha(e) {
+        var k;
+        document.all ? k = e.keyCode : k = e.which;
+        return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || k == 45 || k == 95 || (k >= 48 && k <= 57));
+    }
+    function verify_tags(e) {
+        var k;
+        document.all ? k = e.keyCode : k = e.which;
+        return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || k == 44 || k == 45 || k == 46 || k == 95 || (k >= 48 && k <= 57));
+    }
+
+    /* On paste event handling for id#"project_name" */
+    const input = document.getElementById("project_name")
+    input.onpaste = (e) => {
+        setTimeout(() => {
+            paste_value = e.target.value
+            console.log("Pasted ==>", e.target.value.replaceAll("/", ""));
+            e.target.value = e.target.value.replaceAll("/", "");
+        }, 0)
+    }
+</script>
+
+</html>
