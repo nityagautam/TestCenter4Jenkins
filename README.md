@@ -1,18 +1,5 @@
-### Reporting Dashboard v2.0
+### (TestCenter4Jenkins) A TestCenter/Dashboard for the jenkins job
 <hr/>
-
-###### TODO LIST
-- Verify Project name while creation
-- Delete Project
-- Edit Project
-
-###### Screenshots
-1- Overview page
-![Overview page screenshot](./app/client/static/images/app_screenshots/Screenshot-overview-page.png)
-2- Dashboard page
-![Dashboard page screenshot](./app/client/static/images/app_screenshots/Screenshot-dashboard-page.png)
-3- History page
-![History page screenshot](./app/client/static/images/app_screenshots/Screenshot-History-Page.png)
 
 ###### Description
 It is the combination of few services which gets/crawls the reports and manage the report on the disk as well as in to the database; it keeps cleaning the old records and keeps last 20-30(as configured) records.
@@ -52,8 +39,20 @@ It is the combination of few services which gets/crawls the reports and manage t
 ###### There are three section of this application
 1. Crawler
 2. Reports data Manager
-3. Dashboard Server
+3. Server
 
+###### TODO LIST
+- Verify Project name while creation
+- Delete Project
+- Edit Project
+
+###### Screenshots
+1- Overview page
+![Overview page screenshot](./app/client/static/images/app_screenshots/Screenshot-overview-page.png)
+2- Dashboard page
+![Dashboard page screenshot](./app/client/static/images/app_screenshots/Screenshot-dashboard-page.png)
+3- History page
+![History page screenshot](./app/client/static/images/app_screenshots/Screenshot-History-Page.png)
 
 ###### Setup
 Just clone the repo/code and install the requirements;
