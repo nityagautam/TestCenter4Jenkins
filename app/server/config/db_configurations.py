@@ -5,9 +5,9 @@ class DBConfig(Configurations):
     # ----------------------------------
     # Database file name/path
     # ----------------------------------
-    db_file = {"PROD": "./app/server/dbase/prod_database.db",
-               "TEST": "./app/server/dbase/data.db",
-               "SAMPLE": "./app/server/dbase/sample.db"}
+    db_file = {"PROD": "./data/database.db",
+               "TEST": "./data/database.db",
+               "SAMPLE": "./data/sample_database.db"}
 
     # ----------------------------------
     # Tables and its schema
