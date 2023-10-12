@@ -1,0 +1,12 @@
+__pycache__
+venv
+.git
+.github
+.idea
+logs/*.log
+logs/*.txt
+*.pyc
+*.bat
+*.md
+LICENSE
+*wsgi*.ini
