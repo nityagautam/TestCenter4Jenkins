@@ -1,5 +1,16 @@
-import datetime
+"""
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
 
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified: 12 Oct 2023
+    desc: Wrapper class for Jenkins Crawler;
+"""
+
+import datetime
 from app.server.config.crawler_configurations import CrawlerConfig
 from app.server.crawlers.crawl_jenkins import CrawlJenkins
 from app.server.dbase.DBAccess import DBAccess
