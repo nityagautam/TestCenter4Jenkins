@@ -14,7 +14,7 @@ WORKDIR /TestCenter4Jenkins/
 #COPY app /TestCenter4Jenkins/
 #COPY logs /TestCenter4Jenkins/
 #COPY crawler*.py /TestCenter4Jenkins/
-RUN apt-get update && apt-get install -y python3 python3-pip
+#RUN apt-get update && apt-get install -y python3 python3-pip
 RUN pip install -r requirements.txt
 
 # Final configuration
