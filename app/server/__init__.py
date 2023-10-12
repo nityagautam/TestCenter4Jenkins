@@ -10,7 +10,6 @@
     desc: Flask app;
 """
 
-import os
 from flask import Flask
 from app.server.config.configurations import Configurations
 
