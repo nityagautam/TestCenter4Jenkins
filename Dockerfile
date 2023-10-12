@@ -1,5 +1,6 @@
 # Start the image with Python image
-FROM ubuntu:22.04
+#FROM ubuntu:22.04
+FROM python:3-alpine
 
 # Install app
 # RUN apt-get update && apt-get install -y python3 python3-pip
