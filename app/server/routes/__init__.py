@@ -54,7 +54,9 @@ class Gateway(UIConfigurations):
         :param route_name:
         :return: 'TEMPLATE_NAME', 'PAGE_NAME', 'SESSION_USER_NAME', 'UI_CONFIG'
         """
-        return self.ROUTES[route_name]["template_name"], self.ROUTES[route_name]["page_name"], session['user'], self.get_ui_configs_for_templates()
+        return self.ROUTES[route_name]["template_name"], \
+            self.ROUTES[route_name]["page_name"], \
+            session['user'], self.get_ui_configs_for_templates()
 
     # Get the complete template with args
     # -------------------------------------
@@ -70,9 +72,9 @@ class Gateway(UIConfigurations):
                                ui_config=ui_config,
                                db_data=[],
                                data=DBAccess().get_dashboard_data() if '/dashboard' in route_name
-                                        else DBAccess().get_overview_data() if '/index' in route_name
-                                        else DBAccess().get_history_data() if '/history' in route_name
-                                        else sample_data.latest_data
+                               else DBAccess().get_overview_data() if '/index' in route_name
+                               else DBAccess().get_history_data() if '/history' in route_name
+                               else sample_data.latest_data
                                )
 
     def get_error_template(self, route_name, error_data, error_code):

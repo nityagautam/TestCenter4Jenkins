@@ -28,7 +28,7 @@
                     const toastMsg = document.getElementById('toastMsgBody');
 
                     // Raise and Show
-                    toastMsg.innerText = msg;
+                    toastMsg.innerHTML = msg;
                     const toast = new bootstrap.Toast(liveToast);
                     toast.show();
                 }

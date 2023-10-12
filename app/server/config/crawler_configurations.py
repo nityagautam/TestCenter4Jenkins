@@ -1,3 +1,15 @@
+"""
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
+
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified:
+    desc: Configuration file
+"""
+
 from app.server.config.configurations import Configurations
 
 
@@ -5,7 +17,7 @@ class CrawlerConfig(Configurations):
     # ----------------------------------
     # Jenkins data
     # ----------------------------------
-    # jenkins_host_url = "https://jenkins.qac.perforce.com"  # "https://jenkins.qac.perforce.com"
+    # jenkins_host_url = "https://jenkins.qac.perforce.com"
     # jenkins_username = 'amishra'
     # jenkins_password = 'Me@here1'
     # This is access token

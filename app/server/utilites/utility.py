@@ -46,5 +46,5 @@ def global_exception(origin_func):
         except Exception as e:
             print('[ERROR]: ', e)
             return '0'
-    return wrapper
 
+    return wrapper

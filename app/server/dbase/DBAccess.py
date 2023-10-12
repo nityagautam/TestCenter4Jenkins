@@ -1,7 +1,17 @@
+"""
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
+
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified: 12 Oct 2023
+    desc: Wrapper class for SQLite3 Engine;
+"""
+
 import datetime
 import json
-import random
-
 from app.server.config.db_configurations import DBConfig
 from app.server.config.configurations import Configurations
 from app.server.dbase.DBEngine import DBEngine
@@ -134,10 +144,10 @@ class DBAccess(Configurations):
         return self.db_obj.fetch_result_from_cursor()
 
     def get_projects_count(self):
-        print(f"\n Inserting dummy projects ...")
+        print("\n Inserting dummy projects ...")
         self.db_obj.select(self.project_table, "COUNT(1)")
         projects_count = self.db_obj.fetch_result_from_cursor()[0][0]
-        print(f"Project count: {projects_count}")
+        print("Project count: {projects_count}")
         return projects_count
 
     def get_active_project_list(self):
@@ -380,7 +390,7 @@ class DBAccess(Configurations):
 # For CLI Execution
 # ------------------
 if __name__ == "__main__":
-    print(f"\n Running from terminal ... \n ")
+    print("\n Running from terminal ... \n ")
     o = DBAccess()
     print("\n\n", o.get_dashboard_data())
     # o.insert_some_prefix_data()

@@ -1,16 +1,19 @@
 """
-  @author Ashutosh Mishra (@github: nityagautam)
-  Software Engineer & Explorer
-  nityanarayan44@gmail.com
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
 
-  Created on 14 February, 2023 @ 10:25 AM.
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified: 12 Oct 2023
+    desc: Authentication route;
 """
 
 from app.server import app as application
 from flask import flash, redirect, render_template, request, session
 from app.server.config.ui_configurations import UIConfigurations
 from app.server.routes import Gateway
-
 
 # Create an object for gateway;
 # And entire app will use this object by importing
@@ -22,7 +25,10 @@ gateway = Gateway()
 def root():
     if not session.get('logged_in'):
         print('>>> User is not authorised: ', session.get('logged_in'))
-        return render_template("login.html", ui_config={"APP_META": UIConfigurations.APP_META, "ROUTES": UIConfigurations.ROUTES}, data="Any message on the login page")
+        return render_template("login.html",
+                               ui_config={"APP_META": UIConfigurations.APP_META,
+                                          "ROUTES": UIConfigurations.ROUTES},
+                               data="Any message on the login page")
     else:
         print('>>> User is authorised, let in')
         return redirect('/home')
@@ -32,7 +38,8 @@ def root():
 def login():
     # Check requests for the form login
     if request.method == 'POST':
-        print(f">>> Login request came with [User : '{request.form['username']}', Password: '{request.form['username']}']")
+        print(
+            f">>> Login request came with [User : '{request.form['username']}', Password: '{request.form['username']}']")
         if gateway.is_valid_user(request.form["username"], request.form['password']):
             print(f'>>> Login Accepted for user: {request.form["username"]}')
             session['logged_in'] = True

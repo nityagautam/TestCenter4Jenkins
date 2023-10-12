@@ -1,3 +1,15 @@
+"""
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
+
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified:
+    desc: UI Configuration file
+"""
+
 from app.server.config.configurations import Configurations
 
 
@@ -12,9 +24,9 @@ class UIConfigurations(Configurations):
         "app_name": Configurations.APP_NAME,
         "app_version": f"v[{Configurations.APP_VERSION}]",
         "app_author": f"{Configurations.AUTHOR_NAME}",
-        "app_title": f"TEST CENTER 4 JENKINS",
+        "app_title": "TEST CENTER 4 JENKINS",
         "app_poc_tag": "POC PROTOTYPE-1",
-        "app_experimental_tag": f"Experimental",
+        "app_experimental_tag": "Experimental",
     }
 
     # -----------------------------------
@@ -24,13 +36,20 @@ class UIConfigurations(Configurations):
         "USER_LOGGED_OUT": "User has been logged out.",
         "NOT_LOGGED_IN": "You are not logged-in.",
         "NOT_AUTHORISED": "You are not authorised.",
-        "INCORRECT_CREDENTIALS": "Oopse, incorrect credentials !",
-        "USER_DOES_NOT_EXIST": "Oopse, seems like user does not exist in the DB.",
-        "404": "Looks like we don't have it",
-        "500": "Oopse, Something went wrong at our side.",
-        "KEY_ERROR": "Oopse, Something went wrong at our side.",
-        "EMPTY_LIST": "Oopse, Something went wrong at our side.",
-        "GENERAL_ERROR_MESSAGE": "Oopse, Something went wrong."
+        "INCORRECT_CREDENTIALS":
+            "Oops, incorrect credentials!",
+        "USER_DOES_NOT_EXIST":
+            "Oops, seems like user does not exist in the DB.",
+        "404":
+            "Looks like we don't have it",
+        "500":
+            "Oops, Something went wrong at our side.",
+        "KEY_ERROR":
+            "Oops, Something went wrong at our side.",
+        "EMPTY_LIST":
+            "Oops, Something went wrong at our side.",
+        "GENERAL_ERROR_MESSAGE":
+            "Oops, Something went wrong."
     }
 
     # -----------------------------------
@@ -99,19 +118,29 @@ class UIConfigurations(Configurations):
             "PAGE_DESC": "",
             "template_name": "about.html",
             "data": {
-                "desc": f"""This is the about page of the {APP_META["app_title"]} server. This application is to present the reports 
-                           more effectively and in detailed way of the executed automated suites. 
-                           It is just a POC(Proof of Concept) proto-type, to show-case the idea of a dashboard server 
-                           for better reporting of the automation reports and doing/extracting some insights from it.
-                           >>>>>  
-                           This idea came after looking at a lot of reports and jenkins execution data, 
-                           with an idea to represent the insights in a better way.""",
+                "desc":
+                    f"This is the about page of the {APP_META['app_title']} server."
+                    " This application is to present the reports more effectively"
+                    " and in detailed way of the executed automated suites."
+                    " It is just a POC(Proof of Concept) proto-type,"
+                    " to show-case the idea of a dashboard server"
+                    " for better reporting of the automation reports"
+                    " and doing/extracting some insights from it."
+                    " This idea came after looking"
+                    " at a lot of reports and jenkins execution data,"
+                    "with an idea to represent the insights in a better way.",
                 "info": [
-                    "App has 3 main components:: Backend Server + FrontEnd(Aggregation and reports) + Crawler",
-                    "Server is written on 'Python3' with 'Flask'",
-                    "Frontend is written using Javascript/HTML/CSS/ using Jinja Templating engine ",
-                    "Crawler is the data extractor from the HTML/XML/JSON reports (Being written on Python3)",
-                    "crawler may/may not be added as a trigger on CI/CD so that once any build get done, crawler should be "
+                    "App has 3 main components:: "
+                    "Backend Server + FrontEnd + Crawlers",
+                    "Server is written on 'Python3' with 'Flask'"
+                    " and sqlite3 to store the data.",
+                    "Frontend is written using Javascript/HTML/CSS/"
+                    " using Jinja Templating engine ",
+                    "Crawler is the data extractor from the"
+                    " HTML/XML/JSON reports (Being written on Python3)",
+                    "crawler may/may not be added as a trigger"
+                    " on CI/CD so that once any build get done, "
+                    "crawler should be "
                     "triggered as a POST-ACTION.",
                     "they(Crawlers) can also be triggerd independently."
                 ]
@@ -129,14 +158,15 @@ class UIConfigurations(Configurations):
         # -----------------------------------
         # -----------------------------------------------------------------------------------------
         # Routes of the application [Menus]
-        # Key for routes, must exist in the server's routes files (inside the app/server/routes/ )
+        # Key for routes,
+        # must exist in the server's routes files (inside the app/server/routes/ )
         # if 'is_menu' is True then it will be rendered in the nav bar as menu option
         # -----------------------------------------------------------------------------------------
 
         'side_menu': [
             {
                 "name": "DASHBOARD",
-                "route": "/dashboard",                  # The route name should be in the routes.py file
+                "route": "/dashboard",
                 "icon": "fa fa-dashboard fa-lg fa-fw"
             },
             {
@@ -162,4 +192,4 @@ class UIConfigurations(Configurations):
         ]
         # End of side menu
     }
-    # ===[UI Config Ends]===================================================================
+    # ===[UI Config Ends]=====

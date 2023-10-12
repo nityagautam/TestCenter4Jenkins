@@ -7,6 +7,7 @@
 from time import sleep
 from typing import overload
 
+
 class ConsoleAnimator:
     def __init__(self) -> None:
         pass
@@ -16,8 +17,9 @@ class ConsoleAnimator:
         for i in range(len(loading_string)):
             print(loading_string[i], sep='', end='', flush=True); sleep(delay_time)
         print('')
+        return self
 
     def print_msg_with_title(self, title, msg, dash_length=30) -> None:
         print('\n\n+'+'-'*dash_length+'['+title+']'+'-'*dash_length+'+\n|', msg)
-        
+        return self
 
