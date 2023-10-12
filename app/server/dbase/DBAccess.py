@@ -1,3 +1,15 @@
+"""
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
+
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified: 12 Oct 2023
+    desc: Wrapper class for SQLite3 Engine;
+"""
+
 import datetime
 import json
 from app.server.config.db_configurations import DBConfig

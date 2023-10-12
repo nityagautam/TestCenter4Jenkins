@@ -1,8 +1,15 @@
 """
-    author: Ashutosh Mishra (@github: nityagautam)
-    desc: sqlite3 core implementation
-    Caution: Do not touch this core implementation, instead use the db_manager;
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
+
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified: 12 Oct 2023
+    desc: SQLite3 Engine;
 """
+
 import sqlite3
 
 # =============================
@@ -61,7 +68,7 @@ class DBEngine(object):
         # print("QUERY:", query)
         try:
             self.cursor.execute(query)
-            print(f'|  QUERY EXECUTED[R]:==> "{query}"')
+            # print(f'|  QUERY EXECUTED[R]:==> "{query}"')
             return self.cursor
         except sqlite3.OperationalError as e:
             print(f'[DB OP ERROR] Error while executing query: {query}\n', e)
@@ -76,7 +83,7 @@ class DBEngine(object):
             else:
                 self.cursor.execute(query)
             self.db.commit()
-            print(f'|  QUERY EXECUTED[W]:==> "{query}"')
+            # print(f'|  QUERY EXECUTED[W]:==> "{query}"')
             return self.cursor
         except sqlite3.IntegrityError as e:
             # Unique / Primary key rule failed

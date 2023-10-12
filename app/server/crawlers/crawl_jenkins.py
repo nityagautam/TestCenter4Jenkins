@@ -1,9 +1,13 @@
 """
-    @author: Ashutosh Mishra (amishra)
-    @dated: 28 Sep 2023
-    @last-modified: 02 Oct 2023
-    @desc:
-        Crawls to Jenkins server for the job/build info/test-reports;
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
+
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified: 02 Oct 2023
+    desc: Crawls to Jenkins server for the job/build info/test-reports;
 """
 
 # Python Jenkins API

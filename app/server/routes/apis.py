@@ -1,11 +1,15 @@
 """
-  @author Ashutosh Mishra (@github: nityagautam)
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
 
-  Software Engineer & Explorer
-  nityanarayan44@gmail.com
-
-  Created on 14 February, 2023 @ 10:25 AM.
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified: 12 Oct 2023
+    desc: APIs for the server
 """
+
 from threading import Thread
 from app.server import app as application
 from flask import jsonify, url_for, request

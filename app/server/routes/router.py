@@ -1,12 +1,15 @@
 """
-  @author Ashutosh Mishra (amishra)(@github: nityagautam)
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
 
-  Software Engineer & Explorer
-  nityanarayan44@gmail.com
-
-  Created on 14 February, 2023 @ 10:25 AM.
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified: 12 Oct 2023
+    desc: Main router;
 """
-# import app.server
+
 from app.server import app as application
 from flask import redirect, request, json, flash
 from app.server.config.crawler_configurations import CrawlerConfig

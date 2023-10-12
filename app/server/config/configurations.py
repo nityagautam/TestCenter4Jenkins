@@ -1,10 +1,13 @@
 """
-  @author Ashutosh Mishra (@github: nityagautam)
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
 
-  Software Engineer & Explorer
-  nityanarayan44@gmail.com
-
-  Created on 14 February, 2023 @ 10:25 AM.
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified:
+    desc: Configuration file
 """
 
 # ==========================

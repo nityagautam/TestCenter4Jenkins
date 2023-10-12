@@ -1,3 +1,15 @@
+"""
+    @author:
+      Ashutosh Mishra (@github: nityagautam)
+      Software Engineer & Explorer
+      nityanarayan44@gmail.com
+
+    Created: 11 Jan, 2022
+    reviewer:
+    last modified:
+    desc: UI Configuration file
+"""
+
 from app.server.config.configurations import Configurations
 
 
