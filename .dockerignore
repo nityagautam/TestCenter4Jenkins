@@ -2,7 +2,10 @@ __pycache__
 venv
 .git
 .github
+.pytest_cache
 .idea
+.gitignore
+Dockerfile
 logs/*.log
 logs/*.txt
 *.pyc
