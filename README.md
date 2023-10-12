@@ -47,12 +47,11 @@ It is the combination of few services which gets/crawls the reports and manage t
 
 ###### Screenshots
 1- Overview page
-![overview](https://github.com/nityagautam/TestCenter4Jenkins/blob/main/app/client/static/images/app_screenshots/Screenshot-overview-page.png?raw=true)
-![](./app/client/static/images/app_screenshots/Screenshot-overview-page.png)
+![overview](./app/client/static/images/app_screenshots/Screenshot-overview-page.png)
 2- Dashboard page
-![](./app/client/static/images/app_screenshots/Screenshot-dashboard-page.png)
+![dashboard](./app/client/static/images/app_screenshots/Screenshot-dashboard-page.png)
 3- History page
-![](./app/client/static/images/app_screenshots/Screenshot-History-Page.png)
+![history](./app/client/static/images/app_screenshots/Screenshot-History-Page.png)
 
 ###### Setup
 Just clone the repo/code and install the requirements;
