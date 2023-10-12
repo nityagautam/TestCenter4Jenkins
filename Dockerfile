@@ -3,7 +3,8 @@ FROM ubuntu:22.04
 
 # Install app dependencies
 RUN apt-get update && apt-get install -y python3 python3-pip
-RUN pip install -r ./requirements.txt
+COPY requirements.txt /TestCenter4Jenkins/
+RUN pip install -r /TestCenter4Jenkins/requirements.txt
 
 # Install Application
 COPY app /TestCenter4Jenkins/
