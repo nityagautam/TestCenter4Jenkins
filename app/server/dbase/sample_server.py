@@ -1,13 +1,6 @@
 from flask import Flask
 from flask import jsonify
 from flask import render_template
-from flask import url_for
-from flask import request
-from flask import redirect
-import os
-import json
-import argparse
-import jinja2
 from app.server.dbase import sample_data
 
 # ==============================================================

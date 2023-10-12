@@ -5,7 +5,7 @@ class CrawlerConfig(Configurations):
     # ----------------------------------
     # Jenkins data
     # ----------------------------------
-    # jenkins_host_url = "https://jenkins.qac.perforce.com"  # "https://jenkins.qac.perforce.com"
+    # jenkins_host_url = "https://jenkins.qac.perforce.com"
     # jenkins_username = 'amishra'
     # jenkins_password = 'Me@here1'
     # This is access token

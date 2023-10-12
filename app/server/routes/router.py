@@ -8,7 +8,7 @@
 """
 # import app.server
 from app.server import app as application
-from flask import redirect, jsonify, request, json, flash
+from flask import redirect, request, json, flash
 from app.server.config.crawler_configurations import CrawlerConfig
 from app.server.dbase.DBAccess import DBAccess
 from app.server.routes.authentication import not_authorised, gateway

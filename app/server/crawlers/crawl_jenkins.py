@@ -68,7 +68,7 @@ class CrawlJenkins:
                                           username=self.username,
                                           password=self.password,
                                           timeout=self.timeout)
-            print(f"|  [Jenkins Crawler] Fetching Jenkins Server information...")
+            print("|  [Jenkins Crawler] Fetching Jenkins Server information...")
             self.jenkins_user = self.server.get_whoami()
             self.jenkins_version = self.server.get_version()
             self.jenkins_user_fullname = self.jenkins_user['fullName']
@@ -141,7 +141,7 @@ class CrawlJenkins:
                 # print(f"Last Build: {data['lastBuild']}")
                 # print(f"Builds: {data['builds']}")
                 # print(f"\nObject Dump: \n {json.dumps(data)}")
-                print(f"|  [JENKINS JOB INFO] Returning job info")
+                print("|  [JENKINS JOB INFO] Returning job info")
                 return data
             else:
                 print(f"|  Provided Jenkins job [{jenkins_job_name}] does not exist")
@@ -205,9 +205,9 @@ class CrawlJenkins:
 
                 if job_build_info:
                     job_url = job_build_info["url"]
-                    job_status = job_build_info["result"]
+                    # job_status = job_build_info["result"]
                     job_timestamp = job_build_info["timestamp"]
-                    time_stamp = ''
+                    # time_stamp = ''
                     # fetching data for build test report
                     data = self.server.get_build_test_report(name=jenkins_job_name,
                                                              number=jenkins_build_number,
@@ -216,7 +216,7 @@ class CrawlJenkins:
                     if data:
                         # TODO: removing for now:
                         # "suite_details": data['suites']
-                        print(f"|  [JENKINS TEST REPORT] Collecting...")
+                        print("|  [JENKINS TEST REPORT] Collecting...")
                         compiled_data = {
                             self.test_report_fields["JOB_NAME"]: jenkins_job_name,
                             self.test_report_fields["BUILD_NO"]: jenkins_build_number,
@@ -234,8 +234,8 @@ class CrawlJenkins:
                             self.test_report_fields["CRAWL_DATE"]: str(datetime.datetime.now())
                         }
                     else:
-                        print(f"|  [JENKINS TEST REPORT] Test report is not available, "
-                              f"either the job was aborted or failed due to setup.")
+                        print("|  [JENKINS TEST REPORT] Test report is not available, "
+                              "either the job was aborted or failed due to setup.")
                         compiled_data = {
                             self.test_report_fields["JOB_NAME"]: jenkins_job_name,
                             self.test_report_fields["BUILD_NO"]: jenkins_build_number,
@@ -342,8 +342,8 @@ class CrawlJenkins:
 
             # 1.1 - Get the verified build list to be crawled
             builds_no_to_crawl = self.__get_builds_no_to_crawl(
-                    builds_no_from_db = list(set([number[0] for number in self.db_obj.get_builds_from_execution_data(jenkins_job_name)])),
-                    input_list_of_build_no = self.__resolve_builds_range(build_list, start, end))
+                    builds_no_from_db=list(set([number[0] for number in self.db_obj.get_builds_from_execution_data(jenkins_job_name)])),
+                    input_list_of_build_no=self.__resolve_builds_range(build_list, start, end))
 
             # 1.2 - If we have any build(s) to crawl
             if len(builds_no_to_crawl) > 0:
@@ -357,13 +357,13 @@ class CrawlJenkins:
 
                     # 1.2.1.2 - Applying Retry, incase data is null for the very first time
                     while not data and data_retry_count > 0:
-                        print(f"|  [TEST REPORT FOR BUILDS] Retrying...")
+                        print("|  [TEST REPORT FOR BUILDS] Retrying...")
                         data = self.__get_jenkins_job_test_report_data(jenkins_job_name, build_no, depth)
                         data_retry_count -= 1
 
                     # 1.2.1.3 - Append into the final list
                     compiled_data.append(data)
-                    print(f"|  ")
+                    print("|  ")
 
                 # if logging the collected output is true the write to output file
                 if self.write_output:
@@ -426,12 +426,12 @@ class CrawlJenkins:
         return list_of_build_no
 
     def get_all_test_reports_for_job(self, jenkins_job_name: str) -> any:
-        print(f"|  [GET ALL TEST REPORT] Initiating...")
+        print("|  [GET ALL TEST REPORT] Initiating...")
         # Fetch for the start and end build no
         return self.__get_jenkins_test_report_for_builds(jenkins_job_name, build_list=self.get_builds_from_jenkins(jenkins_job_name))
 
     def get_latest_test_reports_for_job(self, jenkins_job_name: str) -> any:
-        print(f"|  [GET LATEST TEST REPORT] Initiating...")
+        print("|  [GET LATEST TEST REPORT] Initiating...")
         # Fetch the result for the latest build no
         return self.__get_jenkins_test_report_for_builds(jenkins_job_name, build_list=max(self.get_builds_from_jenkins(jenkins_job_name)))
 
@@ -445,10 +445,10 @@ class CrawlJenkins:
 # ====[ CLI Execution ]======================
 if __name__ == "__main__":
 
-    print(f"[Jenkins Crawler] FROM CLI ...")
+    print("[Jenkins Crawler] FROM CLI ...")
     # DATA
     # --------------
-    jenkins_host_url = "https://jenkins.qac.perforce.com"  # "https://jenkins.qac.perforce.com"
+    jenkins_host_url = "https://jenkins.qac.perforce.com"
     jenkins_username = 'amishra'
     jenkins_password = 'Me@here1'
     # This is access token

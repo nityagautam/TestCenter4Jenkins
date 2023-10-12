@@ -3,13 +3,11 @@
     desc: sqlite3 core implementation
     Caution: Do not touch this core implementation, instead use the db_manager;
 """
-import datetime
 import sqlite3
 
 # =============================
 # Define the queries
 # =============================
-import time
 
 queries = {
     'SELECT': 'SELECT %s FROM %s',

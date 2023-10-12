@@ -8,7 +8,7 @@
 """
 from threading import Thread
 from app.server import app as application
-from flask import jsonify, url_for, request, session
+from flask import jsonify, url_for, request
 from app.server.config.configurations import Configurations
 from app.server.config.crawler_configurations import CrawlerConfig
 from crawler import Crawler
@@ -148,5 +148,4 @@ def get_logo():
     return f'<html><head><title>Root</title><head><body><hr/> Welcome to the main page <hr/> ' \
            f'Building image from static public location: <br/> ' \
            f'<img src=\'{url_for("static", filename="images/logo.svg")}\' /> </body></html>'
-
 

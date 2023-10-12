@@ -19,17 +19,18 @@ class DBConfig(Configurations):
                         'created TIMESTAMP']
 
     PROJECT_TABLE = 'projects'
-    PROJECT_TABLE_FIELDS = ['project_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
-                            'project_name TEXT',
-                            'data_source TEXT',
-                            'jenkins_job_name TEXT',
-                            'jenkins_url TEXT',
-                            'jenkins_user TEXT',
-                            'jenkins_password TEXT',
-                            'status TEXT',
-                            'tags TEXT',
-                            'created TIMESTAMP',
-                            'last_modified TIMESTAMP']
+    PROJECT_TABLE_FIELDS = [
+        'project_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
+        'project_name TEXT',
+        'data_source TEXT',
+        'jenkins_job_name TEXT',
+        'jenkins_url TEXT',
+        'jenkins_user TEXT',
+        'jenkins_password TEXT',
+        'status TEXT',
+        'tags TEXT',
+        'created TIMESTAMP',
+        'last_modified TIMESTAMP']
 
     TEST_EXECUTION_TABLE = 'executions'
     TEST_EXECUTION_TABLE_FIELDS = ['project_id INTEGER NOT NULL',
@@ -57,15 +58,20 @@ class DBConfig(Configurations):
     }
 
     CUSTOM_QUERIES = {
-        "OLDEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS": "SELECT project_id, project_name, test_results, execution_date, crawled_date FROM executions GROUP BY project_name ORDER BY MIN(jenkins_job_build_timestamp)",
-        "LATEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS": "SELECT * FROM executions GROUP BY project_name ORDER BY MAX(jenkins_job_build_timestamp)"
+        "OLDEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS":
+            "SELECT project_id, project_name, test_results, "
+            "execution_date, crawled_date FROM executions "
+            "GROUP BY project_name ORDER BY MIN("
+            "jenkins_job_build_timestamp)",
+        "LATEST_CRAWLED_TEST_EXECUTIONS_DATA_FOR_DISTINCT_PROJECTS":
+            "SELECT * FROM executions GROUP BY project_name "
+            "ORDER BY MAX(jenkins_job_build_timestamp) "
     }
 
     TABLE_JOINS = {
         "ORDER": "DESC",
         "ORDER_BY_COLUMN": "crawled_date",
         "JOIN_ON": "project_id",
-        # "SELECT_COLUMNS_FOR_PROJECTS_AND_EXECUTION": "project_name, test_results, source, source_value, crawled_date"
         "SELECT_COLUMNS_FOR_PROJECTS_AND_EXECUTION": "*"
     }
 

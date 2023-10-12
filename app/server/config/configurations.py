@@ -32,7 +32,8 @@ class Configurations(object):
     # ----------------------------------------------------
     APP_SERVER_HOST = '0.0.0.0'
     APP_SERVER_PORT = 8000
-    APP_SRC_DIR_NAME = 'app'  # This is the name for the very first level dir in this repo source
+    # This is the name for the very first level dir in this repo source
+    APP_SRC_DIR_NAME = 'app'
     APP_SECRET_KEY = sha256_crypt.encrypt(APP_SRC_DIR_NAME)
     APP_SECRET_KEY_OTHER = os.urandom(12)
     APP_API_BASE_ROUTE = "/api/v1"
@@ -66,5 +67,5 @@ class Testing(Configurations):
 
 class Production(Configurations):
     # For DB config, Look into app/server/config/db_configurations.py
-    MYSQL_DATABASE_URI = f'mysql://amishra@localhost/{Configurations.APP_SRC_DIR_NAME}'
-
+    # MYSQL_DATABASE_URI = f'mysql://amishra@localhost/app'
+    pass
