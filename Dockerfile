@@ -1,20 +1,23 @@
-# Start the image with ubuntu
+# Start the image with Python image
 FROM ubuntu:22.04
 
-# Install app dependencies
-RUN apt-get update && apt-get install -y python3 python3-pip
-COPY requirements.txt /TestCenter4Jenkins/
-RUN pip install -r /TestCenter4Jenkins/requirements.txt
+# Install app
+# RUN apt-get update && apt-get install -y python3 python3-pip
+# COPY requirements.txt /TestCenter4Jenkins/
+COPY . /TestCenter4Jenkins/
 
-# Install Application
-COPY app /TestCenter4Jenkins/
-COPY logs /TestCenter4Jenkins/
-COPY crawler*.py /TestCenter4Jenkins/
+# Set the Work directory
+WORKDIR /TestCenter4Jenkins/
+
+# Install Application modules
+#COPY app /TestCenter4Jenkins/
+#COPY logs /TestCenter4Jenkins/
+#COPY crawler*.py /TestCenter4Jenkins/
+RUN apt-get update && apt-get install -y python3 python3-pip
+RUN pip install -r requirements.txt
 
 # Final configuration
-ENV FLASK_APP=app
 EXPOSE 8000
 
 # RUN THE FLASK SERVER
-CMD cd /TestCenter4Jenkins/
 CMD waitress-serve --host 127.0.0.1 --port 8000 app.server:app
