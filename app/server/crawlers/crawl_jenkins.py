@@ -179,7 +179,7 @@ class CrawlJenkins:
                     {
                         "jenkins_job_name": "SomeJobName",
                         "jenkins_job_build_no": 26,
-                        "jenkins_job_url": "https://jenkins/abcd",
+                        "jenkins_job_url": "https://jenkins_url/abcd",
                         "duration_in_sec": 69521.82,
                         "suite_names": [
                             "suite_Regression_Testing"
@@ -317,7 +317,7 @@ class CrawlJenkins:
                             {
                                 "jenkins_job_name": "SomeJobName",
                                 "jenkins_job_build_no": 26,
-                                "jenkins_job_url": "https://jenkins.qac.perforce.com/abcd",
+                                "jenkins_job_url": "https://jenkins_url/abcd",
                                 "duration_in_sec": 69521.82,
                                 "suite_names": [
                                     "suite_Regression_Testing"

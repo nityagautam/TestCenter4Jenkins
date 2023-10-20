@@ -17,9 +17,6 @@ class CrawlerConfig(Configurations):
     # ----------------------------------
     # Jenkins data
     # ----------------------------------
-    # jenkins_host_url = "https://jenkins_url"
-    # jenkins_username = 'username'
-    # jenkins_password = 'password'
     req_timeout = 60
 
     # ----------------------------------
