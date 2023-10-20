@@ -177,9 +177,9 @@ class CrawlJenkins:
 
         Output sample:
                     {
-                        "jenkins_job_name": "FW-430/QAF_430_Test_Eclipse_Centos7x64_EN",
+                        "jenkins_job_name": "SomeJobName",
                         "jenkins_job_build_no": 26,
-                        "jenkins_job_url": "https://jenkins.qac.perforce.com/abcd",
+                        "jenkins_job_url": "https://jenkins_url/abcd",
                         "duration_in_sec": 69521.82,
                         "suite_names": [
                             "suite_Regression_Testing"
@@ -315,9 +315,9 @@ class CrawlJenkins:
             Output sample:
                         [
                             {
-                                "jenkins_job_name": "FW-430/QAF_430_Test_Eclipse_Centos7x64_EN",
+                                "jenkins_job_name": "SomeJobName",
                                 "jenkins_job_build_no": 26,
-                                "jenkins_job_url": "https://jenkins.qac.perforce.com/abcd",
+                                "jenkins_job_url": "https://jenkins_url/abcd",
                                 "duration_in_sec": 69521.82,
                                 "suite_names": [
                                     "suite_Regression_Testing"
@@ -452,34 +452,14 @@ if __name__ == "__main__":
     print("[Jenkins Crawler] FROM CLI ...")
     # DATA
     # --------------
-    jenkins_host_url = "https://jenkins.qac.perforce.com"
-    jenkins_username = 'amishra'
-    jenkins_password = 'Me@here1'
-    # This is access token
-    # self.password = "11f9cada0ab7b05ef59afce3f260eba6c9"
+    jenkins_host_url = "https://jenkins_url"
+    jenkins_username = 'username'
+    jenkins_password = 'pwd'
     req_timeout = 60
 
     # TODO: Change the job/build streams or the full names as needed
     # Sample data for job names
-    job_name = ["FW-430/QAF_430_Test_Eclipse_Win10x64_EN",
-                "FW-430/QAF_430_Test_Eclipse_Centos7x64_EN",
-
-                "FW-430/QAF_430_Test_GUI_Win11x64_EN_Regression",
-                "FW-430/QAF_430_Test_GUI_Win11x64_EN_Sanity",
-                "FW-430/QAF_430_Test_GUI_Win10x64_JP_Regression",
-                "FW-430/QAF_430_Test_GUI_Win10x64_JP_sanity",
-
-                "FW-430/QAF_430_Qacli_UI_Test_AdminAndUser_Win10x64",
-                "FW-430/QAF_430_Qacli_UI_Test_AdminAndAdmin_Win11x64",
-
-                "FW-430/Squish_VS2022_Win10x64_EN_Regression",
-                "FW-430/Squish_VS2022_Win10x64_EN_Sanity",
-                "FW-430/Squish_VS2019_Win10x64_EN_Regression",
-                "FW-430/Squish_VS2019_Win10x64_EN_Sanity",
-
-                "FW-430/VSCode_Win11_EN_Sanity",
-                "FW-430/VSCode_Win10_EN_Sanity",
-                ]
+    job_name = ["SomeJobName"]
     job_build_no = 22
 
     # Object creation

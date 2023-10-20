@@ -25,7 +25,7 @@ class Configurations(object):
     # Core properties
     # -------------------
     APP_NAME = 'TEST_CENTER'
-    AUTHOR_NAME = 'Ashutosh Mishra [amishra]'
+    AUTHOR_NAME = 'Ashutosh Mishra'
     APP_VERSION = '1.0.0'
     APP_ENVIRONMENT = "TEST"
     DEBUG = True
