@@ -6,5 +6,6 @@ venv
 .pytest_cache
 .idea
 logs/*.log
+logs/*.*g
 logs/*.txt
 *.pyc
