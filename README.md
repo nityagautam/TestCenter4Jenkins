@@ -46,12 +46,7 @@ It is the combination of few services which gets/crawls the reports and manage t
 - Logging
 
 ###### Screenshots
-1- Overview page
-![overview](./app/client/static/images/app_screenshots/Screenshot-overview-page.png)
-2- Dashboard page
-![dashboard](./app/client/static/images/app_screenshots/Screenshot-dashboard-page.png)
-3- History page
-![history](./app/client/static/images/app_screenshots/Screenshot-History-Page.png)
+Will go here ...
 
 ###### Setup
 Just clone the repo/code and install the requirements;
