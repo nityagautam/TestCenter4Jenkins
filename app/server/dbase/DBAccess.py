@@ -21,7 +21,6 @@ class DBAccess(Configurations):
     def __init__(self):
         # Initialize the DB file for data source
         self.db_obj = DBEngine(DBConfig.db_file[Configurations.APP_ENVIRONMENT])
-        # self.db_obj = DBEngine("data.db")
 
         # basic tables and its schema
         # 1- for users table
