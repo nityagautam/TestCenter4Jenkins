@@ -5,7 +5,5 @@ __pycache__
 venv
 .pytest_cache
 .idea
-logs/*.log
-logs/*.*g
-logs/*.txt
+*.log
 *.pyc
