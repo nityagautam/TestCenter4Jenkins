@@ -1,0 +1,5 @@
+# Create venv
+python3 -m venv ./path/to/venv
+
+# Activate venv
+source ./path/to/env/bin/activate
